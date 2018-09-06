@@ -134,7 +134,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
             ),
           ));
     }
-    if (aaa != 'null') {
+    if (aaa != 'nu') {
       controllerDeviceId.text = aaa;
       enableDeviceID = false;
       
