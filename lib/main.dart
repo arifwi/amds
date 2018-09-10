@@ -3,10 +3,16 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:amds/Menu.dart';
 
-void main() => runApp(new MyApp());
+void main() {
+SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
+   runApp(new MyApp());
+
+});
+}
 String username = '';
 
 class MyApp extends StatelessWidget {
@@ -33,7 +39,12 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController txt_password = new TextEditingController();
 
   String message = '';
+<<<<<<< HEAD
   String url = 'http://172.28.16.84:8089/';
+=======
+  String url = 'http://192.168.43.62/amdsweb/';
+  //String url = 'http://172.28.16.84:8089/';
+>>>>>>> 1c9426d2cf6d9c0aaf8e77cd7c161fd13ef188e6
   Future<dynamic> _checkLogin() async {
     setState(() {
       message = '';
@@ -62,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
         }
       }
       else{
-        message = 'Connection failed';
+        message = 'Connection failed ${response.statusCode}';
       }
     } catch (e) {
       print(e);

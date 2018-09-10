@@ -3,25 +3,38 @@ import 'dart:convert';
 
 import 'package:amds/Menu.dart' as menu;
 import 'package:flutter/material.dart';
-import 'package:barcode_scan/barcode_scan.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:simple_permissions/simple_permissions.dart';
 import 'package:amds/before_adddevice.dart' as scan;
+import 'package:amds/usersList.dart' as UsersList;
 
 class mainAdd extends StatefulWidget {
   final Function() onPressed;
   final String tooltip;
   final IconData icon;
 
-  String strDeviceId, strPN, strSN;
+  String strDeviceId,
+      strPN,
+      strSN,
+      str_selectedType,
+      str_selectedModel,
+      str_selectedEntity,
+      str_selectedUser,
+      str_selectedLocation,
+      str_selectedUserId;
   mainAdd(
       {this.onPressed,
       this.tooltip,
       this.icon,
       this.strDeviceId,
       this.strSN,
-      this.strPN});
+      this.strPN,
+      this.str_selectedType,
+      this.str_selectedModel,
+      this.str_selectedEntity,
+      this.str_selectedLocation,
+      this.str_selectedUser,
+      this.str_selectedUserId});
 
   @override
   mainAddState createState() {
@@ -30,6 +43,9 @@ class mainAdd extends StatefulWidget {
 }
 
 class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
+  String url = 'http://192.168.43.62/amdsweb/';
+  //String url = 'http://172.28.16.84:8089/';
+
   Permission permission = Permission.Camera;
 
   TextEditingController controllerDeviceId = new TextEditingController();
@@ -46,20 +62,33 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
 
   bool enableDeviceID, enableSN, enablePN;
 
-  String _selectedType, _selectedModel, selectedTypeName, selectedModelName;
+  String _selectedType,
+      _selectedModel,
+      _selectedEntity,
+      _selectedUser,
+      _selectedUserId;
 
   List<DropdownMenuItem<String>> dataType = [];
   List<DropdownMenuItem<String>> dataModel = [];
+  List<DropdownMenuItem<String>> dataEntities = [];
+
   //List<UserDetails> txtselectedType, txtselectedModel;
-  List<MapTypeModel> _listDataType = [];
-  List<MapTypeModel> _searchTypeResult = [];
-  List<MapTypeModel> _listDataModel = [];
-  List<MapTypeModel> _searchModelResult = [];
+  List<MapIdName> _listDataType = [];
+  List<MapIdName> _searchTypeResult = [];
+  List<MapIdName> _listDataModel = [];
+  List<MapIdName> _searchModelResult = [];
+  List<MapIdName> _listDataEntities = [];
+  List<MapIdName> _searchEntitiesResult = [];
+
+  String isSuccessInput;
 
   var _result;
 
   String qresult = '';
+<<<<<<< HEAD
   String url = 'http://172.28.16.84:8089/';
+=======
+>>>>>>> 1c9426d2cf6d9c0aaf8e77cd7c161fd13ef188e6
 
   bool isOpened = false;
   AnimationController _animationController;
@@ -71,58 +100,100 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
   bool _isUnlock = true;
   Icon iconLock = new Icon(Icons.lock);
   Icon iconLockOpen = new Icon(Icons.lock_open);
-   String aaa ;
-  Widget toggle() {
-    return Container(
-      child: FloatingActionButton(
-        backgroundColor: _buttonColor.value,
-        onPressed: animate,
-        tooltip: 'Toggle',
-        child: AnimatedIcon(
-          icon: AnimatedIcons.menu_close,
-          progress: _animateIcon,
-        ),
-      ),
-    );
-  }
-
-  Widget wlockUnlock() {
-    return Container(
-      child: FloatingActionButton(
-        backgroundColor: Colors.green,
-        onPressed: () {
-          
-        },
-        tooltip: 'Save the new device',
-        child: _isUnlock == true ? iconLockOpen : iconLock,
-      ),
-    );
-  }
-
-  Widget wScan() {
-    return Container(
-      child: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushReplacement(
-              context,
-              new MaterialPageRoute(
-                  builder: (context) => scan.scanning(
-                        deviceID: controllerDeviceId.text,
-                        sn: controllerSerialNumber.text,
-                        pn: controllerProductNumber.text,
-                      )));
-        },
-        tooltip: 'Back to scanning page',
-        child: Icon(Icons.camera_alt),
-      ),
-    );
-  }
+  String aaa;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    String wDevId = widget.strDeviceId,
+        wPN = widget.strPN,
+        wSN = widget.strSN,
+        wSelectedType = widget.str_selectedType,
+        wSelectedModel = widget.str_selectedModel,
+        wSelectedEntity = widget.str_selectedEntity,
+        wSelectedUser = widget.str_selectedUser,
+        wSelectedLoc = widget.str_selectedLocation,
+        wSelectedUserId = widget.str_selectedUserId;
+
+    aaa = widget.strDeviceId;
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500))
+          ..addListener(() {
+            setState(() {});
+          });
+    _animateIcon =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+    _buttonColor = ColorTween(
+      begin: Colors.blue,
+      end: Colors.red,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Interval(
+        0.00,
+        1.00,
+        curve: Curves.linear,
+      ),
+    ));
+    _translateButton = Tween<double>(
+      begin: _fabHeight,
+      end: -14.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Interval(
+        0.0,
+        0.75,
+        curve: _curve,
+      ),
+    ));
+    super.initState();
+
+    getcomputerTypes().then((result) {
+      new Future.delayed(Duration(milliseconds: 500), () {
+        setState(() {
+          _result = result;
+          getcomputerModels().then((result) {
+            getEntities().then((result) {
+              setState(() {
+                if (wDevId != null) {
+                  controllerDeviceId.text = wDevId;
+                  _isUnlock = false;
+                }
+                if (wPN != null) {
+                  controllerProductNumber.text = wPN;
+                  _isUnlock = false;
+                }
+                if (wSN != null) {
+                  controllerSerialNumber.text = wSN;
+                  _isUnlock = false;
+
+                }
+                if (wSelectedType != null) {
+                  _selectedType = wSelectedType;
+                }
+                if (wSelectedModel != null) {
+                  _selectedModel = wSelectedModel;
+                }
+                if (wSelectedEntity != null) {
+                  _selectedEntity = wSelectedEntity;
+                }
+                if (wSelectedUser != null) {
+                  _selectedUser = wSelectedUser;
+                }
+                if (wSelectedLoc != null) {}
+                if (wSelectedUserId != null) {
+                  _selectedUserId = wSelectedUserId;
+                }
+              });
+            });
+          });
+        });
+      });
+    });
+  }
+
+//INTERFACE//
+  @override
   Widget build(BuildContext context) {
-    String resultID = '${widget.strDeviceId}',
-        resultSN = '${widget.strSN}',
-        resultPN = '${widget.strPN}';
     if (_result == null) {
       //Lakukan sesuatu sambil menunggu proses get dari database
 
@@ -134,42 +205,32 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
             ),
           ));
     }
-    if (aaa != 'nu') {
-      controllerDeviceId.text = aaa;
-      enableDeviceID = false;
-      
-            
-      
-    }
-    if (resultSN != 'null') {
-      controllerSerialNumber.text = resultSN;
-      enableSN = false;
-      
-
-    }
-    if (resultPN != 'null') {
-      controllerProductNumber.text = resultPN;
-      enablePN = false;
-      
-
-    }
 
     return WillPopScope(
       onWillPop: backButtonDialog,
       child: Scaffold(
         appBar: new AppBar(
-          title: Text('Add New Device'),
-          leading: new IconButton(
-            icon: new Icon(Icons.arrow_back),
-            onPressed: backButtonDialog,
-          ),
+          title: Text('Add Device'),
+          leading: new Icon(Icons.add_to_queue),
           actions: <Widget>[
-            new RaisedButton.icon(
-              icon: new Icon(Icons.save_alt),
-              onPressed: inputConfirmDialog,
-              label: new Text('Save'),
-              color: Colors.green,
+            new IconButton(
+              icon: _isUnlock == true ? iconLockOpen : iconLock,
+              onPressed: () {
+                _isUnlock == true ? _isUnlock= false: _isUnlock= true;
+                
+              },
             ),
+            new FlatButton.icon(
+              icon: Icon(
+                Icons.save,
+                color: Colors.white,
+              ),
+              onPressed: inputConfirmDialog,
+              label: new Text(
+                'Save',
+                style: new TextStyle(color: Colors.white),
+              ),
+            )
           ],
         ),
         floatingActionButton: new Row(
@@ -182,7 +243,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
             new FloatingActionButton(
               child: iconLock,
               onPressed: () {
-            enableDeviceID = true;
+                enableDeviceID = true;
               },
             ),
           ],
@@ -280,28 +341,76 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                             borderRadius: BorderRadius.circular(5.0))),
                   ),
                 ),
+                //entities dropdown
                 Container(
-                  padding: EdgeInsets.only(right: 15.0, left: 15.0, top: 15.0),
-                  child: TextField(
-                    focusNode: fLocation,
-                    controller: controllerLocation,
-                    decoration: InputDecoration(
-                        labelText: 'Location',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0))),
+                  padding: EdgeInsets.only(right: 10.0, left: 20.0, top: 15.0),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      iconSize: 20.0,
+                      style: TextStyle(fontSize: 17.0, color: Colors.black),
+                      value: _selectedEntity,
+                      items: dataEntities,
+                      hint: Text('Select Entitiy'),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedEntity = value;
+                        });
+                      },
+                    ),
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(right: 15.0, left: 15.0, top: 15.0),
-                  child: TextField(
-                    focusNode: fUser,
-                    controller: controllerUser,
-                    decoration: InputDecoration(
-                        labelText: 'User',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0))),
-                  ),
-                ),
+                    padding:
+                        EdgeInsets.only(right: 15.0, left: 15.0, top: 15.0),
+                    child: new ListTile(
+                      leading: new Text('User :'),
+                      title: new Text(_selectedUser.toString()),
+                      trailing: new FlatButton.icon(
+                        icon: new Icon(Icons.search),
+                        label: new Text('Search'),
+                        color: Colors.amber,
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UsersList.HomePage(
+                                        strSN: controllerSerialNumber.text,
+                                        strPN: controllerProductNumber.text,
+                                        strDeviceId: controllerDeviceId.text,
+                                        str_selectedModel: _selectedModel,
+                                        str_selectedEntity: _selectedEntity,
+                                        str_selectedType: _selectedType,
+                                        str_selectedUserId: _selectedUserId,
+                                      )));
+                        },
+                      ),
+                    )),
+                Container(
+                    padding:
+                        EdgeInsets.only(right: 15.0, left: 15.0, top: 15.0),
+                    child: new ListTile(
+                      leading: new Text('User :'),
+                      title: new Text(_selectedUser.toString()),
+                      trailing: new FlatButton.icon(
+                        icon: new Icon(Icons.search),
+                        label: new Text('Search'),
+                        color: Colors.blue,
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UsersList.HomePage(
+                                        strSN: controllerSerialNumber.text,
+                                        strPN: controllerProductNumber.text,
+                                        strDeviceId: controllerDeviceId.text,
+                                        str_selectedModel: _selectedModel,
+                                        str_selectedEntity: _selectedEntity,
+                                        str_selectedType: _selectedType,
+                                        str_selectedUserId: _selectedUserId,
+                                      )));
+                        },
+                      ),
+                    )),
               ],
             ),
             Positioned(
@@ -333,53 +442,67 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
       ),
     );
   }
+  //END OF INTERFACE//
 
-  //METHOD OR FUNCTION ARE HERE//
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    aaa = widget.strDeviceId;
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500))
-          ..addListener(() {
-            setState(() {});
-          });
-    _animateIcon =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
-    _buttonColor = ColorTween(
-      begin: Colors.blue,
-      end: Colors.red,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Interval(
-        0.00,
-        1.00,
-        curve: Curves.linear,
+  Widget toggle() {
+    return Container(
+      child: FloatingActionButton(
+        backgroundColor: _buttonColor.value,
+        onPressed: animate,
+        tooltip: 'Toggle',
+        child: AnimatedIcon(
+          icon: AnimatedIcons.menu_close,
+          progress: _animateIcon,
+        ),
       ),
-    ));
-    _translateButton = Tween<double>(
-      begin: _fabHeight,
-      end: -14.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Interval(
-        0.0,
-        0.75,
-        curve: _curve,
-      ),
-    ));
-    super.initState();
-
-    getcomputerTypes().then((result) {
-      new Future.delayed(Duration(milliseconds: 500), () {
-        setState(() {
-          _result = result;
-          getcomputerModels();
-        });
-      });
-    });
+    );
   }
+
+  Widget wlockUnlock() {
+    return Container(
+      child: FloatingActionButton(
+        backgroundColor: Colors.green,
+        onPressed: () {},
+        tooltip: 'Save the new device',
+        child: _isUnlock == true ? iconLockOpen : iconLock,
+      ),
+    );
+  }
+
+  Widget wScan() {
+    return Container(
+      child: FloatingActionButton(
+        onPressed: () {
+          String id, sn, pn;
+          if (controllerDeviceId.text != '') {
+            id = controllerDeviceId.text;
+          }
+          if (controllerSerialNumber.text != '') {
+            sn = controllerSerialNumber.text;
+          }
+          if (controllerProductNumber.text != '') {
+            pn = controllerProductNumber.text;
+          }
+
+          Navigator.pushReplacement(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => scan.scanning(
+                      strDeviceId: id,
+                      strSN: sn,
+                      strPN: pn,
+                      str_selectedType: _selectedType,
+                      str_selectedModel: _selectedModel,
+                      str_selectedEntity: _selectedEntity,
+                      str_selectedUser: _selectedUser,
+                      str_selectedUserId: _selectedUserId)));
+        },
+        tooltip: 'Back to scanning page',
+        child: Icon(Icons.camera_alt),
+      ),
+    );
+  }
+  //METHOD OR FUNCTION ARE HERE//
 
   @override
   dispose() {
@@ -405,7 +528,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
       dataType = [];
       //txtselectedType = getdataType;
       for (Map i in getdataType) {
-        _listDataType.add(MapTypeModel.fromJson(i));
+        _listDataType.add(MapIdName.fromJson(i));
       }
 
       for (var i = 0; i < _listDataType.length; i++) {
@@ -437,7 +560,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
       //print(getdatamodel.length.toString());
       //for(Map a in )
       for (Map i in getdatamodel) {
-        _listDataModel.add(MapTypeModel.fromJson(i));
+        _listDataModel.add(MapIdName.fromJson(i));
       }
       for (var i = 0; i < _listDataModel.length; i++) {
         //txtselectedModel.add(getdatamodel)
@@ -456,6 +579,39 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
         ));
       }
       return dataModel;
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future getEntities() async {
+    try {
+      final getEntitiesResult = await http.get(url + 'getEntities.php');
+
+      final getDataEntities = json.decode(getEntitiesResult.body);
+
+      dataEntities = [];
+      //txtselectedType = getdataType;
+      for (Map i in getDataEntities) {
+        _listDataEntities.add(MapIdName.fromJson(i));
+      }
+
+      for (var i = 0; i < _listDataEntities.length; i++) {
+        Color color;
+        if (i % 2 != 0) {
+          color = Colors.amber;
+        } else {
+          color = Colors.blue[300];
+        }
+        dataEntities.add(new DropdownMenuItem(
+          child: new Text(
+            (_listDataEntities[i].name),
+            style: new TextStyle(color: color, fontWeight: FontWeight.bold),
+          ),
+          value: _listDataEntities[i].id.toString(),
+        ));
+      }
+      return dataEntities;
     } catch (error) {
       print(error);
     }
@@ -671,7 +827,6 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
     }
   }
 
-  String isSuccessInput;
   Future<bool> successInputDialog() {
     AlertDialog successInputInfo = new AlertDialog(
       title: new Text(
@@ -684,15 +839,15 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
   }
 }
 
-class MapTypeModel {
+class MapIdName {
   //used by get selected type and selected model
   final String id;
   final String name;
 
-  MapTypeModel({this.id, this.name});
+  MapIdName({this.id, this.name});
 
-  factory MapTypeModel.fromJson(Map<String, dynamic> json) {
-    return new MapTypeModel(
+  factory MapIdName.fromJson(Map<String, dynamic> json) {
+    return new MapIdName(
       id: json['id'],
       name: json['name'],
     );
