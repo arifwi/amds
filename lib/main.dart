@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:amds/Menu.dart';
+import 'package:amds/addDevice.dart' ;
+import 'package:amds/scanning.dart' as scanningComputer;
+import 'package:amds/usersList.dart' as userList;
+import 'package:amds/locationsList.dart'as locationList;
 
 void main() {
 SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
@@ -24,6 +28,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
         '/mainMenu': (BuildContext context) => new mainMenu(username: username),
+        '/addComputer': (BuildContext context)=> new mainAdd(),
+        '/scanningComputer' : (BuildContext context)=> new scanningComputer.scanning(),
+        '/userList' : (BuildContext context)=> new userList.HomePage(),
+        '/locationList' : (BuildContext context) => locationList.HomePage(),
       },
     );
   }

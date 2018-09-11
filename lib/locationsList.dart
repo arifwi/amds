@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:amds/addDevice.dart' as addDevice;
 
 class HomePage extends StatefulWidget {
-  
   String strDeviceId,
       strPN,
       strSN,
@@ -59,30 +58,29 @@ class _HomePageState extends State<HomePage> {
 
   List<MapIdName> _searchResult = [];
 
-  List<MapIdName> _userDetails = [];
+  List<MapIdName> _locationDetails = [];
 
   String fullname;
 
-  final String url = 'http://192.168.43.62/amdsweb/getUsers.php';
+  final String url = 'http://192.168.43.62/amdsweb/getLocations.php';
 
   // Get json result and convert it to model. Then add
-  Future<Null> getUserDetails() async {
+  Future<Null> getLocation() async {
     final response = await http.get(url);
     final responseJson = json.decode(response.body);
 
     setState(() {
       for (Map user in responseJson) {
-        _userDetails.add(MapIdName.fromJson(user));
+        _locationDetails.add(MapIdName.fromJson(user));
       }
     });
   }
 
   @override
   void initState() {
-    
     super.initState();
-    
-    getUserDetails().then((value){
+
+    getLocation().then((result) {
       if (widget.strDeviceId != null) {
         _deviceId = widget.strDeviceId;
       }
@@ -119,12 +117,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      
       appBar: new AppBar(
         title: new Text('Select User'),
         elevation: 0.0,
       ),
-      
       body: new Column(
         children: <Widget>[
           new Container(
@@ -170,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                           children: <Widget>[
                             new ListTile(
                               title: new Text(
-                                '${_searchResult[i].firstname} ${_searchResult[i].lastname}',
+                                '${_searchResult[i].id} ${_searchResult[i].name}',
                                 style: new TextStyle(
                                     fontSize: 12.0,
                                     fontWeight: FontWeight.bold),
@@ -183,15 +179,17 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.blue,
                                 onPressed: () {
                                   setState(() {
-                                    _selectedUser = _searchResult[i].name;
-                                    _selectedUserId = _searchResult[i].id;
+                                    _selectedLocation =
+                                        _locationDetails[i].name;
+                                    _selectedLocationId =
+                                        _locationDetails[i].id;
                                   });
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       new MaterialPageRoute(
                                           builder: (context) =>
                                               addDevice.mainAdd(
-                                                 strSN: _sn,
+                                                strSN: _sn,
                                                 strPN: _pn,
                                                 strDeviceId: _deviceId,
                                                 str_selectedModelId:
@@ -212,7 +210,9 @@ class _HomePageState extends State<HomePage> {
                                                 str_selectedLocation:
                                                     _selectedLocation,
                                                 str_selectedLocationId:
-                                                    _selectedLocationId,)), ModalRoute.withName('/addComputer'));
+                                                    _selectedLocationId,
+                                              )),
+                                      ModalRoute.withName('/addComputer'));
                                 },
                               ),
                             ),
@@ -223,7 +223,7 @@ class _HomePageState extends State<HomePage> {
                     },
                   )
                 : new ListView.builder(
-                    itemCount: _userDetails.length,
+                    itemCount: _locationDetails.length,
                     itemBuilder: (context, index) {
                       return new Card(
                         child: new ExpansionTile(
@@ -232,11 +232,11 @@ class _HomePageState extends State<HomePage> {
                             size: 40.0,
                             color: Colors.blue,
                           ),
-                          title: new Text(_userDetails[index].name),
+                          title: new Text(_locationDetails[index].name),
                           children: <Widget>[
                             new ListTile(
                               title: new Text(
-                                '${_userDetails[index].firstname} ${_userDetails[index].lastname}',
+                                '${_locationDetails[index].id} ${_locationDetails[index].name}',
                                 style: new TextStyle(
                                     fontSize: 12.0,
                                     fontWeight: FontWeight.bold),
@@ -249,8 +249,10 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.blue,
                                 onPressed: () {
                                   setState(() {
-                                    _selectedUser = _userDetails[index].name;
-                                    _selectedUserId = _userDetails[index].id;
+                                    _selectedLocation =
+                                        _locationDetails[index].name;
+                                    _selectedLocationId =
+                                        _locationDetails[index].id;
                                   });
 
                                   Navigator.pushAndRemoveUntil(
@@ -258,8 +260,7 @@ class _HomePageState extends State<HomePage> {
                                       new MaterialPageRoute(
                                           builder: (context) =>
                                               addDevice.mainAdd(
-                                                  strSN: _sn,
-                         
+                                                strSN: _sn,
                                                 strPN: _pn,
                                                 strDeviceId: _deviceId,
                                                 str_selectedModelId:
@@ -280,7 +281,9 @@ class _HomePageState extends State<HomePage> {
                                                 str_selectedLocation:
                                                     _selectedLocation,
                                                 str_selectedLocationId:
-                                                    _selectedLocationId,)),ModalRoute.withName('/addComputer'));
+                                                    _selectedLocationId,
+                                              )),
+                                      ModalRoute.withName('/addComputer'));
                                 },
                               ),
                             ),
@@ -303,11 +306,9 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    _userDetails.forEach((userDetail) {
-      if (userDetail.id.contains(text) ||
-          userDetail.name.contains(text) ||
-          userDetail.firstname.contains(text) ||
-          userDetail.lastname.contains(text)) _searchResult.add(userDetail);
+    _locationDetails.forEach((userDetail) {
+      if (userDetail.id.contains(text) || userDetail.name.contains(text))
+        _searchResult.add(userDetail);
     });
 
     setState(() {});
@@ -316,16 +317,14 @@ class _HomePageState extends State<HomePage> {
 
 class MapIdName {
   //used by get selected type and selected model
-  final String id, name, firstname, lastname;
+  final String id, name;
 
-  MapIdName({this.id, this.name, this.firstname, this.lastname});
+  MapIdName({this.id, this.name});
 
   factory MapIdName.fromJson(Map<String, dynamic> json) {
     return new MapIdName(
       id: json['id'],
       name: json['name'],
-      firstname: json['firstname'],
-      lastname: json['lastname'],
     );
   }
 }

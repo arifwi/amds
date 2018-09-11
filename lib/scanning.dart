@@ -10,35 +10,51 @@ class scanning extends StatefulWidget {
   String strDeviceId,
       strPN,
       strSN,
-      str_selectedType,
-      str_selectedModel,
-      str_selectedEntity,
+      str_selectedTypeId,
+      str_selectedModelId,
+      str_selectedEntityId,
+      str_selectedTypeName,
+      str_selectedModelName,
+      str_selectedEntityName,
       str_selectedUser,
       str_selectedLocation,
-      str_selectedUserId;
+      str_selectedUserId,
+      str_selectedLocationId;
 
-  scanning(
-      {this.strDeviceId,
-      this.strSN,
-      this.strPN,
-      this.str_selectedType,
-      this.str_selectedModel,
-      this.str_selectedEntity,
-      this.str_selectedLocation,
-      this.str_selectedUser,
-      this.str_selectedUserId});
+  scanning({
+    this.strDeviceId,
+    this.strSN,
+    this.strPN,
+    this.str_selectedTypeId,
+    this.str_selectedModelId,
+    this.str_selectedEntityId,
+    this.str_selectedTypeName,
+    this.str_selectedEntityName,
+    this.str_selectedModelName,
+    this.str_selectedLocation,
+    this.str_selectedLocationId,
+    this.str_selectedUser,
+    this.str_selectedUserId,
+  });
 
   @override
   _scanningState createState() => _scanningState();
 }
 
 class _scanningState extends State<scanning> {
-  String _selectedType,
-      _selectedModel,
-      _selectedEntity,
+  String _selectedTypeId,
+      _selectedModelId,
+      _selectedEntityId,
+      _selectedTypeName,
+      _selectedModelName,
+      _selectedEntityName,
       _selectedUser,
-      _selectedUserId;
-  String strDeviceId, strPN, strSN;
+      _selectedUserId,
+      _selectedLocation,
+      _selectedLocationId,
+      _deviceId,
+      _sn,
+      _pn;
 
   bool styleID = false, styleSN = false, stylePN = false;
 
@@ -47,30 +63,35 @@ class _scanningState extends State<scanning> {
     // TODO: implement initState
     setState(() {
       if (widget.strDeviceId != null) {
-        strDeviceId = widget.strDeviceId;
-      } 
+        _deviceId = widget.strDeviceId;
+      }
       if (widget.strSN != null) {
-        strSN = widget.strSN;
-      } 
+        _sn = widget.strSN;
+      }
       if (widget.strPN != null) {
-        strPN = widget.strPN;
-      } 
-      if(widget.str_selectedType != null){
-        _selectedType = widget.str_selectedType;
-        }
-      if(widget.str_selectedModel != null){
-        _selectedModel = widget.str_selectedModel;
-        }
-      if(widget.str_selectedEntity != null){
-        _selectedEntity= widget.str_selectedEntity;
-        }
-      
-      if(widget.str_selectedUser != null){
+        _pn = widget.strPN;
+      }
+      if (widget.str_selectedTypeId != null) {
+        _selectedTypeId = widget.str_selectedTypeId;
+        _selectedTypeName = widget.str_selectedTypeName;
+      }
+      if (widget.str_selectedModelId != null) {
+        _selectedModelName = widget.str_selectedModelName;
+        _selectedModelId = widget.str_selectedModelId;
+      }
+      if (widget.str_selectedEntityId != null) {
+        _selectedEntityId = widget.str_selectedEntityId;
+        _selectedEntityName = widget.str_selectedEntityName;
+      }
+
+      if (widget.str_selectedUser != null) {
         _selectedUser = widget.str_selectedUser;
-        }
-      if(widget.str_selectedUserId != null){
         _selectedUserId = widget.str_selectedUserId;
-        }
+      }
+      if (widget.str_selectedLocation != null) {
+        _selectedLocation = widget.str_selectedLocation;
+        _selectedLocationId = widget.str_selectedLocationId;
+      }
     });
 
     super.initState();
@@ -80,7 +101,7 @@ class _scanningState extends State<scanning> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        if (strDeviceId == 'null' && strSN == 'null' && strPN == 'null') {
+        if (_deviceId == null && _sn == null && _pn == null) {
           Navigator.pushReplacement(context,
               new MaterialPageRoute(builder: (context) => menu.mainMenu()));
         } else {
@@ -107,7 +128,7 @@ class _scanningState extends State<scanning> {
                   style: new TextStyle(fontSize: 15.0),
                 ),
                 title: Text(
-                  strDeviceId.toString(),
+                  _deviceId.toString(),
                   style: styleID
                       ? TextStyle(color: Colors.green)
                       : TextStyle(color: Colors.red),
@@ -132,7 +153,7 @@ class _scanningState extends State<scanning> {
                   style: new TextStyle(fontSize: 15.0),
                 ),
                 title: Text(
-                  strSN.toString(),
+                  _sn.toString(),
                   style: styleSN
                       ? TextStyle(color: Colors.green)
                       : TextStyle(color: Colors.red),
@@ -157,7 +178,7 @@ class _scanningState extends State<scanning> {
                   style: new TextStyle(fontSize: 15.0),
                 ),
                 title: Text(
-                  strPN.toString(),
+                  _pn.toString(),
                   style: stylePN
                       ? TextStyle(color: Colors.green)
                       : TextStyle(color: Colors.red),
@@ -204,23 +225,36 @@ class _scanningState extends State<scanning> {
                   ),
                   icon: new Icon(Icons.navigate_next, color: Colors.white),
                   onPressed: () {
-                    if (strDeviceId == "null" ||
-                        strPN == "null" ||
-                        strSN == "null") {
+                    if (_deviceId == null || _pn == null || _sn == null) {
                       incompleteDialog();
                     } else {
                       Navigator.pushReplacement(
                           context,
                           new MaterialPageRoute(
                               builder: (context) => addDevice.mainAdd(
-                                  strDeviceId: strDeviceId,
-                                  strSN: strSN,
-                                  strPN: strPN,
-                                  str_selectedType: _selectedType,
-                                  str_selectedModel: _selectedModel,
-                                  str_selectedEntity: _selectedEntity,
-                                  str_selectedUser: _selectedUser,
-                                  str_selectedUserId: _selectedUserId)));
+                                    strSN: _sn,
+                                                strPN: _pn,
+                                                strDeviceId: _deviceId,
+                                                str_selectedModelId:
+                                                    _selectedModelId,
+                                                str_selectedEntityId:
+                                                    _selectedEntityId,
+                                                str_selectedTypeId:
+                                                    _selectedTypeId,
+                                                str_selectedModelName:
+                                                    _selectedModelName,
+                                                str_selectedEntityName:
+                                                    _selectedEntityName,
+                                                str_selectedTypeName:
+                                                    _selectedTypeName,
+                                                str_selectedUserId:
+                                                    _selectedUserId,
+                                                str_selectedUser: _selectedUser,
+                                                str_selectedLocation:
+                                                    _selectedLocation,
+                                                str_selectedLocationId:
+                                                    _selectedLocationId,
+                                  )));
                     }
                   },
                   color: Colors.green,
@@ -258,14 +292,28 @@ class _scanningState extends State<scanning> {
                 context,
                 new MaterialPageRoute(
                     builder: (context) => addDevice.mainAdd(
-                        strDeviceId: strDeviceId,
-                        strSN: strSN,
-                        strPN: strPN,
-                        str_selectedType: _selectedType,
-                        str_selectedModel: _selectedModel,
-                        str_selectedEntity: _selectedEntity,
-                        str_selectedUser: _selectedUser,
-                        str_selectedUserId: _selectedUserId)));
+                        strSN: _sn,
+                                                strPN: _pn,
+                                                strDeviceId: _deviceId,
+                                                str_selectedModelId:
+                                                    _selectedModelId,
+                                                str_selectedEntityId:
+                                                    _selectedEntityId,
+                                                str_selectedTypeId:
+                                                    _selectedTypeId,
+                                                str_selectedModelName:
+                                                    _selectedModelName,
+                                                str_selectedEntityName:
+                                                    _selectedEntityName,
+                                                str_selectedTypeName:
+                                                    _selectedTypeName,
+                                                str_selectedUserId:
+                                                    _selectedUserId,
+                                                str_selectedUser: _selectedUser,
+                                                str_selectedLocation:
+                                                    _selectedLocation,
+                                                str_selectedLocationId:
+                                                    _selectedLocationId)));
           },
           child: new Text(
             'Yes',
@@ -322,13 +370,13 @@ class _scanningState extends State<scanning> {
       String barcode = await BarcodeScanner.scan();
       setState(() {
         if (whatScan == 'id') {
-          strDeviceId = barcode;
+          _deviceId = barcode;
           styleID = true;
         } else if (whatScan == 'sn') {
-          strSN = barcode;
+          _sn = barcode;
           styleSN = true;
         } else if (whatScan == 'pn') {
-          strPN = barcode;
+          _pn = barcode;
           stylePN = true;
         }
       });

@@ -5,36 +5,40 @@ import 'package:amds/Menu.dart' as menu;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:simple_permissions/simple_permissions.dart';
-import 'package:amds/before_adddevice.dart' as scan;
+import 'package:amds/scanning.dart' as scan;
 import 'package:amds/usersList.dart' as UsersList;
+import 'package:amds/locationsList.dart' as LocationList;
 
 class mainAdd extends StatefulWidget {
-  final Function() onPressed;
-  final String tooltip;
-  final IconData icon;
-
   String strDeviceId,
       strPN,
       strSN,
-      str_selectedType,
-      str_selectedModel,
-      str_selectedEntity,
+      str_selectedTypeId,
+      str_selectedModelId,
+      str_selectedEntityId,
+      str_selectedTypeName,
+      str_selectedModelName,
+      str_selectedEntityName,
       str_selectedUser,
       str_selectedLocation,
-      str_selectedUserId;
-  mainAdd(
-      {this.onPressed,
-      this.tooltip,
-      this.icon,
-      this.strDeviceId,
-      this.strSN,
-      this.strPN,
-      this.str_selectedType,
-      this.str_selectedModel,
-      this.str_selectedEntity,
-      this.str_selectedLocation,
-      this.str_selectedUser,
-      this.str_selectedUserId});
+      str_selectedUserId,
+      str_selectedLocationId;
+
+  mainAdd({
+    this.strDeviceId,
+    this.strSN,
+    this.strPN,
+    this.str_selectedTypeId,
+    this.str_selectedModelId,
+    this.str_selectedEntityId,
+    this.str_selectedTypeName,
+    this.str_selectedEntityName,
+    this.str_selectedModelName,
+    this.str_selectedLocation,
+    this.str_selectedLocationId,
+    this.str_selectedUser,
+    this.str_selectedUserId,
+  });
 
   @override
   mainAddState createState() {
@@ -51,22 +55,26 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
   TextEditingController controllerDeviceId = new TextEditingController();
   TextEditingController controllerSerialNumber = new TextEditingController();
   TextEditingController controllerProductNumber = new TextEditingController();
-  TextEditingController controllerLocation = new TextEditingController();
-  TextEditingController controllerUser = new TextEditingController();
 
   FocusNode fDeviceId = new FocusNode();
   FocusNode fSerialNumber = new FocusNode();
   FocusNode fProductNumber = new FocusNode();
-  FocusNode fLocation = new FocusNode();
-  FocusNode fUser = new FocusNode();
 
-  bool enableDeviceID, enableSN, enablePN;
+  bool enableDeviceID = true, enableSN = true, enablePN = true;
 
-  String _selectedType,
-      _selectedModel,
-      _selectedEntity,
+  String _selectedTypeId,
+      _selectedModelId,
+      _selectedEntityId,
+      _selectedTypeName,
+      _selectedModelName,
+      _selectedEntityName,
       _selectedUser,
-      _selectedUserId;
+      _selectedUserId,
+      _selectedLocation,
+      _selectedLocationId,
+      _deviceId,
+      _sn,
+      _pn;
 
   List<DropdownMenuItem<String>> dataType = [];
   List<DropdownMenuItem<String>> dataModel = [];
@@ -86,100 +94,63 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
 
   String qresult = '';
 
-  bool isOpened = false;
-  AnimationController _animationController;
-  Animation<Color> _buttonColor;
-  Animation<double> _animateIcon;
-  Animation<double> _translateButton;
-  Curve _curve = Curves.easeOut;
-  double _fabHeight = 56.0;
   bool _isUnlock = true;
   Icon iconLock = new Icon(Icons.lock);
   Icon iconLockOpen = new Icon(Icons.lock_open);
-  String aaa;
 
   @override
   void initState() {
     // TODO: implement initState
-    String wDevId = widget.strDeviceId,
-        wPN = widget.strPN,
-        wSN = widget.strSN,
-        wSelectedType = widget.str_selectedType,
-        wSelectedModel = widget.str_selectedModel,
-        wSelectedEntity = widget.str_selectedEntity,
-        wSelectedUser = widget.str_selectedUser,
-        wSelectedLoc = widget.str_selectedLocation,
-        wSelectedUserId = widget.str_selectedUserId;
 
-    aaa = widget.strDeviceId;
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500))
-          ..addListener(() {
-            setState(() {});
-          });
-    _animateIcon =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
-    _buttonColor = ColorTween(
-      begin: Colors.blue,
-      end: Colors.red,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Interval(
-        0.00,
-        1.00,
-        curve: Curves.linear,
-      ),
-    ));
-    _translateButton = Tween<double>(
-      begin: _fabHeight,
-      end: -14.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Interval(
-        0.0,
-        0.75,
-        curve: _curve,
-      ),
-    ));
     super.initState();
 
     getcomputerTypes().then((result) {
-      new Future.delayed(Duration(milliseconds: 500), () {
-        setState(() {
-          _result = result;
-          getcomputerModels().then((result) {
-            getEntities().then((result) {
-              setState(() {
-                if (wDevId != null) {
-                  controllerDeviceId.text = wDevId;
-                  _isUnlock = false;
-                }
-                if (wPN != null) {
-                  controllerProductNumber.text = wPN;
-                  _isUnlock = false;
-                }
-                if (wSN != null) {
-                  controllerSerialNumber.text = wSN;
-                  _isUnlock = false;
+      new Future.delayed(Duration(milliseconds: 250), () {
+        _result = result;
+        getcomputerModels().then((result) {
+          getEntities().then((result) {
+            setState(() {
+              if (widget.strDeviceId != null) {
+                _deviceId = widget.strDeviceId;
+                controllerDeviceId.text = _deviceId;
+                _isUnlock = false;
+                enableDeviceID = false;
 
-                }
-                if (wSelectedType != null) {
-                  _selectedType = wSelectedType;
-                }
-                if (wSelectedModel != null) {
-                  _selectedModel = wSelectedModel;
-                }
-                if (wSelectedEntity != null) {
-                  _selectedEntity = wSelectedEntity;
-                }
-                if (wSelectedUser != null) {
-                  _selectedUser = wSelectedUser;
-                }
-                if (wSelectedLoc != null) {}
-                if (wSelectedUserId != null) {
-                  _selectedUserId = wSelectedUserId;
-                }
-              });
+              }
+              if (widget.strSN != null) {
+                _sn = widget.strSN;
+                controllerSerialNumber.text = _sn;
+                _isUnlock = false;
+               enableSN = false;
+              }
+              if (widget.strPN != null) {
+                _pn = widget.strPN;
+                controllerProductNumber.text = _pn;
+                _isUnlock = false;
+                enablePN = false;
+
+              }
+              if (widget.str_selectedTypeId != null) {
+                _selectedTypeId = widget.str_selectedTypeId;
+                _selectedTypeName = widget.str_selectedTypeName;
+              }
+              if (widget.str_selectedModelId != null) {
+                _selectedModelName = widget.str_selectedModelName;
+                _selectedModelId = widget.str_selectedModelId;
+              }
+              if (widget.str_selectedEntityId != null) {
+                _selectedEntityId = widget.str_selectedEntityId;
+                _selectedEntityName = widget.str_selectedEntityName;
+              }
+
+              if (widget.str_selectedUser != null) {
+                _selectedUser = widget.str_selectedUser;
+                _selectedUserId = widget.str_selectedUserId;
+              }
+              if (widget.str_selectedLocation != null) {
+                _selectedLocation = widget.str_selectedLocation;
+                _selectedLocationId = widget.str_selectedLocationId;
+              }
             });
           });
         });
@@ -212,8 +183,19 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
             new IconButton(
               icon: _isUnlock == true ? iconLockOpen : iconLock,
               onPressed: () {
-                _isUnlock == true ? _isUnlock= false: _isUnlock= true;
-                
+                setState(() {
+                  if (_isUnlock == true) {
+                    _isUnlock = false;
+                    enableDeviceID = false;
+                    enablePN = false;
+                    enableSN = false;
+                  } else {
+                    _isUnlock = true;
+                    enableDeviceID = true;
+                    enablePN = true;
+                    enableSN = true;
+                  }
+                });
               },
             ),
             new FlatButton.icon(
@@ -229,20 +211,40 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
             )
           ],
         ),
-        floatingActionButton: new Row(
-          children: <Widget>[
-            new Padding(
-              padding: new EdgeInsets.symmetric(
-                horizontal: 15.0,
-              ),
-            ),
-            new FloatingActionButton(
-              child: iconLock,
-              onPressed: () {
-                enableDeviceID = true;
-              },
-            ),
-          ],
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: new FloatingActionButton(
+          child: new Icon(Icons.camera_alt),
+          tooltip: 'Scan',
+          onPressed: () {
+            if (controllerDeviceId.text != '') {
+              _deviceId = controllerDeviceId.text;
+            }
+            if (controllerSerialNumber.text != '') {
+              _sn = controllerSerialNumber.text;
+            }
+            if (controllerProductNumber.text != '') {
+              _pn = controllerProductNumber.text;
+            }
+
+            Navigator.pushReplacement(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) => scan.scanning(
+                          strSN: _sn,
+                          strPN: _pn,
+                          strDeviceId: _deviceId,
+                          str_selectedModelId: _selectedModelId,
+                          str_selectedEntityId: _selectedEntityId,
+                          str_selectedTypeId: _selectedTypeId,
+                          str_selectedModelName: _selectedModelName,
+                          str_selectedEntityName: _selectedEntityName,
+                          str_selectedTypeName: _selectedTypeName,
+                          str_selectedUserId: _selectedUserId,
+                          str_selectedUser: _selectedUser,
+                          str_selectedLocation: _selectedLocation,
+                          str_selectedLocationId: _selectedLocationId,
+                        )));
+          },
         ),
         body: new Stack(
           children: <Widget>[
@@ -266,22 +268,22 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                     child: DropdownButton(
                       iconSize: 20.0,
                       style: TextStyle(fontSize: 17.0, color: Colors.black),
-                      value: _selectedType,
+                      value: _selectedTypeId,
                       items: dataType,
                       hint: Text('Select Type'),
                       onChanged: (value) {
                         setState(() {
                           _searchTypeResult = [];
 
-                          _selectedType = value;
-                          _selectedModel = null;
+                          _selectedTypeId = value;
+                          _selectedModelId = null;
                           //print(_selectedType);
                           //print(_userDetails[int.tryParse(_selectedType)].name);
                           _listDataType.forEach((MapTypeModel) {
-                            if (MapTypeModel.id.contains(_selectedType))
+                            if (MapTypeModel.id.contains(_selectedTypeId))
                               _searchTypeResult.add(MapTypeModel);
                           });
-                          //print(_searchResult);
+                          _selectedTypeName = _searchTypeResult[0].name;
                         });
                       },
                     ),
@@ -293,21 +295,23 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                     child: DropdownButton(
                       iconSize: 20.0,
                       style: TextStyle(fontSize: 17.0, color: Colors.black),
-                      value: _selectedModel,
+                      value: _selectedModelId,
                       items: dataModel,
                       hint: Text('Select Model'),
                       onChanged: (valuemodel) {
-                        _searchModelResult = [];
                         //var result = List<dynamic>.
 //                        print(_searchResult[1].name);
                         // print(_searchTypeResult[0].name);
 
                         setState(() {
-                          _selectedModel = valuemodel;
+                          _searchModelResult = [];
+
+                          _selectedModelId = valuemodel;
                           _listDataModel.forEach((MapTypeModel) {
-                            if (MapTypeModel.id.contains(_selectedModel))
+                            if (MapTypeModel.id.contains(_selectedModelId))
                               _searchModelResult.add(MapTypeModel);
                           });
+                          _selectedModelName = _searchModelResult[0].name;
                         });
                       },
                     ),
@@ -344,95 +348,114 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                     child: DropdownButton(
                       iconSize: 20.0,
                       style: TextStyle(fontSize: 17.0, color: Colors.black),
-                      value: _selectedEntity,
+                      value: _selectedEntityId,
                       items: dataEntities,
                       hint: Text('Select Entitiy'),
                       onChanged: (value) {
                         setState(() {
-                          _selectedEntity = value;
+                          _searchEntitiesResult = [];
+
+                          _selectedEntityId = value;
+                          _listDataEntities.forEach((MapTypeModel) {
+                            if (MapTypeModel.id.contains(_selectedEntityId))
+                              _searchEntitiesResult.add(MapTypeModel);
+                          });
+                          _selectedEntityName = _searchEntitiesResult[0].name;
                         });
                       },
                     ),
                   ),
                 ),
                 Container(
-                    padding:
-                        EdgeInsets.only(right: 15.0, left: 15.0, top: 15.0),
+                    padding: EdgeInsets.only(right: 0.0, left: 5.0, top: 0.0),
                     child: new ListTile(
-                      leading: new Text('User :'),
-                      title: new Text(_selectedUser.toString()),
-                      trailing: new FlatButton.icon(
+                      leading: new Text('Location :',
+                          style: new TextStyle(fontSize: 16.0)),
+                      title: _selectedLocation == null
+                          ? new Text('')
+                          : new Text(_selectedLocation.toString()),
+                      trailing: new IconButton(
                         icon: new Icon(Icons.search),
-                        label: new Text('Search'),
-                        color: Colors.amber,
+                        color: Colors.blue,
                         onPressed: () {
-                          Navigator.pushReplacement(
+                          if (controllerDeviceId.text != '') {
+                            _deviceId = controllerDeviceId.text;
+                          }
+                          if (controllerSerialNumber.text != '') {
+                            _sn = controllerSerialNumber.text;
+                          }
+                          if (controllerProductNumber.text != '') {
+                            _pn = controllerProductNumber.text;
+                          }
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => UsersList.HomePage(
-                                        strSN: controllerSerialNumber.text,
-                                        strPN: controllerProductNumber.text,
-                                        strDeviceId: controllerDeviceId.text,
-                                        str_selectedModel: _selectedModel,
-                                        str_selectedEntity: _selectedEntity,
-                                        str_selectedType: _selectedType,
+                                  builder: (context) => LocationList.HomePage(
+                                        strSN: _sn,
+                                        strPN: _pn,
+                                        strDeviceId: _deviceId,
+                                        str_selectedModelId: _selectedModelId,
+                                        str_selectedEntityId: _selectedEntityId,
+                                        str_selectedTypeId: _selectedTypeId,
+                                        str_selectedModelName:
+                                            _selectedModelName,
+                                        str_selectedEntityName:
+                                            _selectedEntityName,
+                                        str_selectedTypeName: _selectedTypeName,
                                         str_selectedUserId: _selectedUserId,
+                                        str_selectedUser: _selectedUser,
+                                        str_selectedLocation: _selectedLocation,
                                       )));
                         },
                       ),
                     )),
                 Container(
-                    padding:
-                        EdgeInsets.only(right: 15.0, left: 15.0, top: 15.0),
+                    padding: EdgeInsets.only(right: 0.0, left: 5.0, top: 0.0),
                     child: new ListTile(
-                      leading: new Text('User :'),
-                      title: new Text(_selectedUser.toString()),
-                      trailing: new FlatButton.icon(
+                      leading: new Text('User :',
+                          style: new TextStyle(fontSize: 16.0)),
+                      title: _selectedUser == null
+                          ? new Text('')
+                          : new Text(_selectedUser.toString()),
+                      trailing: new IconButton(
                         icon: new Icon(Icons.search),
-                        label: new Text('Search'),
                         color: Colors.blue,
                         onPressed: () {
-                          Navigator.pushReplacement(
+                          if (controllerDeviceId.text != '') {
+                            _deviceId = controllerDeviceId.text;
+                          }
+                          if (controllerSerialNumber.text != '') {
+                            _sn = controllerSerialNumber.text;
+                          }
+                          if (controllerProductNumber.text != '') {
+                            _pn = controllerProductNumber.text;
+                          }
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => UsersList.HomePage(
-                                        strSN: controllerSerialNumber.text,
-                                        strPN: controllerProductNumber.text,
-                                        strDeviceId: controllerDeviceId.text,
-                                        str_selectedModel: _selectedModel,
-                                        str_selectedEntity: _selectedEntity,
-                                        str_selectedType: _selectedType,
+                                        strSN: _sn,
+                                        strPN: _pn,
+                                        strDeviceId: _deviceId,
+                                        str_selectedModelId: _selectedModelId,
+                                        str_selectedEntityId: _selectedEntityId,
+                                        str_selectedTypeId: _selectedTypeId,
+                                        str_selectedModelName:
+                                            _selectedModelName,
+                                        str_selectedEntityName:
+                                            _selectedEntityName,
+                                        str_selectedTypeName: _selectedTypeName,
                                         str_selectedUserId: _selectedUserId,
+                                        str_selectedUser: _selectedUser,
+                                        str_selectedLocation: _selectedLocation,
+                                        str_selectedLocationId:
+                                            _selectedLocationId,
                                       )));
                         },
                       ),
                     )),
               ],
             ),
-            Positioned(
-                bottom: 16.0,
-                right: 16.0,
-                child: Column(
-                  children: <Widget>[
-                    Transform(
-                      transform: Matrix4.translationValues(
-                        0.0,
-                        _translateButton.value * 2.0,
-                        0.0,
-                      ),
-                      child: wlockUnlock(),
-                    ),
-                    Transform(
-                      transform: Matrix4.translationValues(
-                        0.0,
-                        _translateButton.value,
-                        0.0,
-                      ),
-                      child: wScan(),
-                    ),
-                    toggle(),
-                  ],
-                ))
           ],
         ),
       ),
@@ -440,80 +463,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
   }
   //END OF INTERFACE//
 
-  Widget toggle() {
-    return Container(
-      child: FloatingActionButton(
-        backgroundColor: _buttonColor.value,
-        onPressed: animate,
-        tooltip: 'Toggle',
-        child: AnimatedIcon(
-          icon: AnimatedIcons.menu_close,
-          progress: _animateIcon,
-        ),
-      ),
-    );
-  }
-
-  Widget wlockUnlock() {
-    return Container(
-      child: FloatingActionButton(
-        backgroundColor: Colors.green,
-        onPressed: () {},
-        tooltip: 'Save the new device',
-        child: _isUnlock == true ? iconLockOpen : iconLock,
-      ),
-    );
-  }
-
-  Widget wScan() {
-    return Container(
-      child: FloatingActionButton(
-        onPressed: () {
-          String id, sn, pn;
-          if (controllerDeviceId.text != '') {
-            id = controllerDeviceId.text;
-          }
-          if (controllerSerialNumber.text != '') {
-            sn = controllerSerialNumber.text;
-          }
-          if (controllerProductNumber.text != '') {
-            pn = controllerProductNumber.text;
-          }
-
-          Navigator.pushReplacement(
-              context,
-              new MaterialPageRoute(
-                  builder: (context) => scan.scanning(
-                      strDeviceId: id,
-                      strSN: sn,
-                      strPN: pn,
-                      str_selectedType: _selectedType,
-                      str_selectedModel: _selectedModel,
-                      str_selectedEntity: _selectedEntity,
-                      str_selectedUser: _selectedUser,
-                      str_selectedUserId: _selectedUserId)));
-        },
-        tooltip: 'Back to scanning page',
-        child: Icon(Icons.camera_alt),
-      ),
-    );
-  }
   //METHOD OR FUNCTION ARE HERE//
-
-  @override
-  dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  animate() {
-    if (!isOpened) {
-      _animationController.forward();
-    } else {
-      _animationController.reverse();
-    }
-    isOpened = !isOpened;
-  }
 
   Future getcomputerTypes() async {
     try {
@@ -644,7 +594,6 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
             style: new TextStyle(color: Colors.white),
           ),
           onPressed: () {
-            Navigator.pop(context, true);
             Navigator.pushReplacement(context,
                 new MaterialPageRoute(builder: (context) => menu.mainMenu()));
           },
@@ -655,13 +604,14 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
   }
 
   Future<bool> inputConfirmDialog() {
-    if (_selectedType != null &&
-        _selectedModel != null &&
+    if (_selectedTypeId != null &&
+        _selectedModelId != null &&
         controllerDeviceId.text != "" &&
         controllerProductNumber.text != "" &&
-        controllerLocation.text != "" &&
+        _selectedLocation != "" &&
         controllerSerialNumber.text != "" &&
-        controllerUser.text != "") {
+        _selectedUser != "" &&
+        _selectedEntityId != null) {
       AlertDialog alertInputConfirmation = new AlertDialog(
           title: const Text(
             'Input Confirmation',
@@ -679,7 +629,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                     style: new TextStyle(color: Colors.blue)),
                 title: new Text(
                   //'${txtselectedType[int.tryParse(_selectedType)+1]["name"]}',
-                  _searchTypeResult[0].name,
+                  _selectedTypeName,
                   style: new TextStyle(color: Colors.green),
                 ),
               ),
@@ -687,7 +637,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                 leading: new Text('Model : ',
                     style: new TextStyle(color: Colors.blue)),
                 title: new Text(
-                  _searchModelResult[0].name,
+                  _selectedModelName,
                   style: new TextStyle(color: Colors.green),
                 ),
               ),
@@ -710,10 +660,18 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                 ),
               ),
               new ListTile(
+                leading: new Text('Entity : ',
+                    style: new TextStyle(color: Colors.blue)),
+                title: new Text(
+                  _selectedEntityName,
+                  style: new TextStyle(color: Colors.green),
+                ),
+              ),
+              new ListTile(
                 leading: new Text('Location : ',
                     style: new TextStyle(color: Colors.blue)),
                 title: new Text(
-                  controllerLocation.text,
+                  _selectedLocation,
                   style: new TextStyle(color: Colors.green),
                 ),
               ),
@@ -721,7 +679,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                 leading: new Text('User : ',
                     style: new TextStyle(color: Colors.blue)),
                 title: new Text(
-                  controllerLocation.text,
+                  _selectedUser,
                   style: new TextStyle(color: Colors.green),
                 ),
               ),
@@ -735,14 +693,20 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                 ),
                 trailing: new RaisedButton(
                   onPressed: () {
-                    inputNewComputer(
-                        controllerDeviceId.text,
-                        _selectedType,
-                        _selectedModel,
-                        controllerSerialNumber.text,
-                        controllerProductNumber.text,
-                        controllerLocation.text,
-                        controllerUser.text).then((_result) {
+                    setState(() {
+                                          _deviceId = controllerDeviceId.text;
+                                          _sn = controllerSerialNumber.text;
+                                          _pn = controllerProductNumber.text;
+                                        });
+                                     inputNewComputer(
+                        _deviceId,
+                        _selectedEntityId,
+                        _selectedTypeId,
+                        _selectedModelId,
+                        _sn,
+                        _pn,
+                        _selectedLocationId,
+                        _selectedUserId).then((_result) {
                       new Future.delayed(Duration(milliseconds: 500), () {
                         Navigator.pop(context, true);
                         successInputDialog();
@@ -793,6 +757,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
 
   Future inputNewComputer(
       String computerId,
+      String entities_id,
       String computerTypes_id,
       String computerModels_id,
       String sn,
@@ -803,6 +768,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
     try {
       final response = await http.post(url + "inputNewComputer.php", body: {
         'id': computerId,
+        'entities_id': entities_id,
         'model_id': computerModels_id,
         'type_id': computerTypes_id,
         'sn': sn,

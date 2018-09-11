@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:amds/main.dart' as login;
 import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/scan.dart' as scanner;
-import 'package:amds/before_adddevice.dart' as scan_adddevice;
+import 'package:amds/scanning.dart' as scan_adddevice;
 import 'package:amds/computerList.dart' as commputerlist;
 import 'package:amds/usersList.dart' as UserList;
 
 class mainMenu extends StatefulWidget {
   final String username;
+  
 
   mainMenu({this.username});
 
@@ -47,10 +48,7 @@ class _mainMenuState extends State<mainMenu> {
                 ],
               )),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => scan_adddevice.scanning()));
+                Navigator.of(context).pushNamed('/scanningComputer');
                 //MaterialPageRoute(builder: (context) => addDevice.mainAdd()));
               },
             ),
