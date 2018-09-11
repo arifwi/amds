@@ -93,6 +93,10 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
   var _result;
 
   String qresult = '';
+<<<<<<< HEAD
+  String url = 'http://172.28.16.84:8089/';
+=======
+>>>>>>> 1c9426d2cf6d9c0aaf8e77cd7c161fd13ef188e6
 
   bool _isUnlock = true;
   Icon iconLock = new Icon(Icons.lock);
