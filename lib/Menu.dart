@@ -105,10 +105,7 @@ class _mainMenuState extends State<mainMenu> {
                 ],
               )),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserList.HomePage()),
-                );
+                Navigator.pushNamed(context, '/computerList');
               },
             ),
           ],

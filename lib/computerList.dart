@@ -1,26 +1,30 @@
 import 'dart:async';
-
-import 'package:flutter/material.dart';
 import 'dart:convert';
+
+import 'package:amds/utils/formatter.dart' as MyFormatter;
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-
-
+import 'package:amds/addDevice.dart' as addDevice;
+import  'package:amds/Menu.dart' as menu;
 
 class HomePage extends StatefulWidget {
+  
   @override
   _HomePageState createState() => new _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  
   TextEditingController controller = new TextEditingController();
 
-  
-  List<UserDetails> _searchResult = [];
+  List<MapIdName> _searchResult = [];
 
-  List<UserDetails> _userDetails = [];
+  List<MapIdName> _computerDetails = [];
 
-  final String url = 'https://jsonplaceholder.typicode.com/users';
+  String fullname;
+
+  //final String url = 'http://192.168.43.62/amdsweb/getUsers.php';
+  final String url = 'http://172.28.16.84:8089/getComputerList.php';
 
   // Get json result and convert it to model. Then add
   Future<Null> getUserDetails() async {
@@ -29,25 +33,30 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       for (Map user in responseJson) {
-        _userDetails.add(UserDetails.fromJson(user));
+        _computerDetails.add(MapIdName.fromJson(user));
       }
     });
   }
 
   @override
   void initState() {
+    
     super.initState();
-
-    getUserDetails();
+    
+    getUserDetails().then((value){
+      
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      
       appBar: new AppBar(
-        title: new Text('Home'),
+        title: new Text('Computer List'),
         elevation: 0.0,
       ),
+      
       body: new Column(
         children: <Widget>[
           new Container(
@@ -59,14 +68,18 @@ class _HomePageState extends State<HomePage> {
                   leading: new Icon(Icons.search),
                   title: new TextField(
                     controller: controller,
+                    inputFormatters: [MyFormatter.UpperCaseFormatter()],
                     decoration: new InputDecoration(
                         hintText: 'Search', border: InputBorder.none),
                     onChanged: onSearchTextChanged,
                   ),
-                  trailing: new IconButton(icon: new Icon(Icons.cancel), onPressed: () {
-                    controller.clear();
-                    onSearchTextChanged('');
-                  },),
+                  trailing: new IconButton(
+                    icon: new Icon(Icons.cancel),
+                    onPressed: () {
+                      controller.clear();
+                      onSearchTextChanged('');
+                    },
+                  ),
                 ),
               ),
             ),
@@ -74,29 +87,86 @@ class _HomePageState extends State<HomePage> {
           new Expanded(
             child: _searchResult.length != 0 || controller.text.isNotEmpty
                 ? new ListView.builder(
-              itemCount: _searchResult.length,
-              itemBuilder: (context, i) {
-                return new Card(
-                  child: new ListTile(
-                    leading: new CircleAvatar(backgroundImage: new NetworkImage(_searchResult[i].profileUrl,),),
-                    title: new Text(_searchResult[i].firstName + ' ' + _searchResult[i].lastName),
-                  ),
-                  margin: const EdgeInsets.all(0.0),
-                );
-              },
-            )
+                    itemCount: _searchResult.length,
+                    itemBuilder: (context, i) {
+                      return new Card(
+                        child: new ExpansionTile(
+                          leading: new Icon(
+                            Icons.person_pin,
+                            size: 40.0,
+                            color: Colors.blue,
+                          ),
+                          title: new Text(
+                            _searchResult[i].name,
+                          ),
+                          children: <Widget>[
+                            new ListTile(
+                              title: new Text(
+                                '${_searchResult[i].modelName} ${_searchResult[i].typeName}',
+                                style: new TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              trailing: new FlatButton(
+                                child: new Text(
+                                  'Select',
+                                  style: new TextStyle(color: Colors.white),
+                                ),
+                                color: Colors.blue,
+                                onPressed: () {
+                                  setState(() {
+                                    
+                                  });
+                                  
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        margin: const EdgeInsets.all(0.0),
+                      );
+                    },
+                  )
                 : new ListView.builder(
-              itemCount: _userDetails.length,
-              itemBuilder: (context, index) {
-                return new Card(
-                  child: new ListTile(
-                    leading: new CircleAvatar(backgroundImage: new NetworkImage(_userDetails[index].profileUrl,),),
-                    title: new Text(_userDetails[index].firstName + ' ' + _userDetails[index].lastName),
+                    itemCount: _computerDetails.length,
+                    itemBuilder: (context, index) {
+                      return new Card(
+                        child: new ExpansionTile(
+                          leading: new Icon(
+                            Icons.person_pin,
+                            size: 40.0,
+                            color: Colors.blue,
+                          ),
+                          title: new Text(_computerDetails[index].name),
+                          children: <Widget>[
+                            new ListTile(
+                              title: new Text(
+                                '${_computerDetails[index].modelName} ${_computerDetails[index].typeName}',
+                                style: new TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              trailing: new FlatButton(
+                                child: new Text(
+                                  'Select',
+                                  style: new TextStyle(color: Colors.white),
+                                ),
+                                color: Colors.blue,
+                                onPressed: () {
+                                  setState(() {
+                                    
+                                  });
+
+                                  
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        margin: const EdgeInsets.all(0.0),
+                      );
+                    },
                   ),
-                  margin: const EdgeInsets.all(0.0),
-                );
-              },
-            ),
           ),
         ],
       ),
@@ -110,27 +180,31 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    _userDetails.forEach((userDetail) {
-      if (userDetail.firstName.contains(text) || userDetail.lastName.contains(text))
-        _searchResult.add(userDetail);
+    _computerDetails.forEach((userDetail) {
+      if (userDetail.id.contains(text) ||
+          userDetail.name.contains(text) ||
+          userDetail.modelName.contains(text) ||
+          userDetail.typeName.contains(text)) _searchResult.add(userDetail);
     });
 
     setState(() {});
   }
 }
 
+class MapIdName {
+  //used by get selected type and selected model
+  final String id, name, modelId, modelName, typeId, typeName;
 
-class UserDetails {
-  final int id;
-  final String firstName, lastName, profileUrl;
+  MapIdName({this.id, this.name, this.modelId, this.modelName, this.typeId, this.typeName});
 
-  UserDetails({this.id, this.firstName, this.lastName, this.profileUrl = 'https://i.amz.mshcdn.com/3NbrfEiECotKyhcUhgPJHbrL7zM=/950x534/filters:quality(90)/2014%2F06%2F02%2Fc0%2Fzuckheadsho.a33d0.jpg'});
-
-  factory UserDetails.fromJson(Map<String, dynamic> json) {
-    return new UserDetails(
+  factory MapIdName.fromJson(Map<String, dynamic> json) {
+    return new MapIdName(
       id: json['id'],
-      firstName: json['name'],
-      lastName: json['username'],
+      name: json['name'],
+      modelId: json['model_id'],
+      modelName: json['model_name'],
+      typeId: json['type_id'],
+      typeName : json['type_name'],
     );
   }
 }

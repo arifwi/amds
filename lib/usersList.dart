@@ -63,7 +63,8 @@ class _HomePageState extends State<HomePage> {
 
   String fullname;
 
-  final String url = 'http://192.168.43.62/amdsweb/getUsers.php';
+  //final String url = 'http://192.168.43.62/amdsweb/getUsers.php';
+  final String url = 'http://172.28.16.84:8089/getUsers.php';
 
   // Get json result and convert it to model. Then add
   Future<Null> getUserDetails() async {

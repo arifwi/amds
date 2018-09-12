@@ -10,6 +10,7 @@ import 'package:amds/addDevice.dart' ;
 import 'package:amds/scanning.dart' as scanningComputer;
 import 'package:amds/usersList.dart' as userList;
 import 'package:amds/locationsList.dart'as locationList;
+import 'package:amds/computerList.dart' as computerList;
 
 void main() {
 SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
@@ -32,6 +33,8 @@ class MyApp extends StatelessWidget {
         '/scanningComputer' : (BuildContext context)=> new scanningComputer.scanning(),
         '/userList' : (BuildContext context)=> new userList.HomePage(),
         '/locationList' : (BuildContext context) => locationList.HomePage(),
+        '/computerList' : (BuildContext context) => computerList.HomePage(),
+
       },
     );
   }
@@ -47,21 +50,14 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController txt_password = new TextEditingController();
 
   String message = '';
-<<<<<<< HEAD
   String url = 'http://172.28.16.84:8089/';
-=======
-  String url = 'http://192.168.43.62/amdsweb/';
-  //String url = 'http://172.28.16.84:8089/';
->>>>>>> 1c9426d2cf6d9c0aaf8e77cd7c161fd13ef188e6
   Future<dynamic> _checkLogin() async {
     setState(() {
       message = '';
     });
     try {
       final response = await http.post(url + "login.php", body: {
-        //http://192.168.168.190/amds/login.php
-        //http://192.168.43.62/amds/login.php
-        //10.66
+       
         'username': txt_username.text,
         'password': txt_password.text,
       });
@@ -72,11 +68,9 @@ class _LoginPageState extends State<LoginPage> {
             message = 'Login Filed';
           });
         } else {
-          //print(datauser[0]["username"]);
           Navigator.pushReplacementNamed(context, "/mainMenu");
           setState(() {
             username = datauser[0]["username"];
-            //print(username);
           });
         }
       }
