@@ -102,8 +102,7 @@ class _scanningState extends State<scanning> {
     return WillPopScope(
       onWillPop: () {
         if (_deviceId == null && _sn == null && _pn == null) {
-          Navigator.pushReplacement(context,
-              new MaterialPageRoute(builder: (context) => menu.mainMenu()));
+          Navigator.pushReplacementNamed(context, '/computerList');
         } else {
           backButtonDialog();
         }
@@ -116,7 +115,13 @@ class _scanningState extends State<scanning> {
               Icons.arrow_back,
               color: Colors.white,
             ),
-            onPressed: backButtonDialog,
+            onPressed: () {
+              if (_deviceId == null && _sn == null && _pn == null) {
+                Navigator.pushReplacementNamed(context, '/computerList');
+              } else {
+                backButtonDialog();
+              }
+            },
           ),
         ),
         body: new Center(
@@ -233,27 +238,18 @@ class _scanningState extends State<scanning> {
                           new MaterialPageRoute(
                               builder: (context) => addDevice.mainAdd(
                                     strSN: _sn,
-                                                strPN: _pn,
-                                                strDeviceId: _deviceId,
-                                                str_selectedModelId:
-                                                    _selectedModelId,
-                                                str_selectedEntityId:
-                                                    _selectedEntityId,
-                                                str_selectedTypeId:
-                                                    _selectedTypeId,
-                                                str_selectedModelName:
-                                                    _selectedModelName,
-                                                str_selectedEntityName:
-                                                    _selectedEntityName,
-                                                str_selectedTypeName:
-                                                    _selectedTypeName,
-                                                str_selectedUserId:
-                                                    _selectedUserId,
-                                                str_selectedUser: _selectedUser,
-                                                str_selectedLocation:
-                                                    _selectedLocation,
-                                                str_selectedLocationId:
-                                                    _selectedLocationId,
+                                    strPN: _pn,
+                                    strDeviceId: _deviceId,
+                                    str_selectedModelId: _selectedModelId,
+                                    str_selectedEntityId: _selectedEntityId,
+                                    str_selectedTypeId: _selectedTypeId,
+                                    str_selectedModelName: _selectedModelName,
+                                    str_selectedEntityName: _selectedEntityName,
+                                    str_selectedTypeName: _selectedTypeName,
+                                    str_selectedUserId: _selectedUserId,
+                                    str_selectedUser: _selectedUser,
+                                    str_selectedLocation: _selectedLocation,
+                                    str_selectedLocationId: _selectedLocationId,
                                   )));
                     }
                   },
@@ -293,27 +289,18 @@ class _scanningState extends State<scanning> {
                 new MaterialPageRoute(
                     builder: (context) => addDevice.mainAdd(
                         strSN: _sn,
-                                                strPN: _pn,
-                                                strDeviceId: _deviceId,
-                                                str_selectedModelId:
-                                                    _selectedModelId,
-                                                str_selectedEntityId:
-                                                    _selectedEntityId,
-                                                str_selectedTypeId:
-                                                    _selectedTypeId,
-                                                str_selectedModelName:
-                                                    _selectedModelName,
-                                                str_selectedEntityName:
-                                                    _selectedEntityName,
-                                                str_selectedTypeName:
-                                                    _selectedTypeName,
-                                                str_selectedUserId:
-                                                    _selectedUserId,
-                                                str_selectedUser: _selectedUser,
-                                                str_selectedLocation:
-                                                    _selectedLocation,
-                                                str_selectedLocationId:
-                                                    _selectedLocationId)));
+                        strPN: _pn,
+                        strDeviceId: _deviceId,
+                        str_selectedModelId: _selectedModelId,
+                        str_selectedEntityId: _selectedEntityId,
+                        str_selectedTypeId: _selectedTypeId,
+                        str_selectedModelName: _selectedModelName,
+                        str_selectedEntityName: _selectedEntityName,
+                        str_selectedTypeName: _selectedTypeName,
+                        str_selectedUserId: _selectedUserId,
+                        str_selectedUser: _selectedUser,
+                        str_selectedLocation: _selectedLocation,
+                        str_selectedLocationId: _selectedLocationId)));
           },
           child: new Text(
             'Yes',
@@ -356,8 +343,7 @@ class _scanningState extends State<scanning> {
             style: new TextStyle(color: Colors.white),
           ),
           onPressed: () {
-            Navigator.pushReplacement(context,
-                new MaterialPageRoute(builder: (context) => menu.mainMenu()));
+            Navigator.pushReplacementNamed(context, '/computerList');
           },
         )
       ],

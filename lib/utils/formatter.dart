@@ -8,3 +8,11 @@ class UpperCaseFormatter extends TextInputFormatter{
   }
 
 }
+class LowerCaseFormatter extends TextInputFormatter{
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    // TODO: implement formatEditUpdate
+    return newValue.copyWith(text:  newValue.text.toLowerCase());
+  }
+
+}

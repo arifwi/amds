@@ -5,12 +5,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:amds/Menu.dart';
+import 'package:amds/Menu.dart' as mainMenu;
 import 'package:amds/addDevice.dart' ;
 import 'package:amds/scanning.dart' as scanningComputer;
 import 'package:amds/usersList.dart' as userList;
 import 'package:amds/locationsList.dart'as locationList;
 import 'package:amds/computerList.dart' as computerList;
+import 'package:amds/utils/formatter.dart' as MyFormatter;
+import 'package:amds/computerDetails.dart' as computerDetails;
 
 void main() {
 SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
@@ -28,12 +30,13 @@ class MyApp extends StatelessWidget {
       home: new LoginPage(),
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
-        '/mainMenu': (BuildContext context) => new mainMenu(username: username),
+        '/mainMenu': (BuildContext context) => new mainMenu.mainMenu(),
         '/addComputer': (BuildContext context)=> new mainAdd(),
         '/scanningComputer' : (BuildContext context)=> new scanningComputer.scanning(),
         '/userList' : (BuildContext context)=> new userList.HomePage(),
         '/locationList' : (BuildContext context) => locationList.HomePage(),
         '/computerList' : (BuildContext context) => computerList.HomePage(),
+        '/computerDetails': (BuildContext context)=> computerDetails.MainComputerDetails(),
 
       },
     );
@@ -109,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   new TextField(
                     controller: txt_username,
+                    inputFormatters: [MyFormatter.LowerCaseFormatter()],
                     decoration: InputDecoration(hintText: 'Username'),
                   ),
                   new Padding(
@@ -116,6 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   new TextField(
                     controller: txt_password,
+                    inputFormatters: [MyFormatter.LowerCaseFormatter()],
                     decoration: InputDecoration(hintText: 'Password'),
                     obscureText: true,
                   ),

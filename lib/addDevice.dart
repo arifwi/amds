@@ -8,6 +8,7 @@ import 'package:simple_permissions/simple_permissions.dart';
 import 'package:amds/scanning.dart' as scan;
 import 'package:amds/usersList.dart' as UsersList;
 import 'package:amds/locationsList.dart' as LocationList;
+import 'package:amds/utils/formatter.dart' as MyFormatter;
 
 class mainAdd extends StatefulWidget {
   String strDeviceId,
@@ -256,8 +257,9 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                     enabled: enableDeviceID,
                     focusNode: fDeviceId,
                     controller: controllerDeviceId,
+                    inputFormatters: [MyFormatter.UpperCaseFormatter()],
                     decoration: InputDecoration(
-                        labelText: 'ID Device',
+                        labelText: 'Device ID',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),
                   ),
@@ -270,6 +272,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                       style: TextStyle(fontSize: 17.0, color: Colors.black),
                       value: _selectedTypeId,
                       items: dataType,
+                      
                       hint: Text('Select Type'),
                       onChanged: (value) {
                         setState(() {
@@ -323,6 +326,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                     enabled: enableSN,
                     focusNode: fSerialNumber,
                     controller: controllerSerialNumber,
+                    inputFormatters: [MyFormatter.UpperCaseFormatter()],
                     decoration: InputDecoration(
                         labelText: 'Serial Number',
                         border: OutlineInputBorder(
@@ -335,6 +339,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                     enabled: enablePN,
                     focusNode: fProductNumber,
                     controller: controllerProductNumber,
+                    inputFormatters: [MyFormatter.UpperCaseFormatter()],
                     decoration: InputDecoration(
                         labelText: 'Product Number',
                         border: OutlineInputBorder(
