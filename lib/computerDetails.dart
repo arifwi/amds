@@ -47,39 +47,82 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
       appBar: new AppBar(),
       body: Container(
         margin: EdgeInsets.all(20.0),
-        child: new Column(
+        child: ListView(
           children: <Widget>[
-            new Center(
-              child: _selectedTypeName == 'DESKTOP' 
-                  ? new Icon(Icons.desktop_windows, size: 80.0,)
-                  : _selectedTypeName == 'NOTEBOOK'
-                      ? new Icon(Icons.laptop,size: 80.0,)
-                      : new Icon(Icons.close,size: 80.0,),
-            ),
-            new Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              
+            new Column(
               children: <Widget>[
-                new Text('ID',),
-                new Text(':'),
-                new Text(_deviceId.toString(),style: new TextStyle(fontWeight: FontWeight.bold)),
-
+                new Center(
+                  child: _selectedTypeName == 'DESKTOP'
+                      ? new Icon(
+                          Icons.desktop_windows,
+                          size: 80.0,
+                        )
+                      : _selectedTypeName == 'NOTEBOOK'
+                          ? new Icon(
+                              Icons.laptop,
+                              size: 80.0,
+                            )
+                          : new Icon(
+                              Icons.close,
+                              size: 80.0,
+                            ),
+                ),
+                new ListTile(
+                  leading: new Text('DEVICE ID'),
+                  title: new Text(':'),
+                  trailing: Text(_deviceId.toString(),
+                      style: new TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                new ListTile(
+                  leading: new Text('USERNAME'),
+                  title: new Text(':'),
+                  trailing: Text(_selectedUser.toString(),
+                      style: new TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                new ListTile(
+                  leading: new Text('ENTITIES'),
+                  title: new Text(':'),
+                  trailing: Text(_selectedEntityName.toString(),
+                      style: new TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                new ListTile(
+                  leading: new Text('LOCATION'),
+                  title: new Text(':'),
+                  trailing: Text(_selectedLocation.toString(),
+                      style: new TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                new ListTile(
+                  leading: new Text('TYPE'),
+                  title: new Text(':'),
+                  trailing: Text(_selectedTypeName.toString(),
+                      style: new TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                new ListTile(
+                  leading: new Text('MODEL'),
+                  title: new Text(':'),
+                  trailing: Text(
+                    _selectedModelName.toString(),
+                    style: new TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                new ListTile(
+                  leading: new Text('PRODUCT NUMBER'),
+                  title: new Text(':'),
+                  trailing: Text(_pn.toString(),
+                      style: new TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                new ListTile(
+                  leading: new Text('SERIAL NUMBER'),
+                  title: new Text(':'),
+                  trailing: Text(_sn.toString(),
+                      style: new TextStyle(fontWeight: FontWeight.bold)),
+                ),
               ],
             ),
-            new Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                 new Text('USERNAME'),
-              new Text(':'),
-              new Text(_deviceId.toString(),style: new TextStyle(fontWeight: FontWeight.bold)),
-                
-              ],
-            ),
-            
+            new RaisedButton(
+              onPressed: (){},
+              child: new Text('MOVE'),
+            )
           ],
         ),
       ),

@@ -95,7 +95,14 @@ class _HomePageState extends State<HomePage> {
                         child: new ListTile(
                           onTap: (){
                             Navigator.push(context, new MaterialPageRoute(
-                              builder: (context)=> computerDetails.MainComputerDetails(str_selectedTypeName: _searchComputerResult[i].typeName,)
+                              builder: (context)=> computerDetails.MainComputerDetails(str_selectedTypeName: _searchComputerResult[i].typeName, 
+                              str_selectedEntityName:  _searchComputerResult[i].entities,
+                               strSN:_searchComputerResult[i].sn, 
+                              str_selectedLocation: _searchComputerResult[i].locations,
+                              strPN: _searchComputerResult[i].pn, 
+                              str_selectedModelName: _searchComputerResult[i].modelName,
+                              strDeviceId: _searchComputerResult[i].name, 
+                              str_selectedUser: _searchComputerResult[i].username,)
                             ));
                           },
                           leading:
@@ -126,7 +133,16 @@ class _HomePageState extends State<HomePage> {
                         child: new ListTile(
                           onTap: (){
                             Navigator.push(context, new MaterialPageRoute(
-                              builder: (context)=> computerDetails.MainComputerDetails(str_selectedTypeName: _computerDetails[index].typeName,)
+                              builder: (context)=> 
+                              computerDetails.MainComputerDetails(str_selectedTypeName: _computerDetails[index].typeName, 
+                              str_selectedEntityName:  _computerDetails[index].entities, 
+                              strSN:_computerDetails[index].sn, 
+                              str_selectedLocation: _computerDetails[index].locations,
+                              strPN: _computerDetails[index].pn, 
+                              str_selectedModelName: _computerDetails[index].modelName,
+                              strDeviceId: _computerDetails[index].name, 
+                              str_selectedUser: _computerDetails[index].username,)
+                              
                             ));
                           },
                           leading:
@@ -179,7 +195,11 @@ class MapIdNameComputers {
       typeName,
       username,
       firstname,
-      lastname;
+      lastname,
+      entities,
+      locations,
+      sn,
+      pn;
 
   MapIdNameComputers(
       {this.id,
@@ -190,7 +210,11 @@ class MapIdNameComputers {
       this.typeName,
       this.firstname,
       this.lastname,
-      this.username});
+      this.username,
+      this.entities,
+      this.locations,
+      this.pn,
+      this.sn});
 
   factory MapIdNameComputers.fromJson(Map<String, dynamic> json) {
     return new MapIdNameComputers(
@@ -202,6 +226,10 @@ class MapIdNameComputers {
         typeName: json['type_name'],
         username: json['username'],
         firstname: json['firstname'],
-        lastname: json['lastname']);
+        lastname: json['lastname'],
+        entities : json['entities_name'],
+        locations :json['location_name'],
+        sn : json['sn'],
+        pn : json['pn']);
   }
 }
