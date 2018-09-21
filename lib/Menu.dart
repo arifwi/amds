@@ -8,8 +8,8 @@ import 'package:amds/scan.dart' as scanner;
 import 'package:amds/scanning.dart' as scan_adddevice;
 import 'package:amds/computerList.dart' as commputerlist;
 import 'package:amds/usersList.dart' as UserList;
-import 'package:amds/computergrid.dart'as computerGrid;
-
+import 'package:amds/monitorList.dart' as monitorList;
+import 'package:amds/printerList.dart' as printerList;
 class mainMenu extends StatefulWidget {
   final String username;
   
@@ -107,7 +107,7 @@ class _mainMenuState extends State<mainMenu> {
               )),
               onTap: () {
                 Navigator.push(context, new MaterialPageRoute(
-                  builder: (context)=> computerGrid.HomePage()
+                  builder: (context)=> printerList.HomePage()
                 ));
               },
             ),
