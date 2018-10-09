@@ -6,42 +6,51 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/Menu.dart' as menu;
-import 'package:amds/movementDevices.dart' as movementDevices;
-class MainComputerDetails extends StatefulWidget {
+
+class MainMovementDevices extends StatefulWidget {
   String strDeviceId,
-      strSN,
       str_selectedTypeName,
-      str_selectedModelName,
       str_selectedEntityName,
       str_selectedUser,
       str_selectedLocation;
 
-  MainComputerDetails({
+  MainMovementDevices({
     this.strDeviceId,
-    this.strSN,
     this.str_selectedTypeName,
     this.str_selectedEntityName,
-    this.str_selectedModelName,
     this.str_selectedLocation,
     this.str_selectedUser,
   });
   @override
-  _MainComputerDetailsState createState() => _MainComputerDetailsState();
+  _MainMovementDevicesState createState() => _MainMovementDevicesState();
 }
 
-class _MainComputerDetailsState extends State<MainComputerDetails> {
+class _MainMovementDevicesState extends State<MainMovementDevices> {
   String _selectedTypeName,
       _selectedModelName,
       _selectedEntityName,
       _selectedUser,
       _selectedLocation,
-      _deviceId,
-      _sn;
+      _deviceId;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(),
+      appBar: new AppBar(
+        title:Text(_deviceId.toString(),
+                      style: new TextStyle(fontWeight: FontWeight.bold)),
+        leading: _selectedTypeName == 'DESKTOP'
+                      ? new Icon(
+                          Icons.desktop_windows,
+                        )
+                      : _selectedTypeName == 'NOTEBOOK'
+                          ? new Icon(
+                              Icons.laptop,
+                            )
+                          : new Icon(
+                              Icons.close,
+                            ),
+      ),
       body: Container(
         margin: EdgeInsets.all(20.0),
         child: ListView(
@@ -49,26 +58,7 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
             new Column(
               children: <Widget>[
                 new Center(
-                  child: _selectedTypeName == 'DESKTOP'
-                      ? new Icon(
-                          Icons.desktop_windows,
-                          size: 80.0,
-                        )
-                      : _selectedTypeName == 'NOTEBOOK'
-                          ? new Icon(
-                              Icons.laptop,
-                              size: 80.0,
-                            )
-                          : new Icon(
-                              Icons.close,
-                              size: 80.0,
-                            ),
-                ),
-                new ListTile(
-                  leading: new Text('DEVICE ID'),
-                  title: new Text(':'),
-                  trailing: Text(_deviceId.toString(),
-                      style: new TextStyle(fontWeight: FontWeight.bold)),
+                  child :new Text('CURRENT DETAILS', style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.red),)
                 ),
                 new ListTile(
                   leading: new Text('USERNAME'),
@@ -88,32 +78,8 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
                   trailing: Text(_selectedLocation.toString(),
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                 ),
-                new ListTile(
-                  leading: new Text('TYPE'),
-                  title: new Text(':'),
-                  trailing: Text(_selectedTypeName.toString(),
-                      style: new TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                new ListTile(
-                  leading: new Text('MODEL'),
-                  title: new Text(':'),
-                  trailing: Text(
-                    _selectedModelName.toString(),
-                    style: new TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                new ExpansionTile(
-                  leading: new Text('SERIAL'),
-                  title: new Text(':'),
-                  children: <Widget>[
-                    Text(
-                      _sn.toString(),
-                      style: new TextStyle(fontWeight: FontWeight.bold),
-                    )
-                  ],
-                  //trailing: Text(_sn.toString(),
-                  //  style: new TextStyle(fontWeight: FontWeight.bold)),
-                ),
+                
+               
                 new Padding(
                   padding: EdgeInsets.only(bottom: 10.0),
                 )
@@ -122,28 +88,13 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
             new RaisedButton.icon(
               color: Colors.blue,
               icon: new Icon(Icons.navigate_next),
-              onPressed: () {
-                Navigator.push(context, new MaterialPageRoute(
-                  builder: (context) => movementDevices.MainMovementDevices(
-                    str_selectedTypeName: _selectedTypeName, 
-                              str_selectedEntityName:  _selectedEntityName, 
-                              str_selectedLocation: _selectedLocation,
-                              strDeviceId: _deviceId, 
-                              str_selectedUser: _selectedUser,
-                  )
-                ));
-              },
+              onPressed: () {},
               label: new Text('MOVE'),
             ),
             new Padding(
               padding: EdgeInsets.only(bottom: 10.0),
             ),
-            new RaisedButton.icon(
-              color: Colors.amber,
-              onPressed: () {},
-              icon: new Icon(Icons.edit),
-              label: new Text('EDIT'),
-            )
+            
           ],
         ),
       ),
@@ -158,16 +109,11 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
       if (widget.strDeviceId != null) {
         _deviceId = widget.strDeviceId.toUpperCase();
       }
-      if (widget.strSN != null) {
-        _sn = widget.strSN.toUpperCase();
-      }
-      
+   
       if (widget.str_selectedTypeName != null) {
         _selectedTypeName = widget.str_selectedTypeName.toUpperCase();
       }
-      if (widget.str_selectedModelName != null) {
-        _selectedModelName = widget.str_selectedModelName.toUpperCase();
-      }
+     
       if (widget.str_selectedEntityName != null) {
         _selectedEntityName = widget.str_selectedEntityName.toUpperCase();
       }

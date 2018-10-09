@@ -13,6 +13,7 @@ import 'package:amds/locationsList.dart'as locationList;
 import 'package:amds/computerList.dart' as computerList;
 import 'package:amds/utils/formatter.dart' as MyFormatter;
 import 'package:amds/computerDetails.dart' as computerDetails;
+import 'package:amds/movementDevices.dart' as movementDevices;
 
 void main() {
 SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
@@ -37,6 +38,8 @@ class MyApp extends StatelessWidget {
         '/locationList' : (BuildContext context) => locationList.HomePage(),
         '/computerList' : (BuildContext context) => computerList.HomePage(),
         '/computerDetails': (BuildContext context)=> computerDetails.MainComputerDetails(),
+        '/movementDevices': (BuildContext context)=> movementDevices.MainMovementDevices(),
+
 
       },
     );
