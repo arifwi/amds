@@ -99,7 +99,6 @@ class _HomePageState extends State<HomePage> {
                               str_selectedEntityName:  _searchComputerResult[i].entities,
                                strSN:_searchComputerResult[i].sn, 
                               str_selectedLocation: _searchComputerResult[i].locations,
-                              strPN: _searchComputerResult[i].pn, 
                               str_selectedModelName: _searchComputerResult[i].username,
                               strDeviceId: _searchComputerResult[i].name, 
                               str_selectedUser: _searchComputerResult[i].username,)
@@ -131,7 +130,6 @@ class _HomePageState extends State<HomePage> {
                               str_selectedEntityName:  _computerDetails[index].entities, 
                               strSN:_computerDetails[index].sn, 
                               str_selectedLocation: _computerDetails[index].locations,
-                              strPN: _computerDetails[index].pn, 
                               str_selectedModelName: _computerDetails[index].username,
                               strDeviceId: _computerDetails[index].name, 
                               str_selectedUser: _computerDetails[index].username,)

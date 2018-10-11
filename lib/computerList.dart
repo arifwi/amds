@@ -56,109 +56,114 @@ class _HomePageState extends State<HomePage> {
         },
         child: new Icon(Icons.add),
       ),
-      body: new Column(
-        children: <Widget>[
-          new Container(
-            color: Theme.of(context).primaryColor,
-            child: new Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new Card(
-                child: new ListTile(
-                  leading: new Icon(Icons.search),
-                  title: new TextField(
-                    controller: controller,
-                    inputFormatters: [MyFormatter.UpperCaseFormatter()],
-                    decoration: new InputDecoration(
-                        hintText: 'Search', border: InputBorder.none),
-                    onChanged: onSearchTextChanged,
-                  ),
-                  trailing: new IconButton(
-                    icon: new Icon(Icons.cancel),
-                    onPressed: () {
-                      controller.clear();
-                      onSearchTextChanged('');
-                    },
+      body: Container(
+        color: Theme.of(context).primaryColor,
+        child: new Column(
+          
+          children: <Widget>[
+            new Container(
+              child: new Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new Card(
+                  child: new ListTile(
+                    leading: new Icon(Icons.search),
+                    title: new TextField(
+                      controller: controller,
+                      inputFormatters: [MyFormatter.UpperCaseFormatter()],
+                      decoration: new InputDecoration(
+                          hintText: 'Search', border: InputBorder.none),
+                      onChanged: onSearchTextChanged,
+                    ),
+                    trailing: new IconButton(
+                      icon: new Icon(Icons.cancel),
+                      onPressed: () {
+                        controller.clear();
+                        onSearchTextChanged('');
+                      },
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          new Expanded(
-            child: _searchComputerResult.length != 0 ||
-                    controller.text.isNotEmpty
-                ? new ListView.builder(
-                    itemCount: _searchComputerResult.length,
-                    itemBuilder: (context, i) {
-                      return new Card(
-                        shape: new Border(
-                            bottom: BorderSide(color: Colors.blue, width: 2.0)),
-                        child: new ListTile(
-                          onTap: (){
-                            Navigator.push(context, new MaterialPageRoute(
-                              builder: (context)=> computerDetails.MainComputerDetails(str_selectedTypeName: _searchComputerResult[i].typeName, 
-                              str_selectedEntityName:  _searchComputerResult[i].entities,
-                               strSN:_searchComputerResult[i].sn, 
-                              str_selectedLocation: _searchComputerResult[i].locations,
-                              str_selectedModelName: _searchComputerResult[i].modelName,
-                              strDeviceId: _searchComputerResult[i].name, 
-                              str_selectedUser: _searchComputerResult[i].username,)
-                            ));
-                          },
-                          leading:
-                              _searchComputerResult[i].typeName == 'NOTEBOOK'
-                                  ? new Icon(Icons.laptop)
-                                  : new Icon(Icons.desktop_windows),
-                          title: new Text(_searchComputerResult[i].name),
-                          trailing: new Text(_searchComputerResult[i].username,
-                              style:
-                                  new TextStyle(fontWeight: FontWeight.bold)),
-                        ),
-                        margin: const EdgeInsets.all(0.0),
-                      );
-                    },
-                  )
-                : new ListView.builder(
-                    itemCount: _computerDetails.length,
-                    itemBuilder: (context, index) {
-                      Color color;
-                      if (index % 2 != 0) {
-                        color = Colors.grey;
-                      } else {
-                        color = Colors.white;
-                      }
-                      return new Card(
-                        shape: new Border(
-                            bottom: BorderSide(color: Colors.blue, width: 2.0)),
-                        child: new ListTile(
-                          onTap: (){
-                            Navigator.push(context, new MaterialPageRoute(
-                              builder: (context)=> 
-                              computerDetails.MainComputerDetails(str_selectedTypeName: _computerDetails[index].typeName, 
-                              str_selectedEntityName:  _computerDetails[index].entities, 
-                              strSN:_computerDetails[index].sn, 
-                              str_selectedLocation: _computerDetails[index].locations,
-                              str_selectedModelName: _computerDetails[index].modelName,
-                              strDeviceId: _computerDetails[index].name, 
-                              str_selectedUser: _computerDetails[index].username,)
-                              
-                            ));
-                          },
-                          leading:
-                              _computerDetails[index].typeName == 'NOTEBOOK'
-                                  ? new Icon(Icons.laptop)
-                                  : new Icon(Icons.desktop_windows),
-                          title: new Text(_computerDetails[index].name),
-                          trailing: new Text(
-                            _computerDetails[index].username,
-                            style: new TextStyle(fontWeight: FontWeight.bold),
+            new Expanded(
+              flex: 10,
+              child: _searchComputerResult.length != 0 ||
+                      controller.text.isNotEmpty
+                  ? new ListView.builder(
+                    
+                    padding: EdgeInsets.only(right: 10.0,left: 10.0),
+                      itemCount: _searchComputerResult.length,
+                      itemBuilder: (context, i) {
+                        return Container(
+                          padding: EdgeInsets.only(bottom: 5.0),
+                          child: new Card(
+                            child: new ListTile(
+                              onTap: (){
+                                Navigator.push(context, new MaterialPageRoute(
+                                  builder: (context)=> computerDetails.MainComputerDetails(str_selectedTypeName: _searchComputerResult[i].typeName, 
+                                  str_selectedEntityName:  _searchComputerResult[i].entities,
+                                   strSN:_searchComputerResult[i].sn, 
+                                  str_selectedLocation: _searchComputerResult[i].locations,
+                                  str_selectedModelName: _searchComputerResult[i].modelName,
+                                  strDeviceId: _searchComputerResult[i].name, 
+                                  str_selectedUser: _searchComputerResult[i].username,)
+                                ));
+                              },
+                              leading:
+                                  _searchComputerResult[i].typeName == 'NOTEBOOK'
+                                      ? new Icon(Icons.laptop)
+                                      : new Icon(Icons.desktop_windows),
+                              title: new Text(_searchComputerResult[i].name),
+                              trailing: new Text(_searchComputerResult[i].username,
+                                  style:
+                                      new TextStyle(fontWeight: FontWeight.bold)),
+                            ),
+                            margin: const EdgeInsets.all(0.0),
                           ),
-                        ),
-                        margin: const EdgeInsets.all(0.0),
-                      );
-                    },
-                  ),
-          ),
-        ],
+                        );
+                      },
+                    )
+                  : new ListView.builder(
+                    padding: EdgeInsets.only(right: 10.0,left: 10.0, ),
+                      itemCount: _computerDetails.length,
+                      itemBuilder: (context, index) {
+                        
+                        
+                        return Container(
+                          padding: EdgeInsets.only(bottom: 5.0),
+                          child: new Card(
+                            child: new ListTile(
+                              onTap: (){
+                                Navigator.push(context, new MaterialPageRoute(
+                                  builder: (context)=> 
+                                  computerDetails.MainComputerDetails(str_selectedTypeName: _computerDetails[index].typeName, 
+                                  str_selectedEntityName:  _computerDetails[index].entities, 
+                                  strSN:_computerDetails[index].sn, 
+                                  str_selectedLocation: _computerDetails[index].locations,
+                                  str_selectedModelName: _computerDetails[index].modelName,
+                                  strDeviceId: _computerDetails[index].name, 
+                                  str_selectedUser: _computerDetails[index].username,)
+                                  
+                                ));
+                              },
+                              leading:
+                                  _computerDetails[index].typeName == 'NOTEBOOK'
+                                      ? new Icon(Icons.laptop)
+                                      : new Icon(Icons.desktop_windows),
+                              title: new Text(_computerDetails[index].name),
+                              trailing: new Text(
+                                _computerDetails[index].username,
+                                style: new TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            margin: const EdgeInsets.all(0.0),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

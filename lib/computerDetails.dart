@@ -94,6 +94,7 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
                   trailing: Text(_selectedTypeName.toString(),
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                 ),
+                
                 new ListTile(
                   leading: new Text('MODEL'),
                   title: new Text(':'),

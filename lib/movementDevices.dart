@@ -32,6 +32,8 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
       _selectedUser,
       _selectedLocation,
       _deviceId;
+    
+  bool unmove = true;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                               Icons.close,
                             ),
       ),
-      body: Container(
+      body:unmove? Container(
         margin: EdgeInsets.all(20.0),
         child: ListView(
           children: <Widget>[
@@ -78,8 +80,6 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                   trailing: Text(_selectedLocation.toString(),
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                 ),
-                
-               
                 new Padding(
                   padding: EdgeInsets.only(bottom: 10.0),
                 )
@@ -88,7 +88,61 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
             new RaisedButton.icon(
               color: Colors.blue,
               icon: new Icon(Icons.navigate_next),
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                unmove = false;
+                                });
+              },
+              label: new Text('MOVE'),
+            ),
+            new Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+            ),
+            
+          ],
+        ),
+      ):Container(
+        margin: EdgeInsets.all(20.0),
+        child: ListView(
+          children: <Widget>[
+            new Column(
+              children: <Widget>[
+                new Center(
+                  child :new Text('CURRENT DETAILS', style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.red),)
+                ),
+                new ListTile(
+                  leading: new Text('USERNAME'),
+                  title: new Text(':'),
+                  trailing: Text(_selectedUser.toString(),
+                      style: new TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                
+                new ListTile(
+                  leading: new Text('ENTITIES'),
+                  title: new Text(':'),
+                  trailing: Text(_selectedEntityName.toString(),
+                      style: new TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                new ListTile(
+                  leading: new Text('LOCATION'),
+                  title: new Text(':'),
+                  trailing: Text(_selectedLocation.toString(),
+                      style: new TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                new Padding(
+                  padding: EdgeInsets.only(bottom: 10.0),
+                )
+              ],
+            ),
+            new RaisedButton.icon(
+              color: Colors.red,
+              icon: new Icon(Icons.navigate_next),
+              onPressed: () {
+                setState(() {
+                unmove = true;
+                                  
+                                });
+              },
               label: new Text('MOVE'),
             ),
             new Padding(
