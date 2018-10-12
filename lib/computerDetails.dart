@@ -8,35 +8,53 @@ import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/Menu.dart' as menu;
 import 'package:amds/movementDevices.dart' as movementDevices;
 class MainComputerDetails extends StatefulWidget {
-  String strDeviceId,
+  String  strDeviceId,
+      strPN,
       strSN,
+      str_selectedTypeId,
+      str_selectedModelId,
+      str_selectedEntityId,
       str_selectedTypeName,
       str_selectedModelName,
       str_selectedEntityName,
       str_selectedUser,
-      str_selectedLocation;
+      str_selectedLocation,
+      str_selectedUserId,
+      str_selectedLocationId;
 
   MainComputerDetails({
-    this.strDeviceId,
+   this.strDeviceId,
     this.strSN,
+    this.strPN,
+    this.str_selectedTypeId,
+    this.str_selectedModelId,
+    this.str_selectedEntityId,
     this.str_selectedTypeName,
     this.str_selectedEntityName,
     this.str_selectedModelName,
     this.str_selectedLocation,
+    this.str_selectedLocationId,
     this.str_selectedUser,
+    this.str_selectedUserId,
   });
   @override
   _MainComputerDetailsState createState() => _MainComputerDetailsState();
 }
 
 class _MainComputerDetailsState extends State<MainComputerDetails> {
-  String _selectedTypeName,
+  String _selectedTypeId,
+      _selectedModelId,
+      _selectedEntityId,
+      _selectedTypeName,
       _selectedModelName,
       _selectedEntityName,
       _selectedUser,
+      _selectedUserId,
       _selectedLocation,
+      _selectedLocationId,
       _deviceId,
-      _sn;
+      _sn,
+      _pn;
 
   @override
   Widget build(BuildContext context) {

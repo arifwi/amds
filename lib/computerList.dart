@@ -142,7 +142,8 @@ class _HomePageState extends State<HomePage> {
                                   str_selectedLocation: _computerDetails[index].locations,
                                   str_selectedModelName: _computerDetails[index].modelName,
                                   strDeviceId: _computerDetails[index].name, 
-                                  str_selectedUser: _computerDetails[index].username,)
+                                  str_selectedUser: _computerDetails[index].username,
+                                  )
                                   
                                 ));
                               },

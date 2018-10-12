@@ -711,7 +711,8 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                         _sn,
                         _pn,
                         _selectedLocationId,
-                        _selectedUserId).then((_result) {
+                        _selectedUserId,
+                        _selectedUser).then((_result) {
                       new Future.delayed(Duration(milliseconds: 500), () {
                         Navigator.pop(context, true);
                         successInputDialog();
@@ -768,7 +769,8 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
       String sn,
       String pn,
       String locations_id,
-      String users_id) async {
+      String users_id, 
+      String user_name) async {
     String result;
     try {
       final response = await http.post(url + "inputNewComputer.php", body: {
@@ -780,11 +782,18 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
         'pn': pn,
         'user_id': users_id,
         'location_id': locations_id,
+        'user_name': _selectedUser, 
+        
       });
-      if (response.body == "DUPLICATE ID DETECTED") {
+      result = response.body;
+      if (result == "DUPLICATE ID DETECTED") {
         result = "Duplicate ID has been detected";
-      } else {
+      } else if (result == "INPUT SUCCESSFULL") {
         result = "Input has been successfull";
+      }
+      else{
+        result = "Error";
+
       }
       setState(() {
         isSuccessInput = result;
