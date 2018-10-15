@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
 
   String fullname;
 
-  final String url = 'http://172.28.16.84:8089/getComputerList.php';
+  final String url = 'http://192.168.43.62/amdsweb/getComputerList.php';
 
   // Get json result and convert it to model. Then add
   Future<Null> getComputerDetails() async {
@@ -100,13 +100,20 @@ class _HomePageState extends State<HomePage> {
                             child: new ListTile(
                               onTap: (){
                                 Navigator.push(context, new MaterialPageRoute(
-                                  builder: (context)=> computerDetails.MainComputerDetails(str_selectedTypeName: _searchComputerResult[i].typeName, 
+                                  builder: (context)=> computerDetails.MainComputerDetails(
+                                  strPN:_searchComputerResult[i].pn ,
+                                  str_selectedTypeId:_searchComputerResult[i].typeId ,
+                                  str_selectedTypeName: _searchComputerResult[i].typeName, 
                                   str_selectedEntityName:  _searchComputerResult[i].entities,
-                                   strSN:_searchComputerResult[i].sn, 
+                                  str_selectedEntityId: _searchComputerResult[i].entities_id,
+                                  strSN:_searchComputerResult[i].sn, 
                                   str_selectedLocation: _searchComputerResult[i].locations,
+                                  str_selectedModelId: _searchComputerResult[i].modelId,
                                   str_selectedModelName: _searchComputerResult[i].modelName,
                                   strDeviceId: _searchComputerResult[i].name, 
-                                  str_selectedUser: _searchComputerResult[i].username,)
+                                  str_selectedUser: _searchComputerResult[i].username,
+                                  str_selectedUserId: _searchComputerResult[i].user_id,
+                                  str_selectedLocationId: _searchComputerResult[i].locations_id,)
                                 ));
                               },
                               leading:
@@ -136,13 +143,20 @@ class _HomePageState extends State<HomePage> {
                               onTap: (){
                                 Navigator.push(context, new MaterialPageRoute(
                                   builder: (context)=> 
-                                  computerDetails.MainComputerDetails(str_selectedTypeName: _computerDetails[index].typeName, 
+                                  computerDetails.MainComputerDetails(
+                                  str_selectedTypeName: _computerDetails[index].typeName, 
                                   str_selectedEntityName:  _computerDetails[index].entities, 
+                                  str_selectedEntityId: _computerDetails[index].entities_id,
                                   strSN:_computerDetails[index].sn, 
                                   str_selectedLocation: _computerDetails[index].locations,
                                   str_selectedModelName: _computerDetails[index].modelName,
                                   strDeviceId: _computerDetails[index].name, 
                                   str_selectedUser: _computerDetails[index].username,
+                                  str_selectedUserId: _computerDetails[index].user_id,
+                                  str_selectedLocationId: _computerDetails[index].locations_id,
+                                  str_selectedModelId: _computerDetails[index].modelId,
+                                  str_selectedTypeId: _computerDetails[index].typeId,
+                                  strPN: _computerDetails[index].pn,
                                   )
                                   
                                 ));
@@ -198,9 +212,12 @@ class MapIdNameComputers {
       typeId,
       typeName,
       username,
+      user_id,
       firstname,
       lastname,
       entities,
+      entities_id,
+      locations_id,
       locations,
       sn,
       pn;
@@ -215,7 +232,10 @@ class MapIdNameComputers {
       this.firstname,
       this.lastname,
       this.username,
+      this.user_id,
       this.entities,
+      this.entities_id,
+      this.locations_id,
       this.locations,
       this.pn,
       this.sn});
@@ -229,10 +249,13 @@ class MapIdNameComputers {
         typeId: json['type_id'],
         typeName: json['type_name'],
         username: json['username'],
+        user_id: json['userid'],
         firstname: json['firstname'],
         lastname: json['lastname'],
         entities : json['entities_name'],
-        locations :json['location_name'],
+        entities_id : json['entities_id'],
+        locations :json['locations_name'],
+        locations_id :json['locations_id'],
         sn : json['sn'],
         pn : json['pn']);
   }

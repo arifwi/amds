@@ -5,9 +5,9 @@ import 'package:amds/utils/formatter.dart' as MyFormatter;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:amds/addDevice.dart' as addDevice;
+import 'package:amds/movementDevices.dart' as movementDevices;
 
 class HomePage extends StatefulWidget {
-  
   String strDeviceId,
       strPN,
       strSN,
@@ -20,7 +20,8 @@ class HomePage extends StatefulWidget {
       str_selectedUser,
       str_selectedLocation,
       str_selectedUserId,
-      str_selectedLocationId;
+      str_selectedLocationId,
+      strPageIdentity;
 
   HomePage({
     this.strDeviceId,
@@ -36,6 +37,7 @@ class HomePage extends StatefulWidget {
     this.str_selectedLocationId,
     this.str_selectedUser,
     this.str_selectedUserId,
+    this.strPageIdentity,
   });
   @override
   _HomePageState createState() => new _HomePageState();
@@ -54,7 +56,8 @@ class _HomePageState extends State<HomePage> {
       _selectedLocationId,
       _deviceId,
       _sn,
-      _pn;
+      _pn,
+      _pageIdentity;
   TextEditingController controller = new TextEditingController();
 
   List<MapIdName> _searchResult = [];
@@ -63,8 +66,8 @@ class _HomePageState extends State<HomePage> {
 
   String fullname;
 
-  //final String url = 'http://192.168.43.62/amdsweb/getUsers.php';
-  final String url = 'http://172.28.16.84:8089/getUsers.php';
+  final String url = 'http://192.168.43.62/amdsweb/getUsers.php';
+  //final String url = 'http://172.28.16.84:8089/getUsers.php';
 
   // Get json result and convert it to model. Then add
   Future<Null> getUserDetails() async {
@@ -80,10 +83,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    
     super.initState();
-    
-    getUserDetails().then((value){
+
+    getUserDetails().then((value) {
       if (widget.strDeviceId != null) {
         _deviceId = widget.strDeviceId;
       }
@@ -114,18 +116,20 @@ class _HomePageState extends State<HomePage> {
         _selectedLocation = widget.str_selectedLocation;
         _selectedLocationId = widget.str_selectedLocationId;
       }
+      if (widget.strPageIdentity != null) {
+        _pageIdentity = widget.strPageIdentity;
+      }
+      print(_pageIdentity);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      
       appBar: new AppBar(
         title: new Text('Select User'),
         elevation: 0.0,
       ),
-      
       body: new Column(
         children: <Widget>[
           new Container(
@@ -187,33 +191,67 @@ class _HomePageState extends State<HomePage> {
                                     _selectedUser = _searchResult[i].name;
                                     _selectedUserId = _searchResult[i].id;
                                   });
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) =>
-                                              addDevice.mainAdd(
-                                                 strSN: _sn,
-                                                strPN: _pn,
-                                                strDeviceId: _deviceId,
-                                                str_selectedModelId:
-                                                    _selectedModelId,
-                                                str_selectedEntityId:
-                                                    _selectedEntityId,
-                                                str_selectedTypeId:
-                                                    _selectedTypeId,
-                                                str_selectedModelName:
-                                                    _selectedModelName,
-                                                str_selectedEntityName:
-                                                    _selectedEntityName,
-                                                str_selectedTypeName:
-                                                    _selectedTypeName,
-                                                str_selectedUserId:
-                                                    _selectedUserId,
-                                                str_selectedUser: _selectedUser,
-                                                str_selectedLocation:
-                                                    _selectedLocation,
-                                                str_selectedLocationId:
-                                                    _selectedLocationId,)), ModalRoute.withName('/addComputer'));
+                                  if (_pageIdentity == "movementDevices") {
+                                      setState(() {
+                                      _pageIdentity = 'usersList';
+                                    });
+                                    Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                movementDevices
+                                                    .MainMovementDevices(
+                                                  str_selectedEntityId:
+                                                      _selectedEntityId,
+                                                  str_selectedEntityName:
+                                                      _selectedEntityName,
+                                                  str_selectedLocation:
+                                                      _selectedLocation,
+                                                  str_selectedLocationId:
+                                                      _selectedLocationId,
+                                                  str_selectedTypeName:
+                                                      _selectedTypeName,
+                                                  str_selectedUser:
+                                                      _selectedUser,
+                                                  str_selectedUserId:
+                                                      _selectedUserId,
+                                                  strDeviceId: _deviceId,
+                                                  strPageIdentity:
+                                                      _pageIdentity,
+                                                )),
+                                        );
+                                  } else {
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                addDevice.mainAdd(
+                                                  strSN: _sn,
+                                                  strPN: _pn,
+                                                  strDeviceId: _deviceId,
+                                                  str_selectedModelId:
+                                                      _selectedModelId,
+                                                  str_selectedEntityId:
+                                                      _selectedEntityId,
+                                                  str_selectedTypeId:
+                                                      _selectedTypeId,
+                                                  str_selectedModelName:
+                                                      _selectedModelName,
+                                                  str_selectedEntityName:
+                                                      _selectedEntityName,
+                                                  str_selectedTypeName:
+                                                      _selectedTypeName,
+                                                  str_selectedUserId:
+                                                      _selectedUserId,
+                                                  str_selectedUser:
+                                                      _selectedUser,
+                                                  str_selectedLocation:
+                                                      _selectedLocation,
+                                                  str_selectedLocationId:
+                                                      _selectedLocationId,
+                                                )),
+                                        ModalRoute.withName('/addComputer'));
+                                  }
                                 },
                               ),
                             ),
@@ -253,35 +291,67 @@ class _HomePageState extends State<HomePage> {
                                     _selectedUser = _userDetails[index].name;
                                     _selectedUserId = _userDetails[index].id;
                                   });
-
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) =>
-                                              addDevice.mainAdd(
+                                  if (_pageIdentity == "movementDevices") {
+                                    setState(() {
+                                      _pageIdentity = 'usersList';
+                                    });
+                                    Navigator.pop(context,_selectedUser);
+                                    // Navigator.pushReplacement(
+                                    //     context,
+                                    //     new MaterialPageRoute(
+                                    //         builder: (context) =>
+                                    //             movementDevices
+                                    //                 .MainMovementDevices(
+                                    //               str_selectedEntityId:
+                                    //                   _selectedEntityId,
+                                    //               str_selectedEntityName:
+                                    //                   _selectedEntityName,
+                                    //               str_selectedLocation:
+                                    //                   _selectedLocation,
+                                    //               str_selectedLocationId:
+                                    //                   _selectedLocationId,
+                                    //               str_selectedTypeName:
+                                    //                   _selectedTypeName,
+                                    //               str_selectedUser:
+                                    //                   _selectedUser,
+                                    //               str_selectedUserId:
+                                    //                   _selectedUserId,
+                                    //               strDeviceId: _deviceId,
+                                    //               strPageIdentity:
+                                    //                   _pageIdentity,
+                                    //             )),);
+                                  } else {
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                addDevice.mainAdd(
                                                   strSN: _sn,
-                         
-                                                strPN: _pn,
-                                                strDeviceId: _deviceId,
-                                                str_selectedModelId:
-                                                    _selectedModelId,
-                                                str_selectedEntityId:
-                                                    _selectedEntityId,
-                                                str_selectedTypeId:
-                                                    _selectedTypeId,
-                                                str_selectedModelName:
-                                                    _selectedModelName,
-                                                str_selectedEntityName:
-                                                    _selectedEntityName,
-                                                str_selectedTypeName:
-                                                    _selectedTypeName,
-                                                str_selectedUserId:
-                                                    _selectedUserId,
-                                                str_selectedUser: _selectedUser,
-                                                str_selectedLocation:
-                                                    _selectedLocation,
-                                                str_selectedLocationId:
-                                                    _selectedLocationId,)),ModalRoute.withName('/addComputer'));
+                                                  strPN: _pn,
+                                                  strDeviceId: _deviceId,
+                                                  str_selectedModelId:
+                                                      _selectedModelId,
+                                                  str_selectedEntityId:
+                                                      _selectedEntityId,
+                                                  str_selectedTypeId:
+                                                      _selectedTypeId,
+                                                  str_selectedModelName:
+                                                      _selectedModelName,
+                                                  str_selectedEntityName:
+                                                      _selectedEntityName,
+                                                  str_selectedTypeName:
+                                                      _selectedTypeName,
+                                                  str_selectedUserId:
+                                                      _selectedUserId,
+                                                  str_selectedUser:
+                                                      _selectedUser,
+                                                  str_selectedLocation:
+                                                      _selectedLocation,
+                                                  str_selectedLocationId:
+                                                      _selectedLocationId,
+                                                )),
+                                        ModalRoute.withName('/addComputer'));
+                                  }
                                 },
                               ),
                             ),

@@ -145,10 +145,13 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
                 Navigator.push(context, new MaterialPageRoute(
                   builder: (context) => movementDevices.MainMovementDevices(
                     str_selectedTypeName: _selectedTypeName, 
-                              str_selectedEntityName:  _selectedEntityName, 
-                              str_selectedLocation: _selectedLocation,
-                              strDeviceId: _deviceId, 
-                              str_selectedUser: _selectedUser,
+                    str_selectedLocationId: _selectedLocationId,
+                    str_selectedUserId: _selectedUserId,
+                    str_selectedEntityId: _selectedEntityId,
+                    str_selectedEntityName:  _selectedEntityName, 
+                    str_selectedLocation: _selectedLocation,
+                    strDeviceId: _deviceId, 
+                    str_selectedUser: _selectedUser,
                   )
                 ));
               },
@@ -180,23 +183,33 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
       if (widget.strSN != null) {
         _sn = widget.strSN.toUpperCase();
       }
+      if(widget.strPN != null){
+        _pn = widget.strPN.toUpperCase();
+      }
       
       if (widget.str_selectedTypeName != null) {
+        _selectedTypeId = widget.str_selectedTypeId;
         _selectedTypeName = widget.str_selectedTypeName.toUpperCase();
       }
       if (widget.str_selectedModelName != null) {
+        _selectedModelId = widget.str_selectedModelId;
         _selectedModelName = widget.str_selectedModelName.toUpperCase();
       }
       if (widget.str_selectedEntityName != null) {
+        _selectedEntityId = widget.str_selectedEntityId;
         _selectedEntityName = widget.str_selectedEntityName.toUpperCase();
       }
 
       if (widget.str_selectedUser != null) {
+        _selectedUserId = widget.str_selectedUserId;
         _selectedUser = widget.str_selectedUser.toUpperCase();
       }
       if (widget.str_selectedLocation != null) {
+        _selectedLocationId = widget.str_selectedLocationId;
         _selectedLocation = widget.str_selectedLocation.toUpperCase();
       }
+      
+           
     });
   }
 }

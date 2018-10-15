@@ -5,13 +5,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:amds/Menu.dart' as mainMenu;
+import 'package:amds/Menu.dart';
 import 'package:amds/addDevice.dart' ;
 import 'package:amds/scanning.dart' as scanningComputer;
 import 'package:amds/usersList.dart' as userList;
 import 'package:amds/locationsList.dart'as locationList;
-import 'package:amds/computerList.dart' as computerList;
-import 'package:amds/utils/formatter.dart' as MyFormatter;
+import 'package:amds/computerList.dart' as commputerList;
 import 'package:amds/computerDetails.dart' as computerDetails;
 import 'package:amds/movementDevices.dart' as movementDevices;
 
@@ -31,12 +30,12 @@ class MyApp extends StatelessWidget {
       home: new LoginPage(),
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
-        '/mainMenu': (BuildContext context) => new mainMenu.mainMenu(),
+        '/mainMenu': (BuildContext context) => new mainMenu(username: username),
         '/addComputer': (BuildContext context)=> new mainAdd(),
         '/scanningComputer' : (BuildContext context)=> new scanningComputer.scanning(),
         '/userList' : (BuildContext context)=> new userList.HomePage(),
         '/locationList' : (BuildContext context) => locationList.HomePage(),
-        '/computerList' : (BuildContext context) => computerList.HomePage(),
+        '/computerList' : (BuildContext context) => commputerList.HomePage(),
         '/computerDetails': (BuildContext context)=> computerDetails.MainComputerDetails(),
         '/movementDevices': (BuildContext context)=> movementDevices.MainMovementDevices(),
 
@@ -56,14 +55,16 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController txt_password = new TextEditingController();
 
   String message = '';
-  String url = 'http://172.28.16.84:8089/';
+  String url = 
+  'http://192.168.43.62/amdsweb/';
+  //'http://172.28.16.84:8089/';
   Future<dynamic> _checkLogin() async {
     setState(() {
       message = '';
     });
     try {
       final response = await http.post(url + "login.php", body: {
-       
+        
         'username': txt_username.text,
         'password': txt_password.text,
       });
@@ -74,9 +75,11 @@ class _LoginPageState extends State<LoginPage> {
             message = 'Login Filed';
           });
         } else {
+          //print(datauser[0]["username"]);
           Navigator.pushReplacementNamed(context, "/mainMenu");
           setState(() {
             username = datauser[0]["username"];
+            //print(username);
           });
         }
       }
@@ -115,7 +118,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   new TextField(
                     controller: txt_username,
-                    inputFormatters: [MyFormatter.LowerCaseFormatter()],
                     decoration: InputDecoration(hintText: 'Username'),
                   ),
                   new Padding(
@@ -123,7 +125,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   new TextField(
                     controller: txt_password,
-                    inputFormatters: [MyFormatter.LowerCaseFormatter()],
                     decoration: InputDecoration(hintText: 'Password'),
                     obscureText: true,
                   ),

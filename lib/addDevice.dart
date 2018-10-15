@@ -4,11 +4,10 @@ import 'dart:convert';
 import 'package:amds/Menu.dart' as menu;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:simple_permissions/simple_permissions.dart';
+//import 'package:simple_permissions/simple_permissions.dart';
 import 'package:amds/scanning.dart' as scan;
 import 'package:amds/usersList.dart' as UsersList;
 import 'package:amds/locationsList.dart' as LocationList;
-import 'package:amds/utils/formatter.dart' as MyFormatter;
 
 class mainAdd extends StatefulWidget {
   String strDeviceId,
@@ -48,10 +47,10 @@ class mainAdd extends StatefulWidget {
 }
 
 class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
-  //String url = 'http://192.168.43.62/amdsweb/';
-  String url = 'http://172.28.16.84:8089/';
+  String url = 'http://192.168.43.62/amdsweb/';
+  //String url = 'http://172.28.16.84:8089/';
 
-  Permission permission = Permission.Camera;
+  //Permission permission = Permission.Camera;
 
   TextEditingController controllerDeviceId = new TextEditingController();
   TextEditingController controllerSerialNumber = new TextEditingController();
@@ -116,20 +115,18 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                 controllerDeviceId.text = _deviceId;
                 _isUnlock = false;
                 enableDeviceID = false;
-
               }
               if (widget.strSN != null) {
                 _sn = widget.strSN;
                 controllerSerialNumber.text = _sn;
                 _isUnlock = false;
-               enableSN = false;
+                enableSN = false;
               }
               if (widget.strPN != null) {
                 _pn = widget.strPN;
                 controllerProductNumber.text = _pn;
                 _isUnlock = false;
                 enablePN = false;
-
               }
               if (widget.str_selectedTypeId != null) {
                 _selectedTypeId = widget.str_selectedTypeId;
@@ -257,9 +254,8 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                     enabled: enableDeviceID,
                     focusNode: fDeviceId,
                     controller: controllerDeviceId,
-                    inputFormatters: [MyFormatter.UpperCaseFormatter()],
                     decoration: InputDecoration(
-                        labelText: 'Device ID',
+                        labelText: 'ID Device',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),
                   ),
@@ -272,7 +268,6 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                       style: TextStyle(fontSize: 17.0, color: Colors.black),
                       value: _selectedTypeId,
                       items: dataType,
-                      
                       hint: Text('Select Type'),
                       onChanged: (value) {
                         setState(() {
@@ -326,7 +321,6 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                     enabled: enableSN,
                     focusNode: fSerialNumber,
                     controller: controllerSerialNumber,
-                    inputFormatters: [MyFormatter.UpperCaseFormatter()],
                     decoration: InputDecoration(
                         labelText: 'Serial Number',
                         border: OutlineInputBorder(
@@ -339,7 +333,6 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                     enabled: enablePN,
                     focusNode: fProductNumber,
                     controller: controllerProductNumber,
-                    inputFormatters: [MyFormatter.UpperCaseFormatter()],
                     decoration: InputDecoration(
                         labelText: 'Product Number',
                         border: OutlineInputBorder(
@@ -699,11 +692,11 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                 trailing: new RaisedButton(
                   onPressed: () {
                     setState(() {
-                                          _deviceId = controllerDeviceId.text;
-                                          _sn = controllerSerialNumber.text;
-                                          _pn = controllerProductNumber.text;
-                                        });
-                                     inputNewComputer(
+                      _deviceId = controllerDeviceId.text;
+                      _sn = controllerSerialNumber.text;
+                      _pn = controllerProductNumber.text;
+                    });
+                    inputNewComputer(
                         _deviceId,
                         _selectedEntityId,
                         _selectedTypeId,
@@ -711,8 +704,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                         _sn,
                         _pn,
                         _selectedLocationId,
-                        _selectedUserId,
-                        _selectedUser).then((_result) {
+                        _selectedUserId).then((_result) {
                       new Future.delayed(Duration(milliseconds: 500), () {
                         Navigator.pop(context, true);
                         successInputDialog();
@@ -769,8 +761,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
       String sn,
       String pn,
       String locations_id,
-      String users_id, 
-      String user_name) async {
+      String users_id) async {
     String result;
     try {
       final response = await http.post(url + "inputNewComputer.php", body: {
@@ -782,18 +773,11 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
         'pn': pn,
         'user_id': users_id,
         'location_id': locations_id,
-        'user_name': _selectedUser, 
-        
       });
-      result = response.body;
-      if (result == "DUPLICATE ID DETECTED") {
+      if (response.body == "DUPLICATE ID DETECTED") {
         result = "Duplicate ID has been detected";
-      } else if (result == "INPUT SUCCESSFULL") {
+      } else {
         result = "Input has been successfull";
-      }
-      else{
-        result = "Error";
-
       }
       setState(() {
         isSuccessInput = result;
