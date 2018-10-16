@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/Menu.dart' as menu;
 import 'package:amds/usersList.dart' as UsersList;
+import 'package:amds/locationsList.dart' as LocationsList;
 
 class MainMovementDevices extends StatefulWidget {
   String strDeviceId,
@@ -44,7 +45,8 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
       _deviceId,
       _pageIdentity;
 
-  String url = 'http://192.168.43.62/amdsweb/';
+  //String url = 'http://192.168.43.62/amdsweb/';
+  String url = 'http://172.28.16.84:8089/';
   List<DropdownMenuItem<String>> dataEntities = [];
   List<MapIdName> _listDataEntities = [];
   List<MapIdName> _searchEntitiesResult = [];
@@ -154,24 +156,24 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                               _pageIdentity = 'movementDevices';
 
                             });
-                            _navigateAndDisplaySelection(context);
-                            print(LocalHistoryRoute);
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) => UsersList.HomePage(
-                            //             strDeviceId: _deviceId,
-                            //             str_selectedEntityId: _selectedEntityId,
-                            //             str_selectedEntityName:
-                            //                 _selectedEntityName,
-                            //             str_selectedTypeName: _selectedTypeName,
-                            //             str_selectedUserId: _selectedUserId,
-                            //             str_selectedUser: _selectedUser,
-                            //             str_selectedLocation: _selectedLocation,
-                            //             str_selectedLocationId:
-                            //                 _selectedLocationId,
-                            //                 strPageIdentity: _pageIdentity,
-                            //           )));
+                            //_navigateAndDisplaySelection(context);
+                            //print(LocalHistoryRoute);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UsersList.HomePage(
+                                        strDeviceId: _deviceId,
+                                        str_selectedEntityId: _selectedEntityId,
+                                        str_selectedEntityName:
+                                            _selectedEntityName,
+                                        str_selectedTypeName: _selectedTypeName,
+                                        str_selectedUserId: _selectedUserId,
+                                        str_selectedUser: _selectedUser,
+                                        str_selectedLocation: _selectedLocation,
+                                        str_selectedLocationId:
+                                            _selectedLocationId,
+                                            strPageIdentity: _pageIdentity,
+                                      )));
                           },
                         ),
                       ),
@@ -220,7 +222,29 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                         trailing: new IconButton(
                           icon: new Icon(Icons.search),
                           color: Colors.blue,
-                          onPressed: () {},
+                          onPressed: () {
+                             setState(() {
+                              _pageIdentity = 'movementDevices';
+
+                            });
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LocationsList.HomePage(
+                                        strDeviceId: _deviceId,
+                                        str_selectedEntityId: _selectedEntityId,
+                                        str_selectedEntityName:
+                                            _selectedEntityName,
+                                        str_selectedTypeName: _selectedTypeName,
+                                        str_selectedUserId: _selectedUserId,
+                                        str_selectedUser: _selectedUser,
+                                        str_selectedLocation: _selectedLocation,
+                                        str_selectedLocationId:
+                                            _selectedLocationId,
+                                            strPageIdentity: _pageIdentity,
+                                      )));
+
+                          },
                         ),
                       ),
                   Container(
@@ -295,21 +319,21 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
           _selectedLocation = widget.str_selectedLocation.toUpperCase();
         }
         if(widget.strPageIdentity != null){
-          if(widget.strPageIdentity == 'userList'){
+          if(widget.strPageIdentity == 'usersList' || widget.strPageIdentity == 'locationsList'){
             _pageIdentity = widget.strPageIdentity;
             unmove = false;
           }
          
         }
         
-        print(_selectedEntityId);
-        print(_selectedTypeName);
-        print(_selectedEntityName);
-        print(_selectedUser);
-        print(_selectedUserId);
-        print(_selectedLocation);
-        print(_selectedLocationId);
-        print(_deviceId);
+        // print(_selectedEntityId);
+        // print(_selectedTypeName);
+        // print(_selectedEntityName);
+        // print(_selectedUser);
+        // print(_selectedUserId);
+        // print(_selectedLocation);
+        // print(_selectedLocationId);
+        // print(_deviceId);
       });
     });
   }

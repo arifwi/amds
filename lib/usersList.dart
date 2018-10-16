@@ -66,8 +66,8 @@ class _HomePageState extends State<HomePage> {
 
   String fullname;
 
-  final String url = 'http://192.168.43.62/amdsweb/getUsers.php';
-  //final String url = 'http://172.28.16.84:8089/getUsers.php';
+  //final String url = 'http://192.168.43.62/amdsweb/getUsers.php';
+  final String url = 'http://172.28.16.84:8089/getUsers.php';
 
   // Get json result and convert it to model. Then add
   Future<Null> getUserDetails() async {
@@ -119,7 +119,6 @@ class _HomePageState extends State<HomePage> {
       if (widget.strPageIdentity != null) {
         _pageIdentity = widget.strPageIdentity;
       }
-      print(_pageIdentity);
     });
   }
 
@@ -195,7 +194,8 @@ class _HomePageState extends State<HomePage> {
                                       setState(() {
                                       _pageIdentity = 'usersList';
                                     });
-                                    Navigator.push(
+
+                                    Navigator.pushReplacement(
                                         context,
                                         new MaterialPageRoute(
                                             builder: (context) =>
@@ -295,31 +295,32 @@ class _HomePageState extends State<HomePage> {
                                     setState(() {
                                       _pageIdentity = 'usersList';
                                     });
-                                    Navigator.pop(context,_selectedUser);
-                                    // Navigator.pushReplacement(
-                                    //     context,
-                                    //     new MaterialPageRoute(
-                                    //         builder: (context) =>
-                                    //             movementDevices
-                                    //                 .MainMovementDevices(
-                                    //               str_selectedEntityId:
-                                    //                   _selectedEntityId,
-                                    //               str_selectedEntityName:
-                                    //                   _selectedEntityName,
-                                    //               str_selectedLocation:
-                                    //                   _selectedLocation,
-                                    //               str_selectedLocationId:
-                                    //                   _selectedLocationId,
-                                    //               str_selectedTypeName:
-                                    //                   _selectedTypeName,
-                                    //               str_selectedUser:
-                                    //                   _selectedUser,
-                                    //               str_selectedUserId:
-                                    //                   _selectedUserId,
-                                    //               strDeviceId: _deviceId,
-                                    //               strPageIdentity:
-                                    //                   _pageIdentity,
-                                    //             )),);
+                                    print(_pageIdentity);
+                                    //Navigator.pop(context,_selectedUser);
+                                    Navigator.pushReplacement(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                movementDevices
+                                                    .MainMovementDevices(
+                                                  str_selectedEntityId:
+                                                      _selectedEntityId,
+                                                  str_selectedEntityName:
+                                                      _selectedEntityName,
+                                                  str_selectedLocation:
+                                                      _selectedLocation,
+                                                  str_selectedLocationId:
+                                                      _selectedLocationId,
+                                                  str_selectedTypeName:
+                                                      _selectedTypeName,
+                                                  str_selectedUser:
+                                                      _selectedUser,
+                                                  str_selectedUserId:
+                                                      _selectedUserId,
+                                                  strDeviceId: _deviceId,
+                                                  strPageIdentity:
+                                                      _pageIdentity,
+                                                )),);
                                   } else {
                                     Navigator.pushAndRemoveUntil(
                                         context,

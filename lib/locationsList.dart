@@ -5,6 +5,7 @@ import 'package:amds/utils/formatter.dart' as MyFormatter;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:amds/addDevice.dart' as addDevice;
+import 'package:amds/movementDevices.dart' as movementDevices;
 
 class HomePage extends StatefulWidget {
   String strDeviceId,
@@ -19,7 +20,9 @@ class HomePage extends StatefulWidget {
       str_selectedUser,
       str_selectedLocation,
       str_selectedUserId,
-      str_selectedLocationId;
+      str_selectedLocationId,
+      strPageIdentity;
+
 
   HomePage({
     this.strDeviceId,
@@ -35,6 +38,8 @@ class HomePage extends StatefulWidget {
     this.str_selectedLocationId,
     this.str_selectedUser,
     this.str_selectedUserId,
+    this.strPageIdentity,
+
   });
   @override
   _HomePageState createState() => new _HomePageState();
@@ -53,7 +58,9 @@ class _HomePageState extends State<HomePage> {
       _selectedLocationId,
       _deviceId,
       _sn,
-      _pn;
+      _pn,
+      _pageIdentity;
+
   TextEditingController controller = new TextEditingController();
 
   List<MapIdName> _searchResult = [];
@@ -112,6 +119,10 @@ class _HomePageState extends State<HomePage> {
         _selectedLocation = widget.str_selectedLocation;
         _selectedLocationId = widget.str_selectedLocationId;
       }
+      if (widget.strPageIdentity != null) {
+        _pageIdentity = widget.strPageIdentity;
+      }
+
     });
   }
 
@@ -185,6 +196,39 @@ class _HomePageState extends State<HomePage> {
                                     _selectedLocationId =
                                         _searchResult[i].id;
                                   });
+                                   if (_pageIdentity == "movementDevices") {
+                                      setState(() {
+                                      _pageIdentity = 'locationsList';
+                                    });
+                                     
+                                    Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                movementDevices
+                                                    .MainMovementDevices(
+                                                  str_selectedEntityId:
+                                                      _selectedEntityId,
+                                                  str_selectedEntityName:
+                                                      _selectedEntityName,
+                                                  str_selectedLocation:
+                                                      _selectedLocation,
+                                                  str_selectedLocationId:
+                                                      _selectedLocationId,
+                                                  str_selectedTypeName:
+                                                      _selectedTypeName,
+                                                  str_selectedUser:
+                                                      _selectedUser,
+                                                  str_selectedUserId:
+                                                      _selectedUserId,
+                                                  strDeviceId: _deviceId,
+                                                  strPageIdentity:
+                                                      _pageIdentity,
+                                                )),
+                                        );
+                                    Navigator.pop(context);
+                                    }
+                                    else{
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       new MaterialPageRoute(
@@ -214,6 +258,7 @@ class _HomePageState extends State<HomePage> {
                                                     _selectedLocationId,
                                               )),
                                       ModalRoute.withName('/addComputer'));
+                                      }
                                 },
                               ),
                             ),
@@ -255,6 +300,42 @@ class _HomePageState extends State<HomePage> {
                                     _selectedLocationId =
                                         _locationDetails[index].id;
                                   });
+                                  if (_pageIdentity == "movementDevices") {
+                                    setState(() {
+                                      _pageIdentity = 'locationsList';
+                                    });
+                                    print(_pageIdentity);
+                                    //Navigator.pop(context,_selectedUser);
+                                    Navigator.pop(context);
+
+                                    Navigator.pushReplacement(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                movementDevices
+                                                    .MainMovementDevices(
+                                                  str_selectedEntityId:
+                                                      _selectedEntityId,
+                                                  str_selectedEntityName:
+                                                      _selectedEntityName,
+                                                  str_selectedLocation:
+                                                      _selectedLocation,
+                                                  str_selectedLocationId:
+                                                      _selectedLocationId,
+                                                  str_selectedTypeName:
+                                                      _selectedTypeName,
+                                                  str_selectedUser:
+                                                      _selectedUser,
+                                                  str_selectedUserId:
+                                                      _selectedUserId,
+                                                  strDeviceId: _deviceId,
+                                                  strPageIdentity:
+                                                      _pageIdentity,
+                                                )),);
+                                  
+                                  } 
+                                  
+                                  else {
 
                                   Navigator.pushAndRemoveUntil(
                                       context,
@@ -286,7 +367,7 @@ class _HomePageState extends State<HomePage> {
                                               )),
                                       ModalRoute.withName('/addComputer'));
                                       print(_selectedLocation+''+_selectedLocationId);
-
+                                  }
                                 },
                               ),
                             ),
