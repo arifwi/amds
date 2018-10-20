@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:amds/Menu.dart' as menu;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 //import 'package:simple_permissions/simple_permissions.dart';
 import 'package:amds/scanning.dart' as scan;
 import 'package:amds/usersList.dart' as UsersList;
 import 'package:amds/locationsList.dart' as LocationList;
+import 'package:amds/computerList.dart' as computerList;
 
 class mainAdd extends StatefulWidget {
   String strDeviceId,
@@ -593,7 +593,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
           ),
           onPressed: () {
             Navigator.pushReplacement(context,
-                new MaterialPageRoute(builder: (context) => menu.mainMenu()));
+                new MaterialPageRoute(builder: (context) => computerList.HomePage()));
           },
         )
       ],

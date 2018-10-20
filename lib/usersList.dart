@@ -97,11 +97,14 @@ class _HomePageState extends State<HomePage> {
       }
       if (widget.str_selectedTypeId != null) {
         _selectedTypeId = widget.str_selectedTypeId;
-        _selectedTypeName = widget.str_selectedTypeName;
       }
       if (widget.str_selectedModelId != null) {
         _selectedModelName = widget.str_selectedModelName;
         _selectedModelId = widget.str_selectedModelId;
+      }
+      if(widget.str_selectedTypeName!= null){
+        _selectedTypeName = widget.str_selectedTypeName;
+
       }
       if (widget.str_selectedEntityId != null) {
         _selectedEntityId = widget.str_selectedEntityId;
@@ -119,6 +122,7 @@ class _HomePageState extends State<HomePage> {
       if (widget.strPageIdentity != null) {
         _pageIdentity = widget.strPageIdentity;
       }
+      //print(widget.str_selectedTypeName);
     });
   }
 
@@ -194,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                                       setState(() {
                                       _pageIdentity = 'usersList';
                                     });
-
+                                    Navigator.pop(context);
                                     Navigator.pushReplacement(
                                         context,
                                         new MaterialPageRoute(
@@ -295,8 +299,9 @@ class _HomePageState extends State<HomePage> {
                                     setState(() {
                                       _pageIdentity = 'usersList';
                                     });
-                                    print(_pageIdentity);
+                                    //print(_pageIdentity);
                                     //Navigator.pop(context,_selectedUser);
+                                    Navigator.pop(context);
                                     Navigator.pushReplacement(
                                         context,
                                         new MaterialPageRoute(

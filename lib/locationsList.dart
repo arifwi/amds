@@ -100,7 +100,10 @@ class _HomePageState extends State<HomePage> {
       }
       if (widget.str_selectedTypeId != null) {
         _selectedTypeId = widget.str_selectedTypeId;
+      }
+      if(widget.str_selectedTypeName!= null){
         _selectedTypeName = widget.str_selectedTypeName;
+
       }
       if (widget.str_selectedModelId != null) {
         _selectedModelName = widget.str_selectedModelName;
@@ -200,8 +203,8 @@ class _HomePageState extends State<HomePage> {
                                       setState(() {
                                       _pageIdentity = 'locationsList';
                                     });
-                                     
-                                    Navigator.push(
+                                     Navigator.pop(context);
+                                    Navigator.pushReplacement(
                                         context,
                                         new MaterialPageRoute(
                                             builder: (context) =>
@@ -226,7 +229,6 @@ class _HomePageState extends State<HomePage> {
                                                       _pageIdentity,
                                                 )),
                                         );
-                                    Navigator.pop(context);
                                     }
                                     else{
                                   Navigator.pushAndRemoveUntil(
@@ -304,7 +306,7 @@ class _HomePageState extends State<HomePage> {
                                     setState(() {
                                       _pageIdentity = 'locationsList';
                                     });
-                                    print(_pageIdentity);
+                                    //print(_pageIdentity);
                                     //Navigator.pop(context,_selectedUser);
                                     Navigator.pop(context);
 
@@ -366,7 +368,7 @@ class _HomePageState extends State<HomePage> {
                                                     _selectedLocationId,
                                               )),
                                       ModalRoute.withName('/addComputer'));
-                                      print(_selectedLocation+''+_selectedLocationId);
+                                      //print(_selectedLocation+''+_selectedLocationId);
                                   }
                                 },
                               ),

@@ -343,6 +343,7 @@ class _scanningState extends State<scanning> {
             style: new TextStyle(color: Colors.white),
           ),
           onPressed: () {
+            Navigator.pop(context);
             Navigator.pushReplacementNamed(context, '/computerList');
           },
         )
