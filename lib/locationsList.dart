@@ -23,7 +23,6 @@ class HomePage extends StatefulWidget {
       str_selectedLocationId,
       strPageIdentity;
 
-
   HomePage({
     this.strDeviceId,
     this.strSN,
@@ -39,7 +38,6 @@ class HomePage extends StatefulWidget {
     this.str_selectedUser,
     this.str_selectedUserId,
     this.strPageIdentity,
-
   });
   @override
   _HomePageState createState() => new _HomePageState();
@@ -69,8 +67,8 @@ class _HomePageState extends State<HomePage> {
 
   String fullname;
 
-  //final String url = 'http://192.168.43.62/amdsweb/getLocations.php';
-  final String url = 'http://172.28.16.84:8089/getLocations.php';
+  final String url = 'http://192.168.43.62/amdsweb/getLocations.php';
+  //final String url = 'http://172.28.16.84:8089/getLocations.php';
 
   // Get json result and convert it to model. Then add
   Future<Null> getLocation() async {
@@ -101,9 +99,8 @@ class _HomePageState extends State<HomePage> {
       if (widget.str_selectedTypeId != null) {
         _selectedTypeId = widget.str_selectedTypeId;
       }
-      if(widget.str_selectedTypeName!= null){
+      if (widget.str_selectedTypeName != null) {
         _selectedTypeName = widget.str_selectedTypeName;
-
       }
       if (widget.str_selectedModelId != null) {
         _selectedModelName = widget.str_selectedModelName;
@@ -125,7 +122,6 @@ class _HomePageState extends State<HomePage> {
       if (widget.strPageIdentity != null) {
         _pageIdentity = widget.strPageIdentity;
       }
-
     });
   }
 
@@ -194,44 +190,40 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.blue,
                                 onPressed: () {
                                   setState(() {
-                                    _selectedLocation =
-                                        _searchResult[i].name;
-                                    _selectedLocationId =
-                                        _searchResult[i].id;
+                                    _selectedLocation = _searchResult[i].name;
+                                    _selectedLocationId = _searchResult[i].id;
                                   });
-                                   if (_pageIdentity == "movementDevices") {
-                                      setState(() {
+                                  if (_pageIdentity == "movementDevices") {
+                                    setState(() {
                                       _pageIdentity = 'locationsList';
                                     });
-                                     Navigator.pop(context);
+                                    Navigator.pop(context);
                                     Navigator.pushReplacement(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) =>
-                                                movementDevices
-                                                    .MainMovementDevices(
-                                                  str_selectedEntityId:
-                                                      _selectedEntityId,
-                                                  str_selectedEntityName:
-                                                      _selectedEntityName,
-                                                  str_selectedLocation:
-                                                      _selectedLocation,
-                                                  str_selectedLocationId:
-                                                      _selectedLocationId,
-                                                  str_selectedTypeName:
-                                                      _selectedTypeName,
-                                                  str_selectedUser:
-                                                      _selectedUser,
-                                                  str_selectedUserId:
-                                                      _selectedUserId,
-                                                  strDeviceId: _deviceId,
-                                                  strPageIdentity:
-                                                      _pageIdentity,
-                                                )),
-                                        );
-                                    }
-                                    else{
-                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) => movementDevices
+                                                  .MainMovementDevices(
+                                                str_selectedEntityId:
+                                                    _selectedEntityId,
+                                                str_selectedEntityName:
+                                                    _selectedEntityName,
+                                                str_selectedLocation:
+                                                    _selectedLocation,
+                                                str_selectedLocationId:
+                                                    _selectedLocationId,
+                                                str_selectedTypeName:
+                                                    _selectedTypeName,
+                                                str_selectedUser: _selectedUser,
+                                                str_selectedUserId:
+                                                    _selectedUserId,
+                                                strDeviceId: _deviceId,
+                                                strPageIdentity: _pageIdentity,
+                                              )),
+                                    );
+                                  } else {
+                                    Navigator.pop(context);
+
+                                    Navigator.pushReplacement(
                                       context,
                                       new MaterialPageRoute(
                                           builder: (context) =>
@@ -259,8 +251,8 @@ class _HomePageState extends State<HomePage> {
                                                 str_selectedLocationId:
                                                     _selectedLocationId,
                                               )),
-                                      ModalRoute.withName('/addComputer'));
-                                      }
+                                    );
+                                  }
                                 },
                               ),
                             ),
@@ -311,35 +303,31 @@ class _HomePageState extends State<HomePage> {
                                     Navigator.pop(context);
 
                                     Navigator.pushReplacement(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) =>
-                                                movementDevices
-                                                    .MainMovementDevices(
-                                                  str_selectedEntityId:
-                                                      _selectedEntityId,
-                                                  str_selectedEntityName:
-                                                      _selectedEntityName,
-                                                  str_selectedLocation:
-                                                      _selectedLocation,
-                                                  str_selectedLocationId:
-                                                      _selectedLocationId,
-                                                  str_selectedTypeName:
-                                                      _selectedTypeName,
-                                                  str_selectedUser:
-                                                      _selectedUser,
-                                                  str_selectedUserId:
-                                                      _selectedUserId,
-                                                  strDeviceId: _deviceId,
-                                                  strPageIdentity:
-                                                      _pageIdentity,
-                                                )),);
-                                  
-                                  } 
-                                  
-                                  else {
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) => movementDevices
+                                                  .MainMovementDevices(
+                                                str_selectedEntityId:
+                                                    _selectedEntityId,
+                                                str_selectedEntityName:
+                                                    _selectedEntityName,
+                                                str_selectedLocation:
+                                                    _selectedLocation,
+                                                str_selectedLocationId:
+                                                    _selectedLocationId,
+                                                str_selectedTypeName:
+                                                    _selectedTypeName,
+                                                str_selectedUser: _selectedUser,
+                                                str_selectedUserId:
+                                                    _selectedUserId,
+                                                strDeviceId: _deviceId,
+                                                strPageIdentity: _pageIdentity,
+                                              )),
+                                    );
+                                  } else {
+                                    Navigator.pop(context);
 
-                                  Navigator.pushAndRemoveUntil(
+                                    Navigator.pushReplacement(
                                       context,
                                       new MaterialPageRoute(
                                           builder: (context) =>
@@ -367,8 +355,8 @@ class _HomePageState extends State<HomePage> {
                                                 str_selectedLocationId:
                                                     _selectedLocationId,
                                               )),
-                                      ModalRoute.withName('/addComputer'));
-                                      //print(_selectedLocation+''+_selectedLocationId);
+                                    );
+                                    //print(_selectedLocation+''+_selectedLocationId);
                                   }
                                 },
                               ),

@@ -47,8 +47,8 @@ class mainAdd extends StatefulWidget {
 }
 
 class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
-  //String url = 'http://192.168.43.62/amdsweb/';
-  String url = 'http://172.28.16.84:8089/';
+  String url = 'http://192.168.43.62/amdsweb/';
+  //String url = 'http://172.28.16.84:8089/';
 
   //Permission permission = Permission.Camera;
 
@@ -592,8 +592,8 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
             style: new TextStyle(color: Colors.white),
           ),
           onPressed: () {
-            Navigator.pushReplacement(context,
-                new MaterialPageRoute(builder: (context) => computerList.HomePage()));
+            Navigator.of(context, rootNavigator: true).pop();
+            Navigator.pop(context);
           },
         )
       ],
@@ -777,7 +777,8 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
       if (response.body == "DUPLICATE ID DETECTED") {
         result = "Duplicate ID has been detected";
       } else {
-        result = "Input has been successfull";
+        result = response.body;
+        print(response.body);
       }
       setState(() {
         isSuccessInput = result;

@@ -23,8 +23,8 @@ class _HomePageState extends State<HomePage> {
   String fullname;
 
   final String url = 
-  'http://172.28.16.84:8089/getComputerList.php';
-  //'http://192.168.43.62/amdsweb/getComputerList.php';
+  //'http://172.28.16.84:8089/getComputerList.php';
+  'http://192.168.43.62/amdsweb/getComputerList.php';
 
   // Get json result and convert it to model. Then add
   Future<Null> getComputerDetails() async {
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
-          Navigator.pushReplacementNamed(context, '/scanningComputer');
+          Navigator.pushNamed(context, '/scanningComputer');
         },
         child: new Icon(Icons.add),
       ),

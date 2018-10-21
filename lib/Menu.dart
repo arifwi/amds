@@ -49,7 +49,7 @@ class _mainMenuState extends State<mainMenu> {
                 ],
               )),
               onTap: () {
-                Navigator.of(context).pushNamed('/computerList');
+                Navigator.pushNamed(context, "/computerList");
                 //MaterialPageRoute(builder: (context) => addDevice.mainAdd()));
               },
             ),
@@ -116,7 +116,7 @@ class _mainMenuState extends State<mainMenu> {
       ),
     );
   }
-
+  
   Future<bool> backButtonDialog() {
     AlertDialog alertScanDeviceid = new AlertDialog(
       title: new Text('Exit Dialog', style: new TextStyle(color: Colors.blue)),
@@ -152,4 +152,11 @@ class _mainMenuState extends State<mainMenu> {
     );
     return showDialog(context: context, child: alertScanDeviceid);
   }
+
+  @override
+    void initState() {
+      // TODO: implement initState
+      super.initState();
+      print(Cookie);
+    }
 }

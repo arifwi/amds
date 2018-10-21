@@ -13,6 +13,7 @@ import 'package:amds/locationsList.dart'as locationList;
 import 'package:amds/computerList.dart' as commputerList;
 import 'package:amds/computerDetails.dart' as computerDetails;
 import 'package:amds/movementDevices.dart' as movementDevices;
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
 SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
@@ -53,11 +54,10 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController txt_username = new TextEditingController();
   TextEditingController txt_password = new TextEditingController();
-
   String message = '';
   String url = 
-  //'http://192.168.43.62/amdsweb/';
-  'http://172.28.16.84:8089/';
+  'http://192.168.43.62/amdsweb/';
+  //'http://172.28.16.84:8089/';
   Future<dynamic> _checkLogin() async {
     setState(() {
       message = '';
@@ -75,12 +75,16 @@ class _LoginPageState extends State<LoginPage> {
             message = 'Login Filed';
           });
         } else {
+         final prefs = await SharedPreferences.getInstance();
+
           //print(datauser[0]["username"]);
-          Navigator.pushReplacementNamed(context, "/mainMenu");
           setState(() {
             username = datauser[0]["username"];
+            prefs.setString('username', username);
             //print(username);
           });
+          Navigator.pushReplacementNamed(context, "/mainMenu");
+
         }
       }
       else{

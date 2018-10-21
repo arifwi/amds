@@ -102,7 +102,8 @@ class _scanningState extends State<scanning> {
     return WillPopScope(
       onWillPop: () {
         if (_deviceId == null && _sn == null && _pn == null) {
-          Navigator.pushReplacementNamed(context, '/computerList');
+          Navigator.pop(context);
+          //Navigator.pushReplacementNamed(context, '/computerList');
         } else {
           backButtonDialog();
         }
@@ -117,7 +118,9 @@ class _scanningState extends State<scanning> {
             ),
             onPressed: () {
               if (_deviceId == null && _sn == null && _pn == null) {
-                Navigator.pushReplacementNamed(context, '/computerList');
+                Navigator.pop(context);
+
+                //Navigator.pushReplacementNamed(context, '/computerList');
               } else {
                 backButtonDialog();
               }
@@ -208,10 +211,7 @@ class _scanningState extends State<scanning> {
             ListTile(
                 leading: new RaisedButton.icon(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) => menu.mainMenu()));
+                    Navigator.pop(context);
                   },
                   icon: new Icon(
                     Icons.close,
@@ -343,8 +343,8 @@ class _scanningState extends State<scanning> {
             style: new TextStyle(color: Colors.white),
           ),
           onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
             Navigator.pop(context);
-            Navigator.pushReplacementNamed(context, '/computerList');
           },
         )
       ],
