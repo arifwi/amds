@@ -48,8 +48,8 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
 
   String isSuccessUpdate;
 
-  String url = 'http://192.168.43.62/amdsweb/';
-  //String url = 'http://172.28.16.84:8089/';
+  //String url = 'http://192.168.43.62/amdsweb/';
+  String url = 'http://172.28.16.84:8089/';
   List<DropdownMenuItem<String>> dataEntities = [];
   List<MapIdName> _listDataEntities = [];
   List<MapIdName> _searchEntitiesResult = [];

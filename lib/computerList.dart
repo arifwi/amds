@@ -9,11 +9,16 @@ import 'package:amds/Menu.dart' as menu;
 import 'package:amds/computerDetails.dart' as computerDetails;
 
 class HomePage extends StatefulWidget {
+  
+  String str_AppUsername;
+  HomePage({this.str_AppUsername});
   @override
   _HomePageState createState() => new _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  String _appUsername;
+
   TextEditingController controller = new TextEditingController();
 
   List<MapIdNameComputers> _searchComputerResult = [];
@@ -23,8 +28,8 @@ class _HomePageState extends State<HomePage> {
   String fullname;
 
   final String url = 
-  //'http://172.28.16.84:8089/getComputerList.php';
-  'http://192.168.43.62/amdsweb/getComputerList.php';
+  'http://172.28.16.84:8089/getComputerList.php';
+  //'http://192.168.43.62/amdsweb/getComputerList.php';
 
   // Get json result and convert it to model. Then add
   Future<Null> getComputerDetails() async {
@@ -41,6 +46,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    _appUsername = widget.str_AppUsername;
     getComputerDetails().then((value) {
       new Future.delayed(Duration(milliseconds: 1000),
                                   () {
@@ -48,7 +54,7 @@ class _HomePageState extends State<HomePage> {
                               });
     });
     
-    
+    print(_appUsername);
   }
 
   @override

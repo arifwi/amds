@@ -11,16 +11,17 @@ import 'package:amds/usersList.dart' as UserList;
 import 'package:amds/monitorList.dart' as monitorList;
 import 'package:amds/printerList.dart' as printerList;
 class mainMenu extends StatefulWidget {
-  final String username;
+  final String str_AppUsername;
   
 
-  mainMenu({this.username});
+  mainMenu({this.str_AppUsername});
 
   @override
   _mainMenuState createState() => _mainMenuState();
 }
 
 class _mainMenuState extends State<mainMenu> {
+  String _appUsername;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -49,8 +50,8 @@ class _mainMenuState extends State<mainMenu> {
                 ],
               )),
               onTap: () {
-                Navigator.pushNamed(context, "/computerList");
-                //MaterialPageRoute(builder: (context) => addDevice.mainAdd()));
+                Navigator.push(context, 
+                MaterialPageRoute(builder: (context) => commputerlist.HomePage(str_AppUsername: _appUsername,)));
               },
             ),
             new GestureDetector(
@@ -157,6 +158,6 @@ class _mainMenuState extends State<mainMenu> {
     void initState() {
       // TODO: implement initState
       super.initState();
-      print(Cookie);
+      _appUsername = widget.str_AppUsername;
     }
 }

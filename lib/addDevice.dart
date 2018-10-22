@@ -47,8 +47,8 @@ class mainAdd extends StatefulWidget {
 }
 
 class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
-  String url = 'http://192.168.43.62/amdsweb/';
-  //String url = 'http://172.28.16.84:8089/';
+  //String url = 'http://192.168.43.62/amdsweb/';
+  String url = 'http://172.28.16.84:8089/';
 
   //Permission permission = Permission.Camera;
 

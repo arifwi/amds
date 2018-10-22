@@ -20,7 +20,8 @@ class MainComputerDetails extends StatefulWidget {
       str_selectedUser,
       str_selectedLocation,
       str_selectedUserId,
-      str_selectedLocationId;
+      str_selectedLocationId,
+      str_AppUsername;
 
   MainComputerDetails({
    this.strDeviceId,
@@ -36,6 +37,7 @@ class MainComputerDetails extends StatefulWidget {
     this.str_selectedLocationId,
     this.str_selectedUser,
     this.str_selectedUserId,
+    this.str_AppUsername,
   });
   @override
   _MainComputerDetailsState createState() => _MainComputerDetailsState();
@@ -54,7 +56,8 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
       _selectedLocationId,
       _deviceId,
       _sn,
-      _pn;
+      _pn,
+      _appUsername;
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +211,7 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
         _selectedLocationId = widget.str_selectedLocationId;
         _selectedLocation = widget.str_selectedLocation.toUpperCase();
       }
-      
+      _appUsername = widget.str_AppUsername;
            
     });
   }

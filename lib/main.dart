@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:amds/Menu.dart';
+import 'package:amds/Menu.dart' as menu;
 import 'package:amds/addDevice.dart' ;
 import 'package:amds/scanning.dart' as scanningComputer;
 import 'package:amds/usersList.dart' as userList;
@@ -13,7 +13,6 @@ import 'package:amds/locationsList.dart'as locationList;
 import 'package:amds/computerList.dart' as commputerList;
 import 'package:amds/computerDetails.dart' as computerDetails;
 import 'package:amds/movementDevices.dart' as movementDevices;
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
 SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
@@ -21,7 +20,7 @@ SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
 
 });
 }
-String username = '';
+String username = '', users_id = '',firstname ='', lastname= '';
 
 class MyApp extends StatelessWidget {
   @override
@@ -31,7 +30,7 @@ class MyApp extends StatelessWidget {
       home: new LoginPage(),
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
-        '/mainMenu': (BuildContext context) => new mainMenu(username: username),
+        '/mainMenu': (BuildContext context) => new menu.mainMenu(),
         '/addComputer': (BuildContext context)=> new mainAdd(),
         '/scanningComputer' : (BuildContext context)=> new scanningComputer.scanning(),
         '/userList' : (BuildContext context)=> new userList.HomePage(),
@@ -56,8 +55,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController txt_password = new TextEditingController();
   String message = '';
   String url = 
-  'http://192.168.43.62/amdsweb/';
-  //'http://172.28.16.84:8089/';
+  //'http://192.168.43.62/amdsweb/';
+  'http://172.28.16.84:8089/';
   Future<dynamic> _checkLogin() async {
     setState(() {
       message = '';
@@ -75,15 +74,14 @@ class _LoginPageState extends State<LoginPage> {
             message = 'Login Filed';
           });
         } else {
-         final prefs = await SharedPreferences.getInstance();
 
           //print(datauser[0]["username"]);
           setState(() {
-            username = datauser[0]["username"];
-            prefs.setString('username', username);
+            username = datauser[0]["lastname"] + " "+datauser[0]["firstname"]+" "+datauser[0]["users_id"];
+           
             //print(username);
           });
-          Navigator.pushReplacementNamed(context, "/mainMenu");
+          Navigator.pushReplacement(context, MaterialPageRoute( builder: (context)=> menu.mainMenu(str_AppUsername: username,)));
 
         }
       }
