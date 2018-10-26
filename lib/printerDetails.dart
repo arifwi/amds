@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/Menu.dart' as menu;
 import 'package:amds/movementDevices.dart' as movementDevices;
-class MainComputerDetails extends StatefulWidget {
+class MainPrinterDetails extends StatefulWidget {
   String  strDeviceId,
       strPN,
       strSN,
@@ -23,7 +23,7 @@ class MainComputerDetails extends StatefulWidget {
       str_selectedLocationId,
       str_AppUsername;
 
-  MainComputerDetails({
+  MainPrinterDetails({
    this.strDeviceId,
     this.strSN,
     this.strPN,
@@ -40,10 +40,10 @@ class MainComputerDetails extends StatefulWidget {
     this.str_AppUsername,
   });
   @override
-  _MainComputerDetailsState createState() => _MainComputerDetailsState();
+  _MainPrinterDetailsState createState() => _MainPrinterDetailsState();
 }
 
-class _MainComputerDetailsState extends State<MainComputerDetails> {
+class _MainPrinterDetailsState extends State<MainPrinterDetails> {
   String _selectedTypeId,
       _selectedModelId,
       _selectedEntityId,

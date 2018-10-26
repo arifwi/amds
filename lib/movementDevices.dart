@@ -64,7 +64,7 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
               style: new TextStyle(fontWeight: FontWeight.bold)),
           leading: _selectedTypeName == 'DESKTOP'
               ? new Icon(
-                  Icons.desktop_windows,
+                  Icons.desktop_mac,
                 )
               : _selectedTypeName == 'NOTEBOOK'
                   ? new Icon(
@@ -271,6 +271,8 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                                 .then((result) {
                               new Future.delayed(Duration(milliseconds: 1000),
                                   () {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);

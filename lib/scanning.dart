@@ -19,7 +19,8 @@ class scanning extends StatefulWidget {
       str_selectedUser,
       str_selectedLocation,
       str_selectedUserId,
-      str_selectedLocationId;
+      str_selectedLocationId,
+      str_AppUsername;
 
   scanning({
     this.strDeviceId,
@@ -35,6 +36,8 @@ class scanning extends StatefulWidget {
     this.str_selectedLocationId,
     this.str_selectedUser,
     this.str_selectedUserId,
+    this.str_AppUsername,
+
   });
 
   @override
@@ -54,14 +57,17 @@ class _scanningState extends State<scanning> {
       _selectedLocationId,
       _deviceId,
       _sn,
-      _pn;
+      _pn,
+      _appUsername;
 
   bool styleID = false, styleSN = false, stylePN = false;
 
   @override
   void initState() {
     // TODO: implement initState
+    
     setState(() {
+      _appUsername = widget.str_AppUsername;
       if (widget.strDeviceId != null) {
         _deviceId = widget.strDeviceId;
       }
@@ -93,7 +99,7 @@ class _scanningState extends State<scanning> {
         _selectedLocationId = widget.str_selectedLocationId;
       }
     });
-
+  print(_appUsername);
     super.initState();
   }
 
@@ -136,7 +142,7 @@ class _scanningState extends State<scanning> {
                   style: new TextStyle(fontSize: 15.0),
                 ),
                 title: Text(
-                  _deviceId.toString(),
+                  _deviceId.toString().toUpperCase(),
                   style: styleID
                       ? TextStyle(color: Colors.green)
                       : TextStyle(color: Colors.red),
@@ -161,7 +167,7 @@ class _scanningState extends State<scanning> {
                   style: new TextStyle(fontSize: 15.0),
                 ),
                 title: Text(
-                  _sn.toString(),
+                  _sn.toString().toUpperCase(),
                   style: styleSN
                       ? TextStyle(color: Colors.green)
                       : TextStyle(color: Colors.red),
@@ -186,7 +192,7 @@ class _scanningState extends State<scanning> {
                   style: new TextStyle(fontSize: 15.0),
                 ),
                 title: Text(
-                  _pn.toString(),
+                  _pn.toString().toUpperCase(),
                   style: stylePN
                       ? TextStyle(color: Colors.green)
                       : TextStyle(color: Colors.red),
@@ -250,6 +256,7 @@ class _scanningState extends State<scanning> {
                                     str_selectedUser: _selectedUser,
                                     str_selectedLocation: _selectedLocation,
                                     str_selectedLocationId: _selectedLocationId,
+                                    str_AppUsername: _appUsername,
                                   )));
                     }
                   },
@@ -272,7 +279,7 @@ class _scanningState extends State<scanning> {
         new RaisedButton(
           color: Colors.green,
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context, rootNavigator: true).pop();
           },
           child: new Text(
             'No',
@@ -282,7 +289,7 @@ class _scanningState extends State<scanning> {
         new RaisedButton(
           color: Colors.red,
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context, rootNavigator: true).pop();
 
             Navigator.pushReplacement(
                 context,
@@ -300,7 +307,8 @@ class _scanningState extends State<scanning> {
                         str_selectedUserId: _selectedUserId,
                         str_selectedUser: _selectedUser,
                         str_selectedLocation: _selectedLocation,
-                        str_selectedLocationId: _selectedLocationId)));
+                        str_selectedLocationId: _selectedLocationId,
+                        str_AppUsername: _appUsername,)));
           },
           child: new Text(
             'Yes',

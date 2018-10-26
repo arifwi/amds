@@ -8,6 +8,7 @@ import 'package:amds/scanning.dart' as scan;
 import 'package:amds/usersList.dart' as UsersList;
 import 'package:amds/locationsList.dart' as LocationList;
 import 'package:amds/computerList.dart' as computerList;
+import 'package:amds/utils/formatter.dart' as MyFormatter;
 
 class mainAdd extends StatefulWidget {
   String strDeviceId,
@@ -22,7 +23,8 @@ class mainAdd extends StatefulWidget {
       str_selectedUser,
       str_selectedLocation,
       str_selectedUserId,
-      str_selectedLocationId;
+      str_selectedLocationId,
+      str_AppUsername;
 
   mainAdd({
     this.strDeviceId,
@@ -38,6 +40,7 @@ class mainAdd extends StatefulWidget {
     this.str_selectedLocationId,
     this.str_selectedUser,
     this.str_selectedUserId,
+    this.str_AppUsername,
   });
 
   @override
@@ -74,7 +77,8 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
       _selectedLocationId,
       _deviceId,
       _sn,
-      _pn;
+      _pn,
+      _appUsername;
 
   List<DropdownMenuItem<String>> dataType = [];
   List<DropdownMenuItem<String>> dataModel = [];
@@ -91,7 +95,6 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
   String isSuccessInput;
 
   var _result;
-
   String qresult = '';
 
   bool _isUnlock = true;
@@ -110,6 +113,8 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
         getcomputerModels().then((result) {
           getEntities().then((result) {
             setState(() {
+              _appUsername = widget.str_AppUsername;
+
               if (widget.strDeviceId != null) {
                 _deviceId = widget.strDeviceId;
                 controllerDeviceId.text = _deviceId;
@@ -149,6 +154,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                 _selectedLocation = widget.str_selectedLocation;
                 _selectedLocationId = widget.str_selectedLocationId;
               }
+              print(_appUsername);
             });
           });
         });
@@ -241,6 +247,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                           str_selectedUser: _selectedUser,
                           str_selectedLocation: _selectedLocation,
                           str_selectedLocationId: _selectedLocationId,
+                          str_AppUsername: _appUsername,
                         )));
           },
         ),
@@ -254,6 +261,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                     enabled: enableDeviceID,
                     focusNode: fDeviceId,
                     controller: controllerDeviceId,
+                    inputFormatters: [MyFormatter.UpperCaseFormatter()],
                     decoration: InputDecoration(
                         labelText: 'ID Device',
                         border: OutlineInputBorder(
@@ -261,7 +269,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(right: 10.0, left: 20.0, top: 15.0),
+                  padding: EdgeInsets.only(right: 3.0, left: 20.0, top: 15.0),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
                       iconSize: 20.0,
@@ -288,7 +296,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(right: 10.0, left: 20.0, top: 15.0),
+                  padding: EdgeInsets.only(right: 3.0, left: 20.0, top: 15.0),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
                       iconSize: 20.0,
@@ -321,6 +329,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                     enabled: enableSN,
                     focusNode: fSerialNumber,
                     controller: controllerSerialNumber,
+                    inputFormatters: [MyFormatter.UpperCaseFormatter()],
                     decoration: InputDecoration(
                         labelText: 'Serial Number',
                         border: OutlineInputBorder(
@@ -333,6 +342,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                     enabled: enablePN,
                     focusNode: fProductNumber,
                     controller: controllerProductNumber,
+                    inputFormatters: [MyFormatter.UpperCaseFormatter()],
                     decoration: InputDecoration(
                         labelText: 'Product Number',
                         border: OutlineInputBorder(
@@ -403,6 +413,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                                         str_selectedUserId: _selectedUserId,
                                         str_selectedUser: _selectedUser,
                                         str_selectedLocation: _selectedLocation,
+                                        str_AppUsername: _appUsername,
                                       )));
                         },
                       ),
@@ -448,6 +459,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                                         str_selectedLocation: _selectedLocation,
                                         str_selectedLocationId:
                                             _selectedLocationId,
+                                        str_AppUsername: _appUsername,
                                       )));
                         },
                       ),
@@ -582,7 +594,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
             style: new TextStyle(color: Colors.white),
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context, rootNavigator: true).pop();
           },
         ),
         new RaisedButton(
@@ -697,18 +709,27 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                       _pn = controllerProductNumber.text;
                     });
                     inputNewComputer(
-                        _deviceId,
-                        _selectedEntityId,
-                        _selectedTypeId,
-                        _selectedModelId,
-                        _sn,
-                        _pn,
-                        _selectedLocationId,
-                        _selectedUserId).then((_result) {
+                            _deviceId,
+                            _selectedEntityId,
+                            _selectedTypeId,
+                            _selectedModelId,
+                            _sn,
+                            _pn,
+                            _selectedLocationId,
+                            _selectedUserId)
+                        .then((_result) {
+                      Navigator.of(context, rootNavigator: true).pop();
+
                       new Future.delayed(Duration(milliseconds: 500), () {
-                        Navigator.pop(context, true);
                         successInputDialog();
+                        new Future.delayed(Duration(milliseconds: 1000), () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                        }).then((onValue) {
+                          Navigator.pop(context);
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>computerList.HomePage(str_AppUsername: _appUsername,)));
+                        });
                       });
+                      //Navigator.pushReplacement(context, newRoute)
                     });
                   },
                   child: new Text('Save'),
@@ -739,13 +760,12 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
         content: new Text('Please fill the empty field on the form!'),
         actions: <Widget>[
           new RaisedButton(
-            child: new Text(
-              'OK',
-              style: new TextStyle(color: Colors.white),
-            ),
-            color: Colors.blue,
-            onPressed: () => Navigator.pop(context, true),
-          )
+              child: new Text(
+                'OK',
+                style: new TextStyle(color: Colors.white),
+              ),
+              color: Colors.blue,
+              onPressed: () => Navigator.of(context, rootNavigator: true).pop())
         ],
       );
 
@@ -773,18 +793,21 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
         'pn': pn,
         'user_id': users_id,
         'location_id': locations_id,
+        'appUsername': _appUsername,
       });
       if (response.body == "DUPLICATE ID DETECTED") {
         result = "Duplicate ID has been detected";
+      } else if (response.body == "Data has been saved successfully.") {
+        result = response.body;
       } else {
         result = response.body;
-        print(response.body);
+        //print(response.body);
       }
       setState(() {
         isSuccessInput = result;
       });
     } catch (e) {
-      print(e);
+      result = e;
     }
   }
 

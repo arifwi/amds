@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/Menu.dart' as menu;
 import 'package:amds/computerDetails.dart' as computerDetails;
+import 'package:amds/scanning.dart' as scanning;
 
 class HomePage extends StatefulWidget {
   
@@ -54,7 +55,6 @@ class _HomePageState extends State<HomePage> {
                               });
     });
     
-    print(_appUsername);
   }
 
   @override
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/scanningComputer');
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> scanning.scanning(str_AppUsername: _appUsername,)));
         },
         child: new Icon(Icons.add),
       ),
@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                               leading:
                                   _searchComputerResult[i].typeName == 'NOTEBOOK'
                                       ? new Icon(Icons.laptop)
-                                      : new Icon(Icons.desktop_windows),
+                                      : new Icon(Icons.desktop_mac),
                               title: new Text(_searchComputerResult[i].name),
                               trailing: new Text(_searchComputerResult[i].username,
                                   style:
@@ -178,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                               leading:
                                   _computerDetails[index].typeName == 'NOTEBOOK'
                                       ? new Icon(Icons.laptop)
-                                      : new Icon(Icons.desktop_windows),
+                                      : new Icon(Icons.desktop_mac),
                               title: new Text(_computerDetails[index].name),
                               trailing: new Text(
                                 _computerDetails[index].username,

@@ -21,7 +21,8 @@ class HomePage extends StatefulWidget {
       str_selectedLocation,
       str_selectedUserId,
       str_selectedLocationId,
-      strPageIdentity;
+      strPageIdentity,
+      str_AppUsername;
 
   HomePage({
     this.strDeviceId,
@@ -38,6 +39,7 @@ class HomePage extends StatefulWidget {
     this.str_selectedUser,
     this.str_selectedUserId,
     this.strPageIdentity,
+    this.str_AppUsername,
   });
   @override
   _HomePageState createState() => new _HomePageState();
@@ -57,7 +59,8 @@ class _HomePageState extends State<HomePage> {
       _deviceId,
       _sn,
       _pn,
-      _pageIdentity;
+      _pageIdentity,
+      _appUsername;
 
   TextEditingController controller = new TextEditingController();
 
@@ -87,6 +90,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     getLocation().then((result) {
+              _appUsername = widget.str_AppUsername;
+
       if (widget.strDeviceId != null) {
         _deviceId = widget.strDeviceId;
       }
@@ -129,7 +134,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Select User'),
+        title: new Text('Select Location'),
         elevation: 0.0,
       ),
       body: new Column(
@@ -167,7 +172,7 @@ class _HomePageState extends State<HomePage> {
                       return new Card(
                         child: new ExpansionTile(
                           leading: new Icon(
-                            Icons.person_pin,
+                            Icons.location_on,
                             size: 40.0,
                             color: Colors.blue,
                           ),
@@ -250,6 +255,7 @@ class _HomePageState extends State<HomePage> {
                                                     _selectedLocation,
                                                 str_selectedLocationId:
                                                     _selectedLocationId,
+                                                     str_AppUsername: _appUsername,
                                               )),
                                     );
                                   }
@@ -268,7 +274,7 @@ class _HomePageState extends State<HomePage> {
                       return new Card(
                         child: new ExpansionTile(
                           leading: new Icon(
-                            Icons.person_pin,
+                            Icons.location_on,
                             size: 40.0,
                             color: Colors.blue,
                           ),
@@ -354,6 +360,7 @@ class _HomePageState extends State<HomePage> {
                                                     _selectedLocation,
                                                 str_selectedLocationId:
                                                     _selectedLocationId,
+                                                    str_AppUsername: _appUsername,
                                               )),
                                     );
                                     //print(_selectedLocation+''+_selectedLocationId);
@@ -380,9 +387,9 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    _locationDetails.forEach((userDetail) {
-      if (userDetail.id.contains(text) || userDetail.name.contains(text))
-        _searchResult.add(userDetail);
+    _locationDetails.forEach((locationDetail) {
+      if (locationDetail.id.contains(text) || locationDetail.name.contains(text))
+        _searchResult.add(locationDetail);
     });
 
     setState(() {});

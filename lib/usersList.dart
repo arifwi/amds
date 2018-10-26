@@ -21,7 +21,8 @@ class HomePage extends StatefulWidget {
       str_selectedLocation,
       str_selectedUserId,
       str_selectedLocationId,
-      strPageIdentity;
+      strPageIdentity,
+      str_AppUsername;
 
   HomePage({
     this.strDeviceId,
@@ -38,6 +39,7 @@ class HomePage extends StatefulWidget {
     this.str_selectedUser,
     this.str_selectedUserId,
     this.strPageIdentity,
+    this.str_AppUsername,
   });
   @override
   _HomePageState createState() => new _HomePageState();
@@ -57,7 +59,9 @@ class _HomePageState extends State<HomePage> {
       _deviceId,
       _sn,
       _pn,
-      _pageIdentity;
+      _pageIdentity,
+      _appUsername;
+
   TextEditingController controller = new TextEditingController();
 
   List<MapIdName> _searchResult = [];
@@ -86,6 +90,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     getUserDetails().then((value) {
+      _appUsername = widget.str_AppUsername;
+
       if (widget.strDeviceId != null) {
         _deviceId = widget.strDeviceId;
       }
@@ -192,67 +198,65 @@ class _HomePageState extends State<HomePage> {
                                     _selectedUserId = _searchResult[i].id;
                                   });
                                   if (_pageIdentity == "movementDevices") {
-                                      setState(() {
+                                    setState(() {
                                       _pageIdentity = 'usersList';
                                     });
                                     Navigator.push(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) =>
-                                                movementDevices
-                                                    .MainMovementDevices(
-                                                  str_selectedEntityId:
-                                                      _selectedEntityId,
-                                                  str_selectedEntityName:
-                                                      _selectedEntityName,
-                                                  str_selectedLocation:
-                                                      _selectedLocation,
-                                                  str_selectedLocationId:
-                                                      _selectedLocationId,
-                                                  str_selectedTypeName:
-                                                      _selectedTypeName,
-                                                  str_selectedUser:
-                                                      _selectedUser,
-                                                  str_selectedUserId:
-                                                      _selectedUserId,
-                                                  strDeviceId: _deviceId,
-                                                  strPageIdentity:
-                                                      _pageIdentity,
-                                                )),
-                                        );
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) => movementDevices
+                                                  .MainMovementDevices(
+                                                str_selectedEntityId:
+                                                    _selectedEntityId,
+                                                str_selectedEntityName:
+                                                    _selectedEntityName,
+                                                str_selectedLocation:
+                                                    _selectedLocation,
+                                                str_selectedLocationId:
+                                                    _selectedLocationId,
+                                                str_selectedTypeName:
+                                                    _selectedTypeName,
+                                                str_selectedUser: _selectedUser,
+                                                str_selectedUserId:
+                                                    _selectedUserId,
+                                                strDeviceId: _deviceId,
+                                                strPageIdentity: _pageIdentity,
+                                                
+                                              )),
+                                    );
                                   } else {
                                     Navigator.pop(context);
 
                                     Navigator.pushReplacement(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) =>
-                                                addDevice.mainAdd(
-                                                  strSN: _sn,
-                                                  strPN: _pn,
-                                                  strDeviceId: _deviceId,
-                                                  str_selectedModelId:
-                                                      _selectedModelId,
-                                                  str_selectedEntityId:
-                                                      _selectedEntityId,
-                                                  str_selectedTypeId:
-                                                      _selectedTypeId,
-                                                  str_selectedModelName:
-                                                      _selectedModelName,
-                                                  str_selectedEntityName:
-                                                      _selectedEntityName,
-                                                  str_selectedTypeName:
-                                                      _selectedTypeName,
-                                                  str_selectedUserId:
-                                                      _selectedUserId,
-                                                  str_selectedUser:
-                                                      _selectedUser,
-                                                  str_selectedLocation:
-                                                      _selectedLocation,
-                                                  str_selectedLocationId:
-                                                      _selectedLocationId,
-                                                )),
-                                        );
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              addDevice.mainAdd(
+                                                strSN: _sn,
+                                                strPN: _pn,
+                                                strDeviceId: _deviceId,
+                                                str_selectedModelId:
+                                                    _selectedModelId,
+                                                str_selectedEntityId:
+                                                    _selectedEntityId,
+                                                str_selectedTypeId:
+                                                    _selectedTypeId,
+                                                str_selectedModelName:
+                                                    _selectedModelName,
+                                                str_selectedEntityName:
+                                                    _selectedEntityName,
+                                                str_selectedTypeName:
+                                                    _selectedTypeName,
+                                                str_selectedUserId:
+                                                    _selectedUserId,
+                                                str_selectedUser: _selectedUser,
+                                                str_selectedLocation:
+                                                    _selectedLocation,
+                                                str_selectedLocationId:
+                                                    _selectedLocationId,
+                                                    str_AppUsername: _appUsername,
+                                              )),
+                                    );
                                   }
                                 },
                               ),
@@ -299,62 +303,60 @@ class _HomePageState extends State<HomePage> {
                                     });
                                     Navigator.pop(context);
                                     Navigator.pushReplacement(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) =>
-                                                movementDevices
-                                                    .MainMovementDevices(
-                                                  str_selectedEntityId:
-                                                      _selectedEntityId,
-                                                  str_selectedEntityName:
-                                                      _selectedEntityName,
-                                                  str_selectedLocation:
-                                                      _selectedLocation,
-                                                  str_selectedLocationId:
-                                                      _selectedLocationId,
-                                                  str_selectedTypeName:
-                                                      _selectedTypeName,
-                                                  str_selectedUser:
-                                                      _selectedUser,
-                                                  str_selectedUserId:
-                                                      _selectedUserId,
-                                                  strDeviceId: _deviceId,
-                                                  strPageIdentity:
-                                                      _pageIdentity,
-                                                )),);
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) => movementDevices
+                                                  .MainMovementDevices(
+                                                str_selectedEntityId:
+                                                    _selectedEntityId,
+                                                str_selectedEntityName:
+                                                    _selectedEntityName,
+                                                str_selectedLocation:
+                                                    _selectedLocation,
+                                                str_selectedLocationId:
+                                                    _selectedLocationId,
+                                                str_selectedTypeName:
+                                                    _selectedTypeName,
+                                                str_selectedUser: _selectedUser,
+                                                str_selectedUserId:
+                                                    _selectedUserId,
+                                                strDeviceId: _deviceId,
+                                                strPageIdentity: _pageIdentity,
+                                              )),
+                                    );
                                   } else {
                                     Navigator.pop(context);
 
                                     Navigator.pushReplacement(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) =>
-                                                addDevice.mainAdd(
-                                                  strSN: _sn,
-                                                  strPN: _pn,
-                                                  strDeviceId: _deviceId,
-                                                  str_selectedModelId:
-                                                      _selectedModelId,
-                                                  str_selectedEntityId:
-                                                      _selectedEntityId,
-                                                  str_selectedTypeId:
-                                                      _selectedTypeId,
-                                                  str_selectedModelName:
-                                                      _selectedModelName,
-                                                  str_selectedEntityName:
-                                                      _selectedEntityName,
-                                                  str_selectedTypeName:
-                                                      _selectedTypeName,
-                                                  str_selectedUserId:
-                                                      _selectedUserId,
-                                                  str_selectedUser:
-                                                      _selectedUser,
-                                                  str_selectedLocation:
-                                                      _selectedLocation,
-                                                  str_selectedLocationId:
-                                                      _selectedLocationId,
-                                                )),
-                                      );
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              addDevice.mainAdd(
+                                                strSN: _sn,
+                                                strPN: _pn,
+                                                strDeviceId: _deviceId,
+                                                str_selectedModelId:
+                                                    _selectedModelId,
+                                                str_selectedEntityId:
+                                                    _selectedEntityId,
+                                                str_selectedTypeId:
+                                                    _selectedTypeId,
+                                                str_selectedModelName:
+                                                    _selectedModelName,
+                                                str_selectedEntityName:
+                                                    _selectedEntityName,
+                                                str_selectedTypeName:
+                                                    _selectedTypeName,
+                                                str_selectedUserId:
+                                                    _selectedUserId,
+                                                str_selectedUser: _selectedUser,
+                                                str_selectedLocation:
+                                                    _selectedLocation,
+                                                str_selectedLocationId:
+                                                    _selectedLocationId,
+                                                    str_AppUsername: _appUsername,
+                                              )),
+                                    );
                                   }
                                 },
                               ),

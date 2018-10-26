@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
         var datauser = json.decode(response.body);
         if (datauser.length == 0) {
           setState(() {
-            message = 'Login Filed';
+            message = 'Login Failed, incorrect username or password!';
           });
         } else {
 
@@ -112,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                   new Padding(
                     padding: EdgeInsets.only(top: 50.0),
                   ),
-                  new Text('AMDS',
+                  new Text('Mobile GLPI',
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 25.0)),
                   new Padding(

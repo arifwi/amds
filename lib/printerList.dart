@@ -6,32 +6,40 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/Menu.dart' as menu;
-import 'package:amds/computerDetails.dart' as computerDetails;
+import 'package:amds/scanning.dart' as scanning;
+import 'package:amds/printerDetails.dart' as printerDetails;
 
 class HomePage extends StatefulWidget {
+  
+  String str_AppUsername;
+  HomePage({this.str_AppUsername});
   @override
   _HomePageState createState() => new _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  String _appUsername;
+
   TextEditingController controller = new TextEditingController();
 
-  List<MapIdNameComputers> _searchComputerResult = [];
+  List<MapIdNamePrinters> _searchPrinterResult = [];
 
-  List<MapIdNameComputers> _computerDetails = [];
+  List<MapIdNamePrinters> _printerDetails = [];
 
   String fullname;
 
-  final String url = 'http://172.28.16.84:8089/getComputerList.php';
+  final String url = 
+  'http://172.28.16.84:8089/getprinterlist.php';
+  //'http://192.168.43.62/amdsweb/getPrinterList.php';
 
   // Get json result and convert it to model. Then add
-  Future<Null> getComputerDetails() async {
+  Future<Null> getPrinterDetails() async {
     final response = await http.get(url);
     final responseJson = json.decode(response.body);
 
     setState(() {
-      for (Map computer in responseJson) {
-        _computerDetails.add(MapIdNameComputers.fromJson(computer));
+      for (Map printer in responseJson) {
+        _printerDetails.add(MapIdNamePrinters.fromJson(printer));
       }
     });
   }
@@ -39,151 +47,177 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
-    getComputerDetails().then((value) {});
+    _appUsername = widget.str_AppUsername;
+    getPrinterDetails().then((value) {
+      new Future.delayed(Duration(milliseconds: 1000),
+                                  () {
+                                
+                              });
+    });
+    
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Computer List'),
+        title: new Text('Printer List'),
         elevation: 0.0,
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
-          Navigator.pushReplacementNamed(context, '/scanningComputer');
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> scanning.scanning(str_AppUsername: _appUsername,)));
         },
         child: new Icon(Icons.add),
       ),
-      body: new Column(
-        children: <Widget>[
-          new Container(
-            color: Theme.of(context).primaryColor,
-            child: new Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new Card(
-                child: new ListTile(
-                  leading: new Icon(Icons.search),
-                  title: new TextField(
-                    controller: controller,
-                    inputFormatters: [MyFormatter.UpperCaseFormatter()],
-                    decoration: new InputDecoration(
-                        hintText: 'Search', border: InputBorder.none),
-                    onChanged: onSearchTextChanged,
-                  ),
-                  trailing: new IconButton(
-                    icon: new Icon(Icons.cancel),
-                    onPressed: () {
-                      controller.clear();
-                      onSearchTextChanged('');
-                    },
+      body: Container(
+        color: Theme.of(context).primaryColor,
+        child: new Column(
+          
+          children: <Widget>[
+            new Container(
+              child: new Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new Card(
+                  child: new ListTile(
+                    leading: new Icon(Icons.search),
+                    title: new TextField(
+                      controller: controller,
+                      inputFormatters: [MyFormatter.UpperCaseFormatter()],
+                      decoration: new InputDecoration(
+                          hintText: 'Search', border: InputBorder.none),
+                      onChanged: onSearchTextChanged,
+                    ),
+                    trailing: new IconButton(
+                      icon: new Icon(Icons.cancel),
+                      onPressed: () {
+                        controller.clear();
+                        onSearchTextChanged('');
+                      },
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          new Expanded(
-            child: _searchComputerResult.length != 0 ||
-                    controller.text.isNotEmpty
-                ? new ListView.builder(
-                    itemCount: _searchComputerResult.length,
-                    itemBuilder: (context, i) {
-                      return new Card(
-                        shape: new Border(
-                            bottom: BorderSide(color: Colors.blue, width: 2.0)),
-                        child: new ListTile(
-                          onTap: (){
-                            Navigator.push(context, new MaterialPageRoute(
-                              builder: (context)=> computerDetails.MainComputerDetails(str_selectedTypeName: _searchComputerResult[i].typeName, 
-                              str_selectedEntityName:  _searchComputerResult[i].entities,
-                               strSN:_searchComputerResult[i].sn, 
-                              str_selectedLocation: _searchComputerResult[i].locations,
-                              str_selectedModelName: _searchComputerResult[i].modelName,
-                              strDeviceId: _searchComputerResult[i].name, 
-                              str_selectedUser: _searchComputerResult[i].username,)
-                            ));
-                          },
-                          leading:
-                              _searchComputerResult[i].typeName == 'NOTEBOOK'
-                                  ? new Icon(Icons.laptop)
-                                  : new Icon(Icons.desktop_windows),
-                          title: new Text(_searchComputerResult[i].name),
-                          trailing: new Text(_searchComputerResult[i].username,
-                              style:
-                                  new TextStyle(fontWeight: FontWeight.bold)),
-                        ),
-                        margin: const EdgeInsets.all(0.0),
-                      );
-                    },
-                  )
-                : new ListView.builder(
-                    itemCount: _computerDetails.length,
-                    itemBuilder: (context, index) {
-                      Color color;
-                      if (index % 2 != 0) {
-                        color = Colors.grey;
-                      } else {
-                        color = Colors.white;
-                      }
-                      return new Card(
-                        shape: new Border(
-                            bottom: BorderSide(color: Colors.blue, width: 2.0)),
-                        child: new ListTile(
-                          onTap: (){
-                            Navigator.push(context, new MaterialPageRoute(
-                              builder: (context)=> 
-                              computerDetails.MainComputerDetails(str_selectedTypeName: _computerDetails[index].typeName, 
-                              str_selectedEntityName:  _computerDetails[index].entities, 
-                              strSN:_computerDetails[index].sn, 
-                              str_selectedLocation: _computerDetails[index].locations,
-                              str_selectedModelName: _computerDetails[index].modelName,
-                              strDeviceId: _computerDetails[index].name, 
-                              str_selectedUser: _computerDetails[index].username,)
-                              
-                            ));
-                          },
-                          leading:
-                              _computerDetails[index].typeName == 'NOTEBOOK'
-                                  ? new Icon(Icons.laptop)
-                                  : new Icon(Icons.desktop_windows),
-                          title: new Text(_computerDetails[index].name),
-                          trailing: new Text(
-                            _computerDetails[index].username,
-                            style: new TextStyle(fontWeight: FontWeight.bold),
+            new Expanded(
+              flex: 10,
+              child: _searchPrinterResult.length != 0 ||
+                      controller.text.isNotEmpty
+                  ? new ListView.builder(
+                    
+                    padding: EdgeInsets.only(right: 10.0,left: 10.0),
+                      itemCount: _searchPrinterResult.length,
+                      itemBuilder: (context, i) {
+                        return Container(
+                          padding: EdgeInsets.only(bottom: 5.0),
+                          child: new Card(
+                            child: new ListTile(
+                              onTap: (){
+                                Navigator.push(context, new MaterialPageRoute(
+                                  builder: (context)=> printerDetails.MainPrinterDetails(
+                                  strPN:_searchPrinterResult[i].pn ,
+                                  str_selectedTypeId:_searchPrinterResult[i].typeId ,
+                                  str_selectedTypeName: _searchPrinterResult[i].typeName, 
+                                  str_selectedEntityName:  _searchPrinterResult[i].entities,
+                                  str_selectedEntityId: _searchPrinterResult[i].entities_id,
+                                  strSN:_searchPrinterResult[i].sn, 
+                                  str_selectedLocation: _searchPrinterResult[i].locations,
+                                  str_selectedModelId: _searchPrinterResult[i].modelId,
+                                  str_selectedModelName: _searchPrinterResult[i].modelName,
+                                  strDeviceId: _searchPrinterResult[i].name, 
+                                  str_selectedUser: _searchPrinterResult[i].username,
+                                  str_selectedUserId: _searchPrinterResult[i].user_id,
+                                  str_selectedLocationId: _searchPrinterResult[i].locations_id,)
+                                ));
+                              },
+                              leading:
+                                  _searchPrinterResult[i].typeName == 'NOTEBOOK'
+                                      ? new Icon(Icons.laptop)
+                                      : new Icon(Icons.desktop_mac),
+                              title: new Text(_searchPrinterResult[i].name),
+                              trailing: new Text(_searchPrinterResult[i].username,
+                                  style:
+                                      new TextStyle(fontWeight: FontWeight.bold)),
+                            ),
+                            margin: const EdgeInsets.all(0.0),
                           ),
-                        ),
-                        margin: const EdgeInsets.all(0.0),
-                      );
-                    },
-                  ),
-          ),
-        ],
+                        );
+                      },
+                    )
+                  : new ListView.builder(
+                    padding: EdgeInsets.only(right: 10.0,left: 10.0, ),
+                      itemCount: _printerDetails.length,
+                      itemBuilder: (context, index) {
+                        
+                        
+                        return Container(
+                          padding: EdgeInsets.only(bottom: 5.0),
+                          child: new Card(
+                            child: new ListTile(
+                              onTap: (){
+                                Navigator.push(context, new MaterialPageRoute(
+                                  builder: (context)=> 
+                                  printerDetails.MainPrinterDetails(
+                                  str_selectedTypeName: _printerDetails[index].typeName, 
+                                  str_selectedEntityName:  _printerDetails[index].entities, 
+                                  str_selectedEntityId: _printerDetails[index].entities_id,
+                                  strSN:_printerDetails[index].sn, 
+                                  str_selectedLocation: _printerDetails[index].locations,
+                                  str_selectedModelName: _printerDetails[index].modelName,
+                                  strDeviceId: _printerDetails[index].name, 
+                                  str_selectedUser: _printerDetails[index].username,
+                                  str_selectedUserId: _printerDetails[index].user_id,
+                                  str_selectedLocationId: _printerDetails[index].locations_id,
+                                  str_selectedModelId: _printerDetails[index].modelId,
+                                  str_selectedTypeId: _printerDetails[index].typeId,
+                                  strPN: _printerDetails[index].pn,
+                                  )
+                                  
+                                ));
+                              },
+                              leading:
+                                  _printerDetails[index].typeName == 'NOTEBOOK'
+                                      ? new Icon(Icons.laptop)
+                                      : new Icon(Icons.desktop_mac),
+                              title: new Text(_printerDetails[index].name),
+                              trailing: new Text(
+                                _printerDetails[index].username,
+                                style: new TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            margin: const EdgeInsets.all(0.0),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   onSearchTextChanged(String text) async {
-    _searchComputerResult.clear();
+    _searchPrinterResult.clear();
     if (text.isEmpty) {
       setState(() {});
       return;
     }
 
-    _computerDetails.forEach((userDetail) {
+    _printerDetails.forEach((userDetail) {
       if (
           userDetail.name.contains(text)||
           userDetail.username.contains(text)||
           userDetail.lastname.contains(text)||
           userDetail.firstname.contains(text))
-        _searchComputerResult.add(userDetail);
+        _searchPrinterResult.add(userDetail);
     });
 
     setState(() {});
   }
 }
 
-class MapIdNameComputers {
+class MapIdNamePrinters {
   //used by get selected type and selected model
   final String id,
       name,
@@ -192,14 +226,17 @@ class MapIdNameComputers {
       typeId,
       typeName,
       username,
+      user_id,
       firstname,
       lastname,
       entities,
+      entities_id,
+      locations_id,
       locations,
       sn,
       pn;
 
-  MapIdNameComputers(
+  MapIdNamePrinters(
       {this.id,
       this.name,
       this.modelId,
@@ -209,13 +246,16 @@ class MapIdNameComputers {
       this.firstname,
       this.lastname,
       this.username,
+      this.user_id,
       this.entities,
+      this.entities_id,
+      this.locations_id,
       this.locations,
       this.pn,
       this.sn});
 
-  factory MapIdNameComputers.fromJson(Map<String, dynamic> json) {
-    return new MapIdNameComputers(
+  factory MapIdNamePrinters.fromJson(Map<String, dynamic> json) {
+    return new MapIdNamePrinters(
         id: json['id'],
         name: json['name'],
         modelId: json['model_id'],
@@ -223,10 +263,13 @@ class MapIdNameComputers {
         typeId: json['type_id'],
         typeName: json['type_name'],
         username: json['username'],
+        user_id: json['userid'],
         firstname: json['firstname'],
         lastname: json['lastname'],
         entities : json['entities_name'],
-        locations :json['location_name'],
+        entities_id : json['entities_id'],
+        locations :json['locations_name'],
+        locations_id :json['locations_id'],
         sn : json['sn'],
         pn : json['pn']);
   }
