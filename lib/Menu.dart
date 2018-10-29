@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -12,9 +13,9 @@ import 'package:amds/computerList.dart' as commputerlist;
 import 'package:amds/usersList.dart' as UserList;
 import 'package:amds/monitorList.dart' as monitorList;
 import 'package:amds/printerList.dart' as printerList;
+
 class mainMenu extends StatefulWidget {
   final String str_AppUsername;
-  
 
   mainMenu({this.str_AppUsername});
 
@@ -24,7 +25,20 @@ class mainMenu extends StatefulWidget {
 
 class _mainMenuState extends State<mainMenu> {
   String _appUsername;
-  String url = 'http://172.28.16.84:8089/', activeComputer = '';
+  String url = 'http://192.168.43.62/amdsweb/',
+      //'http://172.28.16.84:8089/',
+      activeComputerCounter,
+      activePrinterCounter,
+      activeMonitorCounter,
+      onServiceComputerCounter,
+      onServicePrinterCounter,
+      onServiceMonitorCounter,
+      damagedComputerCounter,
+      dispossedComputerCounter,
+      damagedPrinterCounter,
+      dispossedPrinterCounter,
+      damagedMonitorCounter,
+      dispossedMonitorCounter;
 
   @override
   Widget build(BuildContext context) {
@@ -49,57 +63,203 @@ class _mainMenuState extends State<mainMenu> {
                   ),
                   Text(
                     'Computers',
-                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                   ),
-                  Text('Active : $activeComputer Unit'),
-                  Text('On Serivice :'),
-
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('Active :  '),
+                      Text(
+                        '$activeComputerCounter Unit',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.green),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('On Service :  '),
+                      Text(
+                        '$onServiceComputerCounter Unit',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.amber),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('Damaged :  '),
+                      Text(
+                        '$damagedComputerCounter Unit',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.red),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('Dispossed :  '),
+                      Text(
+                        '$dispossedComputerCounter Unit',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.blue),
+                      ),
+                    ],
+                  ),
                 ],
               )),
               onTap: () {
-                Navigator.push(context, 
-                MaterialPageRoute(builder: (context) => commputerlist.HomePage(str_AppUsername: _appUsername,)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => commputerlist.HomePage(
+                              str_AppUsername: _appUsername,
+                            )));
               },
             ),
             new GestureDetector(
-              child: new Card(
-                  child: Column(
-                children: <Widget>[
-                  Icon(
-                    Icons.desktop_windows,
-                    size: 75.0,
-                  ),
-                  Text(
-                    'Monitors',
-                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                  ),
-                  Text('Active :'),
-                  Text('On Serivice :'),
-                ],
-              )),
-              onTap: () {
-              }
-            ),
+                child: new Card(
+                    child: Column(
+                  children: <Widget>[
+                    Icon(
+                      Icons.desktop_windows,
+                      size: 75.0,
+                    ),
+                    Text(
+                      'Monitors',
+                      style: TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Active :  '),
+                        Text(
+                          '$activeMonitorCounter Unit',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.green),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('On Service :  '),
+                        Text(
+                          '$activeMonitorCounter Unit',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.amber),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Damaged :  '),
+                        Text(
+                          '$damagedMonitorCounter Unit',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.red),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Dispossed :  '),
+                        Text(
+                          '$dispossedMonitorCounter Unit',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.blue),
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+                onTap: () {}),
             new GestureDetector(
-              child: new Card(
-                  child: Column(
-                children: <Widget>[
-                  Icon(
-                    Icons.print,
-                    size: 75.0,
-                  ),
-                  Text(
-                    'Printers',
-                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                  ),
-                  Text('Active :'),
-                  Text('On Serivice :'),
-                ],
-              )),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> printerList.HomePage(str_AppUsername: _appUsername,)));
-              }
-            ),
+                child: new Card(
+                    child: Column(
+                  children: <Widget>[
+                    Icon(
+                      Icons.print,
+                      size: 75.0,
+                    ),
+                    Text(
+                      'Printers',
+                      style: TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Active :  '),
+                        Text(
+                          '$activePrinterCounter Unit',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.green),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('On Service :  '),
+                        Text(
+                          '$onServicePrinterCounter Unit',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.amber),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Damaged :  '),
+                        Text(
+                          '$damagedPrinterCounter Unit',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.red),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Dispossed :  '),
+                        Text(
+                          '$dispossedPrinterCounter Unit',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.blue),
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => printerList.HomePage(
+                                str_AppUsername: _appUsername,
+                              )));
+                }),
             new GestureDetector(
               child: new Card(
                   child: Column(
@@ -110,7 +270,8 @@ class _mainMenuState extends State<mainMenu> {
                   ),
                   Text(
                     'Logout',
-                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                   ),
                 ],
               )),
@@ -121,13 +282,12 @@ class _mainMenuState extends State<mainMenu> {
                 );
               },
             ),
-            
           ],
         ),
       ),
     );
   }
-  
+
   Future<bool> backButtonDialog() {
     AlertDialog alertScanDeviceid = new AlertDialog(
       title: new Text('Exit Dialog', style: new TextStyle(color: Colors.blue)),
@@ -163,27 +323,63 @@ class _mainMenuState extends State<mainMenu> {
     );
     return showDialog(context: context, child: alertScanDeviceid);
   }
-  
-  Future<dynamic> getActiveStatus(String devicesType) async {
+
+  Future<dynamic> getActiveStatus() async {
     try {
       //final counter = await http.get(url + 'getActiveStatus.php');
-    final response = await http.post(url + "getActiveStatus.php", body: {
-        'devicesType' : devicesType,
+      final response = await http.get(url + "getActiveStatus.php");
+      final getCounter = json.decode(response.body);
+      setState(() {
+        activeComputerCounter = getCounter[0]["countComputer"];
+        activePrinterCounter = getCounter[0]["countPrinter"];
       });
-    print(response.body);
-    setState(() {
-          activeComputer = response.body;
-        });
     } catch (error) {
       print(error);
     }
   }
 
   @override
-    void initState() {
-      // TODO: implement initState
-      super.initState();
-      _appUsername = widget.str_AppUsername;
-      getActiveStatus();
-    }
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _appUsername = widget.str_AppUsername;
+    getActiveStatus().then((onValue){
+              if(activeComputerCounter ==null){
+                activeComputerCounter = '-';
+              }
+        if(activePrinterCounter ==null){
+          activePrinterCounter = '-';
+        }
+        if(activeMonitorCounter ==null){
+          activeMonitorCounter = '-';
+        }
+        if(onServiceComputerCounter ==null){
+          onServiceComputerCounter = '-';
+        }
+        if(onServicePrinterCounter ==null){
+          onServicePrinterCounter = '-';
+        }
+        if(onServiceMonitorCounter ==null){
+          onServiceMonitorCounter = '-';
+        }
+        if(damagedComputerCounter ==null){
+          damagedComputerCounter = '-';
+        }
+        if(dispossedComputerCounter ==null){
+          dispossedComputerCounter = '-';
+        }
+        if(damagedPrinterCounter ==null){
+          damagedPrinterCounter = '-';
+        }
+        if(dispossedPrinterCounter ==null){
+          dispossedPrinterCounter = '-';
+        }
+        if(damagedMonitorCounter ==null){
+          damagedMonitorCounter = '-';
+        }
+        if(dispossedMonitorCounter ==null){
+          dispossedMonitorCounter = '-';
+        }
+    });
+  }
 }

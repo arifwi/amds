@@ -55,8 +55,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController txt_password = new TextEditingController();
   String message = '';
   String url = 
-  //'http://192.168.43.62/amdsweb/';
-  'http://172.28.16.84:8089/';
+  'http://192.168.43.62/amdsweb/';
+  //'http://172.28.16.84:8089/';
   Future<dynamic> _checkLogin() async {
     setState(() {
       message = '';

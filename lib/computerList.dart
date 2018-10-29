@@ -21,16 +21,20 @@ class _HomePageState extends State<HomePage> {
   String _appUsername;
 
   TextEditingController controller = new TextEditingController();
+  TextEditingController controller1 = new TextEditingController();
+
 
   List<MapIdNameComputers> _searchComputerResult = [];
 
   List<MapIdNameComputers> _computerDetails = [];
-
-  String fullname;
-
+  List<MapIdNameComputers> _computerStates = [];
+  List<DropdownMenuItem<String>> a = [];
+  int _radiovalue = 1;
+  String fullname, _selectedState = '';
+  
   final String url = 
-  'http://172.28.16.84:8089/getComputerList.php';
-  //'http://192.168.43.62/amdsweb/getComputerList.php';
+  //'http://172.28.16.84:8089/getComputerList.php';
+  'http://192.168.43.62/amdsweb/getComputerList.php';
 
   // Get json result and convert it to model. Then add
   Future<Null> getComputerDetails() async {
@@ -48,13 +52,66 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _appUsername = widget.str_AppUsername;
+    a.add(new DropdownMenuItem(
+        child: Text('All',style: TextStyle(color: Colors.blue),),
+        value: '',
+      ));
+      a.add(new DropdownMenuItem(
+        child: Text('Active',style: TextStyle(color: Colors.green),),
+        value: '1',
+      ));
+      a.add(new DropdownMenuItem(
+        child: Text('On Service',style: TextStyle(color: Colors.amber),),
+        value: 'onservice',
+      ));
+       a.add(new DropdownMenuItem(
+        child: Text('Damaged',style: TextStyle(color: Colors.red),),
+        value: 'damaged',
+      ));
+       a.add(new DropdownMenuItem(
+        child: Text('Dispossed',style: TextStyle(color: Colors.grey),),
+        value: 'dispossed',
+      ));
     getComputerDetails().then((value) {
+    //print(_computerDetails.length);
+      
+      setState(() {
+          onSelectionStates('');
+            });
       new Future.delayed(Duration(milliseconds: 1000),
                                   () {
                                 
                               });
     });
     
+  }
+  void onSelectionStates(String value){
+ setState(() {
+      _selectedState = value;
+
+      switch (_selectedState) {
+      case '':
+          states_id('');
+          print(_selectedState);
+          break;
+      case '1':
+          states_id('1');
+          print(_selectedState);
+          break;
+        
+       case 'onservice':
+          print(_selectedState);
+          break;
+       
+       case 'damaged':
+          print(_selectedState);
+          break;
+
+       case 'dispossed':
+          print(_selectedState);
+          break;
+      }
+    });
   }
 
   @override
@@ -63,6 +120,8 @@ class _HomePageState extends State<HomePage> {
       appBar: new AppBar(
         title: new Text('Computer List'),
         elevation: 0.0,
+        centerTitle: true,
+       
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
@@ -77,6 +136,36 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             new Container(
               child: new Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                
+                
+                child: new Card(
+                  child: new ListTile(
+                    leading: new Icon(Icons.sort),
+                    title: new Text('Sort By'),
+                    trailing: new DropdownButtonHideUnderline(
+                      child: new DropdownButton(
+                        items: a,
+                        value: _selectedState,
+                        onChanged: (value){
+                         onSelectionStates(value);
+                        },
+                      ),
+
+                    ),
+                    // trailing: new IconButton(
+                    //   icon: new Icon(Icons.cancel),
+                    //   onPressed: () {
+                    //     controller.clear();
+                    //     states_id(controller1.text);
+                    //   },
+                    // ),
+                  ),
+                ),
+              ),
+            ),
+            new Container(
+              child: new Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: new Card(
                   child: new ListTile(
@@ -86,13 +175,16 @@ class _HomePageState extends State<HomePage> {
                       inputFormatters: [MyFormatter.UpperCaseFormatter()],
                       decoration: new InputDecoration(
                           hintText: 'Search', border: InputBorder.none),
-                      onChanged: onSearchTextChanged,
+                      onChanged: (value){
+                        onSearchTextChanged(controller.text);
+                      },
                     ),
                     trailing: new IconButton(
                       icon: new Icon(Icons.cancel),
                       onPressed: () {
-                        controller.clear();
+                        controller.text = '';
                         onSearchTextChanged('');
+                        states_id(_selectedState);
                       },
                     ),
                   ),
@@ -196,21 +288,69 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+//original modified
+  // onSearchTextChanged(String text, String states_id) async {
+  //   _searchComputerResult.clear();
+  //   if (text.isEmpty && states_id == '0') {
+  //     setState(() {});
+  //     return;
+  //   }
+    
+  //   _computerDetails.forEach((computerDetail) {
+  //     if (
+  //         computerDetail.name.contains(text)||
+  //         computerDetail.username.contains(text)||
+  //         computerDetail.lastname.contains(text)||
+  //         computerDetail.firstname.contains(text)||
+  //         computerDetail.states_id.contains('1'))
+  //       _searchComputerResult.add(computerDetail);
+  //       print(_searchComputerResult.length);
+  //   });
 
+  //   setState(() {});
+  // }
+
+//trial
   onSearchTextChanged(String text) async {
-    _searchComputerResult.clear();
-    if (text.isEmpty) {
+    
+      _searchComputerResult.clear();
+    
+    if(_selectedState==''&&text.isEmpty){
       setState(() {});
       return;
     }
+    
+      _computerDetails.forEach((computerDetail) {
+      if (computerDetail.states_id.contains(_selectedState)&&
+        computerDetail.name.contains(text)||computerDetail.states_id.contains(_selectedState)&&
+           computerDetail.username.contains(text)||computerDetail.states_id.contains(_selectedState)&&
+           computerDetail.lastname.contains(text)||computerDetail.states_id.contains(_selectedState)&&
+           computerDetail.firstname.contains(text)){
+         _searchComputerResult.add(computerDetail);
+        
+      }
+           print(_searchComputerResult.length);
+    });
+    
+    
 
-    _computerDetails.forEach((userDetail) {
+    setState(() {});
+  }
+  states_id(String states_id) async {
+    _searchComputerResult.clear();
+    if (states_id.isEmpty) {
+      setState(() {});
+        print(_searchComputerResult.length);
+
+      return;
+    }
+    
+    _computerDetails.forEach((computerDetail) {
       if (
-          userDetail.name.contains(text)||
-          userDetail.username.contains(text)||
-          userDetail.lastname.contains(text)||
-          userDetail.firstname.contains(text))
-        _searchComputerResult.add(userDetail);
+          
+          computerDetail.states_id.contains(states_id))
+        _searchComputerResult.add(computerDetail);
+        print(_searchComputerResult.length);
     });
 
     setState(() {});
@@ -234,7 +374,8 @@ class MapIdNameComputers {
       locations_id,
       locations,
       sn,
-      pn;
+      pn,
+      states_id;
 
   MapIdNameComputers(
       {this.id,
@@ -252,7 +393,8 @@ class MapIdNameComputers {
       this.locations_id,
       this.locations,
       this.pn,
-      this.sn});
+      this.sn,
+      this.states_id});
 
   factory MapIdNameComputers.fromJson(Map<String, dynamic> json) {
     return new MapIdNameComputers(
@@ -271,6 +413,7 @@ class MapIdNameComputers {
         locations :json['locations_name'],
         locations_id :json['locations_id'],
         sn : json['sn'],
-        pn : json['pn']);
+        pn : json['pn'],
+        states_id: json['states_id']);
   }
 }

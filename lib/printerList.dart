@@ -10,7 +10,6 @@ import 'package:amds/scanning.dart' as scanning;
 import 'package:amds/printerDetails.dart' as printerDetails;
 
 class HomePage extends StatefulWidget {
-  
   String str_AppUsername;
   HomePage({this.str_AppUsername});
   @override
@@ -28,9 +27,9 @@ class _HomePageState extends State<HomePage> {
 
   String fullname;
 
-  final String url = 
-  'http://172.28.16.84:8089/getprinterlist.php';
-  //'http://192.168.43.62/amdsweb/getPrinterList.php';
+  final String url =
+      //'http://172.28.16.84:8089/getprinterlist.php';
+      'http://192.168.43.62/amdsweb/getPrinterList.php';
 
   // Get json result and convert it to model. Then add
   Future<Null> getPrinterDetails() async {
@@ -49,12 +48,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _appUsername = widget.str_AppUsername;
     getPrinterDetails().then((value) {
-      new Future.delayed(Duration(milliseconds: 1000),
-                                  () {
-                                
-                              });
+      new Future.delayed(Duration(milliseconds: 1000), () {});
     });
-    
   }
 
   @override
@@ -66,14 +61,18 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> scanning.scanning(str_AppUsername: _appUsername,)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => scanning.scanning(
+                        str_AppUsername: _appUsername,
+                      )));
         },
         child: new Icon(Icons.add),
       ),
       body: Container(
         color: Theme.of(context).primaryColor,
         child: new Column(
-          
           children: <Widget>[
             new Container(
               child: new Padding(
@@ -104,40 +103,61 @@ class _HomePageState extends State<HomePage> {
               child: _searchPrinterResult.length != 0 ||
                       controller.text.isNotEmpty
                   ? new ListView.builder(
-                    
-                    padding: EdgeInsets.only(right: 10.0,left: 10.0),
+                      padding: EdgeInsets.only(right: 10.0, left: 10.0),
                       itemCount: _searchPrinterResult.length,
                       itemBuilder: (context, i) {
                         return Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: new Card(
                             child: new ListTile(
-                              onTap: (){
-                                Navigator.push(context, new MaterialPageRoute(
-                                  builder: (context)=> printerDetails.MainPrinterDetails(
-                                  strPN:_searchPrinterResult[i].pn ,
-                                  str_selectedTypeId:_searchPrinterResult[i].typeId ,
-                                  str_selectedTypeName: _searchPrinterResult[i].typeName, 
-                                  str_selectedEntityName:  _searchPrinterResult[i].entities,
-                                  str_selectedEntityId: _searchPrinterResult[i].entities_id,
-                                  strSN:_searchPrinterResult[i].sn, 
-                                  str_selectedLocation: _searchPrinterResult[i].locations,
-                                  str_selectedModelId: _searchPrinterResult[i].modelId,
-                                  str_selectedModelName: _searchPrinterResult[i].modelName,
-                                  strDeviceId: _searchPrinterResult[i].name, 
-                                  str_selectedUser: _searchPrinterResult[i].username,
-                                  str_selectedUserId: _searchPrinterResult[i].user_id,
-                                  str_selectedLocationId: _searchPrinterResult[i].locations_id,)
-                                ));
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) =>
+                                            printerDetails.MainPrinterDetails(
+                                              strPN: _searchPrinterResult[i].pn,
+                                              str_selectedTypeId:
+                                                  _searchPrinterResult[i]
+                                                      .typeId,
+                                              str_selectedTypeName:
+                                                  _searchPrinterResult[i]
+                                                      .typeName,
+                                              str_selectedEntityName:
+                                                  _searchPrinterResult[i]
+                                                      .entities,
+                                              str_selectedEntityId:
+                                                  _searchPrinterResult[i]
+                                                      .entities_id,
+                                              strSN: _searchPrinterResult[i].sn,
+                                              str_selectedLocation:
+                                                  _searchPrinterResult[i]
+                                                      .locations,
+                                              str_selectedModelId:
+                                                  _searchPrinterResult[i]
+                                                      .modelId,
+                                              str_selectedModelName:
+                                                  _searchPrinterResult[i]
+                                                      .modelName,
+                                              strDeviceId:
+                                                  _searchPrinterResult[i].name,
+                                              str_selectedUser:
+                                                  _searchPrinterResult[i]
+                                                      .username,
+                                              str_selectedUserId:
+                                                  _searchPrinterResult[i]
+                                                      .user_id,
+                                              str_selectedLocationId:
+                                                  _searchPrinterResult[i]
+                                                      .locations_id,
+                                            )));
                               },
-                              leading:
-                                  _searchPrinterResult[i].typeName == 'NOTEBOOK'
-                                      ? new Icon(Icons.laptop)
-                                      : new Icon(Icons.desktop_mac),
+                              leading: Icon(Icons.print),
                               title: new Text(_searchPrinterResult[i].name),
-                              trailing: new Text(_searchPrinterResult[i].username,
-                                  style:
-                                      new TextStyle(fontWeight: FontWeight.bold)),
+                              trailing: new Text(
+                                  _searchPrinterResult[i].username,
+                                  style: new TextStyle(
+                                      fontWeight: FontWeight.bold)),
                             ),
                             margin: const EdgeInsets.all(0.0),
                           ),
@@ -145,44 +165,63 @@ class _HomePageState extends State<HomePage> {
                       },
                     )
                   : new ListView.builder(
-                    padding: EdgeInsets.only(right: 10.0,left: 10.0, ),
+                      padding: EdgeInsets.only(
+                        right: 10.0,
+                        left: 10.0,
+                      ),
                       itemCount: _printerDetails.length,
                       itemBuilder: (context, index) {
-                        
-                        
                         return Container(
                           padding: EdgeInsets.only(bottom: 5.0),
                           child: new Card(
                             child: new ListTile(
-                              onTap: (){
-                                Navigator.push(context, new MaterialPageRoute(
-                                  builder: (context)=> 
-                                  printerDetails.MainPrinterDetails(
-                                  str_selectedTypeName: _printerDetails[index].typeName, 
-                                  str_selectedEntityName:  _printerDetails[index].entities, 
-                                  str_selectedEntityId: _printerDetails[index].entities_id,
-                                  strSN:_printerDetails[index].sn, 
-                                  str_selectedLocation: _printerDetails[index].locations,
-                                  str_selectedModelName: _printerDetails[index].modelName,
-                                  strDeviceId: _printerDetails[index].name, 
-                                  str_selectedUser: _printerDetails[index].username,
-                                  str_selectedUserId: _printerDetails[index].user_id,
-                                  str_selectedLocationId: _printerDetails[index].locations_id,
-                                  str_selectedModelId: _printerDetails[index].modelId,
-                                  str_selectedTypeId: _printerDetails[index].typeId,
-                                  strPN: _printerDetails[index].pn,
-                                  )
-                                  
-                                ));
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) =>
+                                            printerDetails.MainPrinterDetails(
+                                              str_selectedTypeName:
+                                                  _printerDetails[index]
+                                                      .typeName,
+                                              str_selectedEntityName:
+                                                  _printerDetails[index]
+                                                      .entities,
+                                              str_selectedEntityId:
+                                                  _printerDetails[index]
+                                                      .entities_id,
+                                              strSN: _printerDetails[index].sn,
+                                              str_selectedLocation:
+                                                  _printerDetails[index]
+                                                      .locations,
+                                              str_selectedModelName:
+                                                  _printerDetails[index]
+                                                      .modelName,
+                                              strDeviceId:
+                                                  _printerDetails[index].name,
+                                              str_selectedUser:
+                                                  _printerDetails[index]
+                                                      .username,
+                                              str_selectedUserId:
+                                                  _printerDetails[index]
+                                                      .user_id,
+                                              str_selectedLocationId:
+                                                  _printerDetails[index]
+                                                      .locations_id,
+                                              str_selectedModelId:
+                                                  _printerDetails[index]
+                                                      .modelId,
+                                              str_selectedTypeId:
+                                                  _printerDetails[index].typeId,
+                                              strPN: _printerDetails[index].pn,
+                                            )));
                               },
-                              leading:
-                                  _printerDetails[index].typeName == 'NOTEBOOK'
-                                      ? new Icon(Icons.laptop)
-                                      : new Icon(Icons.desktop_mac),
+                              leading: Icon(Icons.print),
                               title: new Text(_printerDetails[index].name),
                               trailing: new Text(
                                 _printerDetails[index].username,
-                                style: new TextStyle(fontWeight: FontWeight.bold),
+                                style:
+                                    new TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
                             margin: const EdgeInsets.all(0.0),
@@ -205,10 +244,9 @@ class _HomePageState extends State<HomePage> {
     }
 
     _printerDetails.forEach((userDetail) {
-      if (
-          userDetail.name.contains(text)||
-          userDetail.username.contains(text)||
-          userDetail.lastname.contains(text)||
+      if (userDetail.name.contains(text) ||
+          userDetail.username.contains(text) ||
+          userDetail.lastname.contains(text) ||
           userDetail.firstname.contains(text))
         _searchPrinterResult.add(userDetail);
     });
@@ -266,11 +304,11 @@ class MapIdNamePrinters {
         user_id: json['userid'],
         firstname: json['firstname'],
         lastname: json['lastname'],
-        entities : json['entities_name'],
-        entities_id : json['entities_id'],
-        locations :json['locations_name'],
-        locations_id :json['locations_id'],
-        sn : json['sn'],
-        pn : json['pn']);
+        entities: json['entities_name'],
+        entities_id: json['entities_id'],
+        locations: json['locations_name'],
+        locations_id: json['locations_id'],
+        sn: json['sn'],
+        pn: json['pn']);
   }
 }
