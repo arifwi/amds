@@ -7,12 +7,12 @@ import 'package:http/http.dart' as http;
 
 import 'package:amds/main.dart' as login;
 import 'package:amds/addDevice.dart' as addDevice;
-import 'package:amds/scan.dart' as scanner;
 import 'package:amds/scanning.dart' as scan_adddevice;
 import 'package:amds/computerList.dart' as commputerlist;
 import 'package:amds/usersList.dart' as UserList;
 import 'package:amds/monitorList.dart' as monitorList;
 import 'package:amds/printerList.dart' as printerList;
+import 'package:amds/utils/myClass.dart' as utils;
 
 class mainMenu extends StatefulWidget {
   final String str_AppUsername;
@@ -25,8 +25,7 @@ class mainMenu extends StatefulWidget {
 
 class _mainMenuState extends State<mainMenu> {
   String _appUsername;
-  String url = 'http://192.168.43.62/amdsweb/',
-      //'http://172.28.16.84:8089/',
+  String url = utils.defaultUrl,
       activeComputerCounter,
       activePrinterCounter,
       activeMonitorCounter,

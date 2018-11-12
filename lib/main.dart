@@ -13,6 +13,8 @@ import 'package:amds/locationsList.dart'as locationList;
 import 'package:amds/computerList.dart' as commputerList;
 import 'package:amds/computerDetails.dart' as computerDetails;
 import 'package:amds/movementDevices.dart' as movementDevices;
+import 'package:amds/utils/myClass.dart' as utils;
+
 
 void main() {
 SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
@@ -40,10 +42,12 @@ class MyApp extends StatelessWidget {
         '/movementDevices': (BuildContext context)=> movementDevices.MainMovementDevices(),
 
 
+
       },
     );
   }
 }
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -54,9 +58,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController txt_username = new TextEditingController();
   TextEditingController txt_password = new TextEditingController();
   String message = '';
-  String url = 
-  'http://192.168.43.62/amdsweb/';
-  //'http://172.28.16.84:8089/';
+  String url = utils.defaultUrl;
   Future<dynamic> _checkLogin() async {
     setState(() {
       message = '';
@@ -77,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
 
           //print(datauser[0]["username"]);
           setState(() {
-            username = datauser[0]["lastname"] + " "+datauser[0]["firstname"]+" "+datauser[0]["users_id"];
+            username = datauser[0]["lastname"] + " "+datauser[0]["firstname"]+" "+"("+datauser[0]["users_id"]+")";
            
             //print(username);
           });

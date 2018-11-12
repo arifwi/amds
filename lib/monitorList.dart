@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/Menu.dart' as menu;
 import 'package:amds/computerDetails.dart' as computerDetails;
+import 'package:amds/utils/myClass.dart' as utils;
 
 class HomePage extends StatefulWidget {
   @override
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
 
   String fullname;
 
-  final String url = 'http://172.28.16.84:8089/getMonitorList.php';
+  final String url = utils.defaultUrl+'getMonitorList.php';
 
   // Get json result and convert it to model. Then add
   Future<Null> getComputerDetails() async {

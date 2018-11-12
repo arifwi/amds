@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/movementDevices.dart' as movementDevices;
+import 'package:amds/utils/myClass.dart' as utils;
 
 class HomePage extends StatefulWidget {
   String strDeviceId,
@@ -22,7 +23,10 @@ class HomePage extends StatefulWidget {
       str_selectedUserId,
       str_selectedLocationId,
       strPageIdentity,
-      str_AppUsername;
+      str_AppUsername,
+      str_current_username,
+      str_current_entityname,
+      str_current_locationname;
 
   HomePage({
     this.strDeviceId,
@@ -40,6 +44,9 @@ class HomePage extends StatefulWidget {
     this.str_selectedUserId,
     this.strPageIdentity,
     this.str_AppUsername,
+    this.str_current_username,
+    this.str_current_entityname,
+    this.str_current_locationname,
   });
   @override
   _HomePageState createState() => new _HomePageState();
@@ -60,7 +67,10 @@ class _HomePageState extends State<HomePage> {
       _sn,
       _pn,
       _pageIdentity,
-      _appUsername;
+      _appUsername,
+      _current_locationname,
+      _current_username,
+      _current_entityname;
 
   TextEditingController controller = new TextEditingController();
 
@@ -71,7 +81,7 @@ class _HomePageState extends State<HomePage> {
   String fullname;
 
   //final String url = 'http://192.168.43.62/amdsweb/getUsers.php';
-  final String url = 'http://172.28.16.84:8089/getUsers.php';
+  String url = utils.defaultUrl + 'getUsers.php';
 
   // Get json result and convert it to model. Then add
   Future<Null> getUserDetails() async {
@@ -125,7 +135,14 @@ class _HomePageState extends State<HomePage> {
       if (widget.strPageIdentity != null) {
         _pageIdentity = widget.strPageIdentity;
       }
-      print(_pageIdentity);
+      if (widget.str_current_entityname != null ||
+          widget.str_current_locationname != null ||
+          widget.str_current_username != null) {
+        _current_entityname = widget.str_current_entityname.toUpperCase();
+        _current_locationname = widget.str_current_locationname.toUpperCase();
+        _current_username = widget.str_current_username.toUpperCase();
+      }
+      
     });
   }
 
@@ -201,11 +218,17 @@ class _HomePageState extends State<HomePage> {
                                     setState(() {
                                       _pageIdentity = 'usersList';
                                     });
-                                    Navigator.push(
+                                    Navigator.pushReplacement(
                                       context,
                                       new MaterialPageRoute(
                                           builder: (context) => movementDevices
                                                   .MainMovementDevices(
+                                                str_current_entityname:
+                                                    _current_entityname,
+                                                str_current_locationname:
+                                                    _current_locationname,
+                                                str_current_username:
+                                                    _current_username,
                                                 str_selectedEntityId:
                                                     _selectedEntityId,
                                                 str_selectedEntityName:
@@ -221,7 +244,6 @@ class _HomePageState extends State<HomePage> {
                                                     _selectedUserId,
                                                 strDeviceId: _deviceId,
                                                 strPageIdentity: _pageIdentity,
-                                                
                                               )),
                                     );
                                   } else {
@@ -254,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                                                     _selectedLocation,
                                                 str_selectedLocationId:
                                                     _selectedLocationId,
-                                                    str_AppUsername: _appUsername,
+                                                str_AppUsername: _appUsername,
                                               )),
                                     );
                                   }
@@ -307,6 +329,12 @@ class _HomePageState extends State<HomePage> {
                                       new MaterialPageRoute(
                                           builder: (context) => movementDevices
                                                   .MainMovementDevices(
+                                                str_current_entityname:
+                                                    _current_entityname,
+                                                str_current_locationname:
+                                                    _current_locationname,
+                                                str_current_username:
+                                                    _current_username,
                                                 str_selectedEntityId:
                                                     _selectedEntityId,
                                                 str_selectedEntityName:
@@ -354,7 +382,7 @@ class _HomePageState extends State<HomePage> {
                                                     _selectedLocation,
                                                 str_selectedLocationId:
                                                     _selectedLocationId,
-                                                    str_AppUsername: _appUsername,
+                                                str_AppUsername: _appUsername,
                                               )),
                                     );
                                   }

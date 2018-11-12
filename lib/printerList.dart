@@ -8,6 +8,7 @@ import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/Menu.dart' as menu;
 import 'package:amds/scanning.dart' as scanning;
 import 'package:amds/printerDetails.dart' as printerDetails;
+import 'package:amds/utils/myClass.dart' as utils;
 
 class HomePage extends StatefulWidget {
   String str_AppUsername;
@@ -27,9 +28,7 @@ class _HomePageState extends State<HomePage> {
 
   String fullname;
 
-  final String url =
-      //'http://172.28.16.84:8089/getprinterlist.php';
-      'http://192.168.43.62/amdsweb/getPrinterList.php';
+  String url = utils.defaultUrl + 'getPrinterList.php';
 
   // Get json result and convert it to model. Then add
   Future<Null> getPrinterDetails() async {

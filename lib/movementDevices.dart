@@ -8,6 +8,7 @@ import 'package:amds/Menu.dart' as menu;
 import 'package:amds/usersList.dart' as UsersList;
 import 'package:amds/locationsList.dart' as LocationsList;
 import 'package:amds/computerList.dart' as computerList;
+import 'package:amds/utils/myClass.dart' as utils;
 
 class MainMovementDevices extends StatefulWidget {
   String strDeviceId,
@@ -18,7 +19,11 @@ class MainMovementDevices extends StatefulWidget {
       str_selectedLocation,
       str_selectedUserId,
       str_selectedLocationId,
-      strPageIdentity;
+      strPageIdentity,
+      str_AppUsername,
+      str_current_username,
+      str_current_entityname,
+      str_current_locationname;
 
   MainMovementDevices({
     this.strDeviceId,
@@ -30,6 +35,10 @@ class MainMovementDevices extends StatefulWidget {
     this.str_selectedUser,
     this.str_selectedUserId,
     this.strPageIdentity,
+    this.str_AppUsername,
+    this.str_current_username,
+    this.str_current_entityname,
+    this.str_current_locationname,
   });
   @override
   _MainMovementDevicesState createState() => _MainMovementDevicesState();
@@ -44,12 +53,15 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
       _selectedLocation,
       _selectedLocationId,
       _deviceId,
-      _pageIdentity;
+      _pageIdentity,
+      _current_locationname,
+      _current_username,
+      _current_entityname;
 
   String isSuccessUpdate;
+  String _appUsername;
 
-  //String url = 'http://192.168.43.62/amdsweb/';
-  String url = 'http://172.28.16.84:8089/';
+  String url = utils.defaultUrl;
   List<DropdownMenuItem<String>> dataEntities = [];
   List<MapIdName> _listDataEntities = [];
   List<MapIdName> _searchEntitiesResult = [];
@@ -170,6 +182,11 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => UsersList.HomePage(
+                                        str_current_entityname:
+                                            _current_entityname,
+                                        str_current_locationname:
+                                            _current_locationname,
+                                        str_current_username: _current_username,
                                         strDeviceId: _deviceId,
                                         str_selectedEntityId: _selectedEntityId,
                                         str_selectedEntityName:
@@ -238,6 +255,11 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => LocationsList.HomePage(
+                                        str_current_entityname:
+                                            _current_entityname,
+                                        str_current_locationname:
+                                            _current_locationname,
+                                        str_current_username: _current_username,
                                         strDeviceId: _deviceId,
                                         str_selectedEntityId: _selectedEntityId,
                                         str_selectedEntityName:
@@ -259,9 +281,14 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                         color: Colors.blue,
                         icon: new Icon(Icons.save),
                         onPressed: () {
-                          setState(() {
-                            String devicetype;
-
+                          if (_current_entityname == _selectedEntityName &&
+                              _current_locationname == _selectedLocation &&
+                              _current_username == _selectedUser) {
+                            setState(() {
+                              isSuccessUpdate = "Nothing Change!";
+                            });
+                            successDialog();
+                          } else {
                             updateDevices(
                                     _deviceId,
                                     _selectedEntityId,
@@ -271,21 +298,24 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                                 .then((result) {
                               new Future.delayed(Duration(milliseconds: 1000),
                                   () {
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                Navigator.pushReplacement(context, new MaterialPageRoute(
-                                  builder: (context) => computerList.HomePage()
-                                ));
-                                
+                                if (isSuccessUpdate ==
+                                    "$_deviceId updated successfully") {
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop();
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pushReplacement(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              computerList.HomePage()));
+                                } else {
+                                  Navigator.of(context, rootNavigator: true);
+                                }
                               });
-                                successDialog();
-
-                            
+                              successDialog();
                             });
-                          });
+                          }
                         },
                         label: new Text('UPDATE'),
                       ),
@@ -299,6 +329,7 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _appUsername = widget.str_AppUsername;
 
     getEntities().then((result) {
       setState(() {
@@ -329,6 +360,20 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
             unmove = false;
           }
         }
+        if (widget.str_current_entityname != null ||
+            widget.str_current_locationname != null ||
+            widget.str_current_username != null) {
+          _current_entityname = widget.str_current_entityname.toUpperCase();
+          _current_locationname = widget.str_current_locationname.toUpperCase();
+          _current_username = widget.str_current_username.toUpperCase();
+        }
+        if (widget.str_current_entityname == null ||
+            widget.str_current_locationname == null ||
+            widget.str_current_username == null) {
+          _current_entityname = _selectedEntityName.toUpperCase();
+          _current_locationname = _selectedLocation.toUpperCase();
+          _current_username = _selectedUser.toUpperCase();
+        }
 
         // print(_selectedEntityId);
         //print(_selectedTypeName);
@@ -345,26 +390,35 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
   Future updateDevices(String deviceID, String entities_id, String devicesType,
       String locations_id, String users_id) async {
     String result;
-    try {
-      final response = await http.post("http://172.28.16.84:8089/movementDevices.php", body: {
-        'devicetype': devicesType,
-        'id': deviceID,
-        'user_id': users_id,
-        'location_id': locations_id,
-        'entities_id': entities_id,
-      });
-      print(response.body);
-      if (response.body == "Record updated successfully") {
+
+    final response = await http.post(url + 'movementDevices.php', body: {
+      'devicetype': devicesType,
+      'id': deviceID,
+      'user_id': users_id,
+      'location_id': locations_id,
+      'entities_id': entities_id,
+      'appUsername': _appUsername.toString(),
+      'old_value':
+          "$_current_entityname > $_current_locationname; User: $_current_username",
+      'new_value':
+          "$_selectedEntityName > $_selectedLocation; User: $_selectedUser",
+    }).then((onValue) {
+      if (onValue.body == "Record updated successfully") {
         result = "$deviceID updated successfully";
       } else {
-        result = response.body.toString();
+        result = onValue.body.toString();
       }
       setState(() {
         isSuccessUpdate = result;
-       });
-    } catch (e) {
-      print(e);
-    }
+      });
+    }).timeout(const Duration(seconds: 5), onTimeout: () {
+      setState(() {
+        isSuccessUpdate = "Connection has Timeout";
+      });
+    }).catchError((onError) {
+      print(onError);
+      isSuccessUpdate = "Error!!";
+    });
   }
 
   Future<bool> successDialog() {

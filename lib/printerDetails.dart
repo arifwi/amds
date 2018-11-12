@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/Menu.dart' as menu;
 import 'package:amds/movementDevices.dart' as movementDevices;
+import 'package:amds/utils/myClass.dart' as utils;
 class MainPrinterDetails extends StatefulWidget {
   String  strDeviceId,
       strPN,

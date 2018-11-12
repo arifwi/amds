@@ -147,6 +147,7 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
               onPressed: () {
                 Navigator.push(context, new MaterialPageRoute(
                   builder: (context) => movementDevices.MainMovementDevices(
+                    str_AppUsername: _appUsername,
                     str_selectedTypeName: _selectedTypeName, 
                     str_selectedLocationId: _selectedLocationId,
                     str_selectedUserId: _selectedUserId,

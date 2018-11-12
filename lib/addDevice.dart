@@ -9,6 +9,7 @@ import 'package:amds/usersList.dart' as UsersList;
 import 'package:amds/locationsList.dart' as LocationList;
 import 'package:amds/computerList.dart' as computerList;
 import 'package:amds/utils/formatter.dart' as MyFormatter;
+import 'package:amds/utils/myClass.dart' as utils;
 
 class mainAdd extends StatefulWidget {
   String strDeviceId,
@@ -50,10 +51,7 @@ class mainAdd extends StatefulWidget {
 }
 
 class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
-  //String url = 'http://192.168.43.62/amdsweb/';
-  String url = 'http://172.28.16.84:8089/';
-
-  //Permission permission = Permission.Camera;
+  String url = utils.defaultUrl;
 
   TextEditingController controllerDeviceId = new TextEditingController();
   TextEditingController controllerSerialNumber = new TextEditingController();
