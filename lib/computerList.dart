@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   List<MapIdNameComputers> _computerStates = [];
   List<DropdownMenuItem<String>> a = [];
   int _radiovalue = 1;
-  String fullname, _selectedState = '';
+  String fullname, _selectedState = '', computerCounter = '-';
   bool _result = false;
 
   String url = utils.defaultUrl + 'getComputerList.php';
@@ -89,9 +89,10 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         onSelectionStates('');
         _result = true;
+
+        computerCounter = _computerDetails.length.toString();
       });
     });
-    
   }
 
   void onSelectionStates(String value) {
@@ -101,6 +102,7 @@ class _HomePageState extends State<HomePage> {
       switch (_selectedState) {
         case '':
           states_id('');
+          
           break;
         case '1':
           states_id('1');
@@ -127,7 +129,12 @@ class _HomePageState extends State<HomePage> {
           appBar: new AppBar(
             title: new Text('Computer List'),
             elevation: 0.0,
-            centerTitle: true,
+            actions: <Widget>[
+              Container(
+                padding: EdgeInsets.only(right: 15.0, top: 20.0),
+                child: Text("Counter : $computerCounter"),
+              )
+            ],
           ),
           floatingActionButton: new FloatingActionButton(
             onPressed: () {
@@ -156,6 +163,7 @@ class _HomePageState extends State<HomePage> {
                             value: _selectedState,
                             onChanged: (value) {
                               onSelectionStates(value);
+                              
                             },
                           ),
                         ),
@@ -191,6 +199,10 @@ class _HomePageState extends State<HomePage> {
                             controller.text = '';
                             onSearchTextChanged('');
                             states_id(_selectedState);
+                            setState(() {
+                              computerCounter =
+                                  _searchComputerResult.length.toString();
+                            });
                           },
                         ),
                       ),
@@ -199,16 +211,21 @@ class _HomePageState extends State<HomePage> {
                 ),
                 new Container(
                   child: new LinearProgressIndicator(
-                        backgroundColor: Colors.white,
-                ),)
-                
+                    backgroundColor: Colors.white,
+                  ),
+                )
               ])));
     }
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Computer List'),
         elevation: 0.0,
-        centerTitle: true,
+        actions: <Widget>[
+          Container(
+            padding: EdgeInsets.only(right: 15.0, top: 20.0),
+            child: Text("Counter : $computerCounter"),
+          )
+        ],
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
@@ -238,6 +255,7 @@ class _HomePageState extends State<HomePage> {
                         value: _selectedState,
                         onChanged: (value) {
                           onSelectionStates(value);
+                          
                         },
                       ),
                     ),
@@ -273,6 +291,10 @@ class _HomePageState extends State<HomePage> {
                         controller.text = '';
                         onSearchTextChanged('');
                         states_id(_selectedState);
+                        setState(() {
+                          computerCounter =
+                              _searchComputerResult.length.toString();
+                        });
                       },
                     ),
                   ),
@@ -281,9 +303,7 @@ class _HomePageState extends State<HomePage> {
             ),
             new Expanded(
               flex: 10,
-              child: 
-              
-              _searchComputerResult.length != 0 ||
+              child: _searchComputerResult.length != 0 ||
                       controller.text.isNotEmpty
                   ? new ListView.builder(
                       padding: EdgeInsets.only(right: 10.0, left: 10.0),
@@ -474,7 +494,9 @@ class _HomePageState extends State<HomePage> {
       print(_searchComputerResult.length);
     });
 
-    setState(() {});
+    setState(() {
+      computerCounter = _searchComputerResult.length.toString();
+    });
   }
 
   states_id(String states_id) async {
