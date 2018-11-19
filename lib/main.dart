@@ -24,11 +24,20 @@ SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
 }
 String username = '', users_id = '',firstname ='', lastname= '';
 
+class themea{
+  ThemeData a = new ThemeData(
+    brightness: Brightness.dark,
+    primaryColorBrightness: Brightness.dark);
+}
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'AMDS',
+      theme: new ThemeData(
+        brightness: Brightness.dark,
+        accentColor: Colors.amber
+      ),
       home: new LoginPage(),
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
@@ -138,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                 padding: EdgeInsets.only(top: 20.0),
               ),
               new RaisedButton(
-                color: Colors.blueAccent,
+                color: Theme.of(context).accentColor,
                 child: new Text(
                   'Login',
                   style: TextStyle(fontSize: 18.0),

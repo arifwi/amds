@@ -113,6 +113,9 @@ class _HomePageState extends State<HomePage> {
       }
       if (widget.str_selectedTypeId != null) {
         _selectedTypeId = widget.str_selectedTypeId;
+        
+      }
+      if(widget.str_selectedTypeName != null){
         _selectedTypeName = widget.str_selectedTypeName;
       }
       if (widget.str_selectedModelId != null) {
@@ -123,6 +126,7 @@ class _HomePageState extends State<HomePage> {
         _selectedEntityId = widget.str_selectedEntityId;
         _selectedEntityName = widget.str_selectedEntityName;
       }
+      
 
       if (widget.str_selectedUser != null) {
         _selectedUser = widget.str_selectedUser;
@@ -142,7 +146,6 @@ class _HomePageState extends State<HomePage> {
         _current_locationname = widget.str_current_locationname.toUpperCase();
         _current_username = widget.str_current_username.toUpperCase();
       }
-      
     });
   }
 

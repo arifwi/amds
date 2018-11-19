@@ -26,18 +26,26 @@ class mainMenu extends StatefulWidget {
 class _mainMenuState extends State<mainMenu> {
   String _appUsername;
   String url = utils.defaultUrl,
+      
+      allComputerCounter,
+      allPrinterCounter,
+      allMonitorCounter,
+
       activeComputerCounter,
       activePrinterCounter,
-      activeMonitorCounter,
+      activeMonitorCounter, 
+      
       onServiceComputerCounter,
       onServicePrinterCounter,
       onServiceMonitorCounter,
-      damagedComputerCounter,
+      
       dispossedComputerCounter,
-      damagedPrinterCounter,
       dispossedPrinterCounter,
-      damagedMonitorCounter,
-      dispossedMonitorCounter;
+      dispossedMonitorCounter,
+
+      damagedPrinterCounter,
+      damagedComputerCounter,
+      damagedMonitorCounter;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +72,18 @@ class _mainMenuState extends State<mainMenu> {
                     'Computers',
                     style:
                         TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('All :  '),
+                      Text(
+                        '$allComputerCounter Unit',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.blue),
+                      ),
+                    ],
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,18 +121,8 @@ class _mainMenuState extends State<mainMenu> {
                       ),
                     ],
                   ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Dispossed :  '),
-                      Text(
-                        '$dispossedComputerCounter Unit',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.blue),
-                      ),
-                    ],
-                  ),
+                  
+                  
                 ],
               )),
               onTap: () {
@@ -323,14 +333,15 @@ class _mainMenuState extends State<mainMenu> {
     return showDialog(context: context, child: alertScanDeviceid);
   }
 
-  Future<dynamic> getActiveStatus() async {
+  Future<dynamic> getDeviceStatus() async {
     try {
-      //final counter = await http.get(url + 'getActiveStatus.php');
-      final response = await http.get(url + "getActiveStatus.php");
+      //final counter = await http.get(url + 'getDeviceStatus.php');
+      final response = await http.get(url + "getDeviceCounter.php");
       final getCounter = json.decode(response.body);
       setState(() {
-        activeComputerCounter = getCounter[0]["countComputer"];
-        activePrinterCounter = getCounter[0]["countPrinter"];
+        allComputerCounter = getCounter[0]["countAllComputer"];
+        activeComputerCounter = getCounter[0]["countActiveComputer"];
+        activePrinterCounter = getCounter[0]["countActivePrinter"];
       });
     } catch (error) {
       print(error);
@@ -342,7 +353,17 @@ class _mainMenuState extends State<mainMenu> {
     // TODO: implement initState
     super.initState();
     _appUsername = widget.str_AppUsername;
-    getActiveStatus().then((onValue){
+    
+    getDeviceStatus().then((onValue){
+      if(allComputerCounter==null){
+        allComputerCounter = '-';
+      }
+      if(allMonitorCounter==null){
+        allMonitorCounter = '-';
+      }
+      if(allPrinterCounter==null){
+        allPrinterCounter = '-';
+      }
               if(activeComputerCounter ==null){
                 activeComputerCounter = '-';
               }
@@ -379,6 +400,7 @@ class _mainMenuState extends State<mainMenu> {
         if(dispossedMonitorCounter ==null){
           dispossedMonitorCounter = '-';
         }
+        
     });
   }
 }

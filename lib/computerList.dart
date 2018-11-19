@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
 
   List<MapIdNameComputers> _computerDetails = [];
   List<MapIdNameComputers> _computerStates = [];
-  List<DropdownMenuItem<String>> a = [];
+  List<DropdownMenuItem<String>> list_state = [];
   int _radiovalue = 1;
   String fullname, _selectedState = '', computerCounter = '-';
   bool _result = false;
@@ -50,35 +50,35 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _appUsername = widget.str_AppUsername;
-    a.add(new DropdownMenuItem(
+    list_state.add(new DropdownMenuItem(
       child: Text(
         'All',
         style: TextStyle(color: Colors.blue),
       ),
       value: '',
     ));
-    a.add(new DropdownMenuItem(
+    list_state.add(new DropdownMenuItem(
       child: Text(
         'Active',
         style: TextStyle(color: Colors.green),
       ),
       value: '1',
     ));
-    a.add(new DropdownMenuItem(
+    list_state.add(new DropdownMenuItem(
       child: Text(
         'On Service',
         style: TextStyle(color: Colors.amber),
       ),
       value: 'onservice',
     ));
-    a.add(new DropdownMenuItem(
+    list_state.add(new DropdownMenuItem(
       child: Text(
         'Damaged',
         style: TextStyle(color: Colors.red),
       ),
       value: 'damaged',
     ));
-    a.add(new DropdownMenuItem(
+    list_state.add(new DropdownMenuItem(
       child: Text(
         'Dispossed',
         style: TextStyle(color: Colors.grey),
@@ -95,17 +95,21 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void onSelectionStates(String value) {
+  Future<Null> onSelectionStates(String value) async {
     setState(() {
       _selectedState = value;
 
       switch (_selectedState) {
         case '':
-          states_id('');
+          states_id('').then((onValue){
+           computerCounter = _computerDetails.length.toString();
+          });
           
           break;
         case '1':
-          states_id('1');
+          states_id('1').then((onValue){
+            computerCounter = _searchComputerResult.length.toString();
+          });
           break;
 
         case 'onservice':
@@ -115,7 +119,6 @@ class _HomePageState extends State<HomePage> {
           break;
 
         case 'dispossed':
-          print(_selectedState);
           break;
       }
     });
@@ -159,12 +162,11 @@ class _HomePageState extends State<HomePage> {
                         title: new Text('Sort By'),
                         trailing: new DropdownButtonHideUnderline(
                           child: new DropdownButton(
-                            items: a,
+                            items: list_state,
                             value: _selectedState,
                             onChanged: (value) {
-                              onSelectionStates(value);
-                              
-                            },
+                              onSelectionStates(value);                          
+                               },
                           ),
                         ),
                         // trailing: new IconButton(
@@ -199,10 +201,7 @@ class _HomePageState extends State<HomePage> {
                             controller.text = '';
                             onSearchTextChanged('');
                             states_id(_selectedState);
-                            setState(() {
-                              computerCounter =
-                                  _searchComputerResult.length.toString();
-                            });
+                          
                           },
                         ),
                       ),
@@ -251,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                     title: new Text('Sort By'),
                     trailing: new DropdownButtonHideUnderline(
                       child: new DropdownButton(
-                        items: a,
+                        items: list_state,
                         value: _selectedState,
                         onChanged: (value) {
                           onSelectionStates(value);
@@ -259,13 +258,7 @@ class _HomePageState extends State<HomePage> {
                         },
                       ),
                     ),
-                    // trailing: new IconButton(
-                    //   icon: new Icon(Icons.cancel),
-                    //   onPressed: () {
-                    //     controller.clear();
-                    //     states_id(controller1.text);
-                    //   },
-                    // ),
+                   
                   ),
                 ),
               ),
@@ -291,10 +284,7 @@ class _HomePageState extends State<HomePage> {
                         controller.text = '';
                         onSearchTextChanged('');
                         states_id(_selectedState);
-                        setState(() {
-                          computerCounter =
-                              _searchComputerResult.length.toString();
-                        });
+                        
                       },
                     ),
                   ),
@@ -449,34 +439,14 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-//original modified
-  // onSearchTextChanged(String text, String states_id) async {
-  //   _searchComputerResult.clear();
-  //   if (text.isEmpty && states_id == '0') {
-  //     setState(() {});
-  //     return;
-  //   }
 
-  //   _computerDetails.forEach((computerDetail) {
-  //     if (
-  //         computerDetail.name.contains(text)||
-  //         computerDetail.username.contains(text)||
-  //         computerDetail.lastname.contains(text)||
-  //         computerDetail.firstname.contains(text)||
-  //         computerDetail.states_id.contains('1'))
-  //       _searchComputerResult.add(computerDetail);
-  //       print(_searchComputerResult.length);
-  //   });
-
-  //   setState(() {});
-  // }
-
-//trial
-  onSearchTextChanged(String text) async {
+  Future<Null> onSearchTextChanged(String text) async {
     _searchComputerResult.clear();
 
     if (_selectedState == '' && text.isEmpty) {
-      setState(() {});
+      setState(() {
+        computerCounter = _computerDetails.length.toString();
+      });
       return;
     }
 
@@ -491,7 +461,6 @@ class _HomePageState extends State<HomePage> {
               computerDetail.firstname.contains(text)) {
         _searchComputerResult.add(computerDetail);
       }
-      print(_searchComputerResult.length);
     });
 
     setState(() {
@@ -499,7 +468,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  states_id(String states_id) async {
+  Future<Null>states_id(String states_id) async {
     _searchComputerResult.clear();
     if (states_id.isEmpty) {
       setState(() {});

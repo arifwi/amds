@@ -82,6 +82,10 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                   ? new Icon(
                       Icons.laptop,
                     )
+                  : _selectedTypeName == 'PRINTER'?
+                  new Icon(
+                      Icons.local_printshop,
+                    )
                   : new Icon(
                       Icons.close,
                     ),

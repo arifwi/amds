@@ -7,8 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/Menu.dart' as menu;
 import 'package:amds/movementDevices.dart' as movementDevices;
-import 'package:amds/utils/myClass.dart' as utils;
-class MainPrinterDetails extends StatefulWidget {
+class MainComputerDetails extends StatefulWidget {
   String  strDeviceId,
       strPN,
       strSN,
@@ -24,7 +23,7 @@ class MainPrinterDetails extends StatefulWidget {
       str_selectedLocationId,
       str_AppUsername;
 
-  MainPrinterDetails({
+  MainComputerDetails({
    this.strDeviceId,
     this.strSN,
     this.strPN,
@@ -41,10 +40,10 @@ class MainPrinterDetails extends StatefulWidget {
     this.str_AppUsername,
   });
   @override
-  _MainPrinterDetailsState createState() => _MainPrinterDetailsState();
+  _MainComputerDetailsState createState() => _MainComputerDetailsState();
 }
 
-class _MainPrinterDetailsState extends State<MainPrinterDetails> {
+class _MainComputerDetailsState extends State<MainComputerDetails> {
   String _selectedTypeId,
       _selectedModelId,
       _selectedEntityId,
@@ -63,7 +62,11 @@ class _MainPrinterDetailsState extends State<MainPrinterDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(),
+      appBar: new AppBar(
+        title: new Text("Computer Details"),
+      
+      ),
+      
       body: Container(
         margin: EdgeInsets.all(20.0),
         child: ListView(
@@ -71,17 +74,28 @@ class _MainPrinterDetailsState extends State<MainPrinterDetails> {
             new Column(
               children: <Widget>[
                 new Center(
-                  child: new Icon(
-                              Icons.local_printshop,
-                              size: 80.0,
+                  child: _selectedTypeName == 'DESKTOP'
+                      ? new Icon(
+                          Icons.desktop_mac,
+                          size: 50.0,
+                        )
+                      : _selectedTypeName == 'NOTEBOOK'
+                          ? new Icon(
+                              Icons.laptop,
+                              size: 50.0,
+                            )
+                          : new Icon(
+                              Icons.close,
+                              size: 50.0,
                             ),
                 ),
-                new ListTile(
-                  leading: new Text('DEVICE ID'),
-                  title: new Text(':'),
-                  trailing: Text(_deviceId.toString(),
-                      style: new TextStyle(fontWeight: FontWeight.bold)),
-                ),
+              
+                // new ListTile(
+                //   leading: new Text('DEVICE ID'),
+                //   title: new Text(':'),
+                //   trailing: Text(_deviceId.toString(),
+                //       style: new TextStyle(fontWeight: FontWeight.bold)),
+                // ),
                 new ListTile(
                   leading: new Text('USERNAME'),
                   title: new Text(':'),
@@ -138,6 +152,7 @@ class _MainPrinterDetailsState extends State<MainPrinterDetails> {
               onPressed: () {
                 Navigator.push(context, new MaterialPageRoute(
                   builder: (context) => movementDevices.MainMovementDevices(
+                    str_AppUsername: _appUsername,
                     str_selectedTypeName: _selectedTypeName, 
                     str_selectedLocationId: _selectedLocationId,
                     str_selectedUserId: _selectedUserId,

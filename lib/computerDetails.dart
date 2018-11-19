@@ -7,8 +7,9 @@ import 'package:http/http.dart' as http;
 import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/Menu.dart' as menu;
 import 'package:amds/movementDevices.dart' as movementDevices;
+
 class MainComputerDetails extends StatefulWidget {
-  String  strDeviceId,
+  String strDeviceId,
       strPN,
       strSN,
       str_selectedTypeId,
@@ -24,7 +25,7 @@ class MainComputerDetails extends StatefulWidget {
       str_AppUsername;
 
   MainComputerDetails({
-   this.strDeviceId,
+    this.strDeviceId,
     this.strSN,
     this.strPN,
     this.str_selectedTypeId,
@@ -58,118 +59,173 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
       _sn,
       _pn,
       _appUsername;
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: new AppBar(),
-      body: Container(
-        margin: EdgeInsets.all(20.0),
-        child: ListView(
-          children: <Widget>[
-            new Column(
-              children: <Widget>[
-                new Center(
-                  child: _selectedTypeName == 'DESKTOP'
-                      ? new Icon(
-                          Icons.desktop_mac,
-                          size: 80.0,
-                        )
-                      : _selectedTypeName == 'NOTEBOOK'
-                          ? new Icon(
-                              Icons.laptop,
-                              size: 80.0,
-                            )
-                          : new Icon(
-                              Icons.close,
-                              size: 80.0,
-                            ),
-                ),
-                new ListTile(
-                  leading: new Text('DEVICE ID'),
-                  title: new Text(':'),
-                  trailing: Text(_deviceId.toString(),
-                      style: new TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                new ListTile(
-                  leading: new Text('USERNAME'),
-                  title: new Text(':'),
-                  trailing: Text(_selectedUser.toString(),
-                      style: new TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                new ListTile(
-                  leading: new Text('ENTITIES'),
-                  title: new Text(':'),
-                  trailing: Text(_selectedEntityName.toString(),
-                      style: new TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                new ListTile(
-                  leading: new Text('LOCATION'),
-                  title: new Text(':'),
-                  trailing: Text(_selectedLocation.toString(),
-                      style: new TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                new ListTile(
-                  leading: new Text('TYPE'),
-                  title: new Text(':'),
-                  trailing: Text(_selectedTypeName.toString(),
-                      style: new TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                
-                new ListTile(
-                  leading: new Text('MODEL'),
-                  title: new Text(':'),
-                  trailing: Text(
-                    _selectedModelName.toString(),
-                    style: new TextStyle(fontWeight: FontWeight.bold),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          bottom: TabBar(
+            isScrollable: true,
+            tabs: [
+              Tab(
+                icon: Icon(Icons.info),
+                text: "Details",
+              ),
+              Tab(icon: Icon(Icons.history), text: "History"),
+            ],
+          ),
+          title: Text('Persistent Tab Demo'),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.blueAccent,
+          
+          child: new Row(
+            
+            children: <Widget>[
+             
+              FlatButton.icon(
+                label: Text('Set/Move'),
+                icon: Icon(Icons.navigate_next),
+                onPressed: () {},
+              ),
+              Text(
+                "|",
+                style: TextStyle(fontSize: 25.0),
+              ),
+              FlatButton.icon(
+                label: Text('Edit'),
+                icon: Icon(Icons.edit),
+                onPressed: () {},
+              ),
+              Text(
+                "|",
+                style: TextStyle(fontSize: 25.0),
+              ),
+              FlatButton.icon(
+                label: Text('Sending'),
+                icon: Icon(Icons.send),
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            Container(
+              margin: EdgeInsets.all(20.0),
+              child: ListView(
+                children: <Widget>[
+                  new Column(
+                    children: <Widget>[
+                      new Center(
+                        child: _selectedTypeName == 'DESKTOP'
+                            ? new Icon(
+                                Icons.desktop_mac,
+                                size: 50.0,
+                              )
+                            : _selectedTypeName == 'NOTEBOOK'
+                                ? new Icon(
+                                    Icons.laptop,
+                                    size: 50.0,
+                                  )
+                                : new Icon(
+                                    Icons.close,
+                                    size: 50.0,
+                                  ),
+                      ),
+
+                      // new ListTile(
+                      //   leading: new Text('DEVICE ID'),
+                      //   title: new Text(':'),
+                      //   trailing: Text(_deviceId.toString(),
+                      //       style: new TextStyle(fontWeight: FontWeight.bold)),
+                      // ),
+                      new ListTile(
+                        leading: new Text('USERNAME'),
+                        title: new Text(':'),
+                        trailing: Text(_selectedUser.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      new ListTile(
+                        leading: new Text('ENTITIES'),
+                        title: new Text(':'),
+                        trailing: Text(_selectedEntityName.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      new ListTile(
+                        leading: new Text('LOCATION'),
+                        title: new Text(':'),
+                        trailing: Text(_selectedLocation.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      new ListTile(
+                        leading: new Text('TYPE'),
+                        title: new Text(':'),
+                        trailing: Text(_selectedTypeName.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+
+                      new ListTile(
+                        leading: new Text('MODEL'),
+                        title: new Text(':'),
+                        trailing: Text(
+                          _selectedModelName.toString(),
+                          style: new TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      new ExpansionTile(
+                        leading: new Text('SERIAL'),
+                        title: new Text(':'),
+                        children: <Widget>[
+                          Text(
+                            _sn.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          )
+                        ],
+                        //trailing: Text(_sn.toString(),
+                        //  style: new TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      new Padding(
+                        padding: EdgeInsets.only(bottom: 10.0),
+                      )
+                    ],
                   ),
-                ),
-                new ExpansionTile(
-                  leading: new Text('SERIAL'),
-                  title: new Text(':'),
-                  children: <Widget>[
-                    Text(
-                      _sn.toString(),
-                      style: new TextStyle(fontWeight: FontWeight.bold),
-                    )
-                  ],
-                  //trailing: Text(_sn.toString(),
-                  //  style: new TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                new Padding(
-                  padding: EdgeInsets.only(bottom: 10.0),
-                )
-              ],
-            ),
-            new RaisedButton.icon(
-              color: Colors.blue,
-              icon: new Icon(Icons.navigate_next),
-              onPressed: () {
-                Navigator.push(context, new MaterialPageRoute(
-                  builder: (context) => movementDevices.MainMovementDevices(
-                    str_AppUsername: _appUsername,
-                    str_selectedTypeName: _selectedTypeName, 
-                    str_selectedLocationId: _selectedLocationId,
-                    str_selectedUserId: _selectedUserId,
-                    str_selectedEntityId: _selectedEntityId,
-                    str_selectedEntityName:  _selectedEntityName, 
-                    str_selectedLocation: _selectedLocation,
-                    strDeviceId: _deviceId, 
-                    str_selectedUser: _selectedUser,
+                  new RaisedButton.icon(
+                    color: Colors.blue,
+                    icon: new Icon(Icons.navigate_next),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) =>
+                                  movementDevices.MainMovementDevices(
+                                    str_AppUsername: _appUsername,
+                                    str_selectedTypeName: _selectedTypeName,
+                                    str_selectedLocationId: _selectedLocationId,
+                                    str_selectedUserId: _selectedUserId,
+                                    str_selectedEntityId: _selectedEntityId,
+                                    str_selectedEntityName: _selectedEntityName,
+                                    str_selectedLocation: _selectedLocation,
+                                    strDeviceId: _deviceId,
+                                    str_selectedUser: _selectedUser,
+                                  )));
+                    },
+                    label: new Text('MOVE'),
+                  ),
+                  new Padding(
+                    padding: EdgeInsets.only(bottom: 10.0),
+                  ),
+                  new RaisedButton.icon(
+                    color: Colors.amber,
+                    onPressed: () {},
+                    icon: new Icon(Icons.edit),
+                    label: new Text('EDIT'),
                   )
-                ));
-              },
-              label: new Text('MOVE'),
+                ],
+              ),
             ),
-            new Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
-            ),
-            new RaisedButton.icon(
-              color: Colors.amber,
-              onPressed: () {},
-              icon: new Icon(Icons.edit),
-              label: new Text('EDIT'),
-            )
+            Center(child: Text("History Page")),
           ],
         ),
       ),
@@ -187,10 +243,10 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
       if (widget.strSN != null) {
         _sn = widget.strSN.toUpperCase();
       }
-      if(widget.strPN != null){
+      if (widget.strPN != null) {
         _pn = widget.strPN.toUpperCase();
       }
-      
+
       if (widget.str_selectedTypeName != null) {
         _selectedTypeId = widget.str_selectedTypeId;
         _selectedTypeName = widget.str_selectedTypeName.toUpperCase();
@@ -213,7 +269,6 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
         _selectedLocation = widget.str_selectedLocation.toUpperCase();
       }
       _appUsername = widget.str_AppUsername;
-           
     });
   }
 }
