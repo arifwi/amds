@@ -16,6 +16,7 @@ import 'package:amds/movementDevices.dart' as movementDevices;
 import 'package:amds/utils/myClass.dart' as utils;
 
 
+
 void main() {
 SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
    runApp(new MyApp());
@@ -24,16 +25,12 @@ SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
 }
 String username = '', users_id = '',firstname ='', lastname= '';
 
-class themea{
-  ThemeData a = new ThemeData(
-    brightness: Brightness.dark,
-    primaryColorBrightness: Brightness.dark);
-}
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'AMDS',
+      title: 'MGLPI(Asset)',
       theme: new ThemeData(
         brightness: Brightness.dark,
         accentColor: Colors.amber

@@ -72,7 +72,9 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
+          centerTitle: true,
           title: Text(_deviceId.toString(),
+          
               style: new TextStyle(fontWeight: FontWeight.bold)),
           leading: _selectedTypeName == 'DESKTOP'
               ? new Icon(
@@ -95,14 +97,15 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                 ListView(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.only(top: 20.0),
+                      padding: EdgeInsets.only(top: 20.0,bottom: 35.0),
                       child: new Center(
                           child: new Text(
                         'CURRENT DETAILS',
                         style: new TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20.0,
-                            color: Colors.red),
+                            fontSize: 25.0,
+                            color: Colors.blue
+                            ),
                       )),
                     ),
                     new ListTile(
@@ -140,7 +143,7 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                             unmove = false;
                           });
                         },
-                        label: new Text('MOVE'),
+                        label: new Text('SET / MOVE'),
                       ),
                     ),
                   ],
@@ -150,14 +153,14 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                 ListView(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.only(top: 20.0),
+                      padding: EdgeInsets.only(top: 20.0, bottom: 35.0),
                       child: new Center(
                           child: new Text(
-                        'MOVE TO:',
+                        'MOVE / SET TO:',
                         style: new TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20.0,
-                            color: Colors.red),
+                            fontSize: 25.0,
+                            color: Colors.amber),
                       )),
                     ),
                     new ListTile(

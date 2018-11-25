@@ -505,7 +505,8 @@ class MapIdNameComputers {
       locations,
       sn,
       pn,
-      states_id;
+      states_id,
+      states_name;
 
   MapIdNameComputers(
       {this.id,
@@ -524,7 +525,8 @@ class MapIdNameComputers {
       this.locations,
       this.pn,
       this.sn,
-      this.states_id});
+      this.states_id,
+      this.states_name});
 
   factory MapIdNameComputers.fromJson(Map<String, dynamic> json) {
     return new MapIdNameComputers(
@@ -544,6 +546,7 @@ class MapIdNameComputers {
         locations_id: json['locations_id'],
         sn: json['sn'],
         pn: json['pn'],
-        states_id: json['states_id']);
+        states_id: json['states_id'],
+        states_name: json['states_name']);
   }
 }
