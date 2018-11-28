@@ -65,6 +65,9 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
       _appUsername,
       _deviceStatusId,
       _deviceStatusName;
+
+
+  Color statusColor;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -221,6 +224,13 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
                         //trailing: Text(_sn.toString(),
                         //  style: new TextStyle(fontWeight: FontWeight.bold)),
                       ),
+                      new ListTile(
+                        
+                        leading: new Text('STATUS'),
+                        title: new Text(':'),
+                        trailing: Text(_deviceStatusName.toString(),
+                            style: new TextStyle(fontWeight: FontWeight.bold,color: statusColor)),
+                      ),
                       new Padding(
                         padding: EdgeInsets.only(bottom: 10.0),
                       )
@@ -245,6 +255,8 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    
     setState(() {
       if (widget.strDeviceId != null) {
         _deviceId = widget.strDeviceId.toUpperCase();
@@ -280,8 +292,15 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
       if(widget.str_deviceStatusId != null){
         _deviceStatusId = widget.str_deviceStatusId;
         _deviceStatusName = widget.str_deviceStatusName;
+        if(_deviceStatusName == "USED"){
+          statusColor = Colors.green;
+        }
+        else if(_deviceStatusName == "DAMAGED"){
+          statusColor = Colors.red;
+        }
       }
       _appUsername = widget.str_AppUsername;
+
     });
   }
 }

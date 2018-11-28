@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         onSelectionStates('');
         _result = true;
-
+        print(_computerDetails[0].states_name);
         computerCounter = _computerDetails.length.toString();
       });
     });
@@ -309,6 +309,8 @@ class _HomePageState extends State<HomePage> {
                                     new MaterialPageRoute(
                                         builder: (context) =>
                                             computerDetails.MainComputerDetails(
+                                              str_deviceStatusId: _searchComputerResult[i].states_id,
+                                              str_deviceStatusName:  _searchComputerResult[i].states_name,
                                               str_AppUsername: _appUsername,
                                               strPN:
                                                   _searchComputerResult[i].pn,
@@ -381,6 +383,8 @@ class _HomePageState extends State<HomePage> {
                                         builder: (context) =>
                                             computerDetails.MainComputerDetails(
                                               str_AppUsername: _appUsername,
+                                               str_deviceStatusId: _computerDetails[index].states_id,
+                                              str_deviceStatusName:  _computerDetails[index].states_name,
                                               str_selectedTypeName:
                                                   _computerDetails[index]
                                                       .typeName,

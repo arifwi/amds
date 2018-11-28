@@ -23,7 +23,10 @@ class MainMovementDevices extends StatefulWidget {
       str_AppUsername,
       str_current_username,
       str_current_entityname,
-      str_current_locationname;
+      str_current_states,
+      str_current_locationname,
+      str_deviceStatusId,
+      str_deviceStatusName;
 
   MainMovementDevices({
     this.strDeviceId,
@@ -39,6 +42,9 @@ class MainMovementDevices extends StatefulWidget {
     this.str_current_username,
     this.str_current_entityname,
     this.str_current_locationname,
+    this.str_current_states,
+    this.str_deviceStatusName,
+    this.str_deviceStatusId,
   });
   @override
   _MainMovementDevicesState createState() => _MainMovementDevicesState();
@@ -56,7 +62,10 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
       _pageIdentity,
       _current_locationname,
       _current_username,
-      _current_entityname;
+      _current_entityname,
+      _current_states,
+      _deviceStatusId,
+      _deviceStatusName;
 
   String isSuccessUpdate;
   String _appUsername;
