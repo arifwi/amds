@@ -50,6 +50,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _appUsername = widget.str_AppUsername;
+    print(_appUsername);
     list_state.add(new DropdownMenuItem(
       child: Text(
         'All',
@@ -309,8 +310,8 @@ class _HomePageState extends State<HomePage> {
                                     new MaterialPageRoute(
                                         builder: (context) =>
                                             computerDetails.MainComputerDetails(
-                                              str_deviceStatusId: _searchComputerResult[i].states_id,
-                                              str_deviceStatusName:  _searchComputerResult[i].states_name,
+                                              str_deviceStatesId: _searchComputerResult[i].states_id,
+                                              str_deviceStatesName:  _searchComputerResult[i].states_name,
                                               str_AppUsername: _appUsername,
                                               strPN:
                                                   _searchComputerResult[i].pn,
@@ -383,8 +384,8 @@ class _HomePageState extends State<HomePage> {
                                         builder: (context) =>
                                             computerDetails.MainComputerDetails(
                                               str_AppUsername: _appUsername,
-                                               str_deviceStatusId: _computerDetails[index].states_id,
-                                              str_deviceStatusName:  _computerDetails[index].states_name,
+                                               str_deviceStatesId: _computerDetails[index].states_id,
+                                              str_deviceStatesName:  _computerDetails[index].states_name,
                                               str_selectedTypeName:
                                                   _computerDetails[index]
                                                       .typeName,

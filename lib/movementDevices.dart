@@ -25,8 +25,8 @@ class MainMovementDevices extends StatefulWidget {
       str_current_entityname,
       str_current_states,
       str_current_locationname,
-      str_deviceStatusId,
-      str_deviceStatusName;
+      str_deviceStatesId,
+      str_deviceStatesName;
 
   MainMovementDevices({
     this.strDeviceId,
@@ -43,8 +43,8 @@ class MainMovementDevices extends StatefulWidget {
     this.str_current_entityname,
     this.str_current_locationname,
     this.str_current_states,
-    this.str_deviceStatusName,
-    this.str_deviceStatusId,
+    this.str_deviceStatesName,
+    this.str_deviceStatesId,
   });
   @override
   _MainMovementDevicesState createState() => _MainMovementDevicesState();
@@ -63,17 +63,20 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
       _current_locationname,
       _current_username,
       _current_entityname,
-      _current_states,
-      _deviceStatusId,
-      _deviceStatusName;
+      _current_statesname,
+      _deviceStatesId,
+      _deviceStatesName;
 
   String isSuccessUpdate;
   String _appUsername;
 
   String url = utils.defaultUrl;
   List<DropdownMenuItem<String>> dataEntities = [];
+  List<DropdownMenuItem<String>> dataStates = [];
   List<MapIdName> _listDataEntities = [];
   List<MapIdName> _searchEntitiesResult = [];
+  List<MapIdName> _listDataStates = [];
+  List<MapIdName> _searchStatesResult = [];
 
   bool unmove = true;
 
@@ -83,7 +86,6 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
         appBar: new AppBar(
           centerTitle: true,
           title: Text(_deviceId.toString(),
-          
               style: new TextStyle(fontWeight: FontWeight.bold)),
           leading: _selectedTypeName == 'DESKTOP'
               ? new Icon(
@@ -93,28 +95,27 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                   ? new Icon(
                       Icons.laptop,
                     )
-                  : _selectedTypeName == 'PRINTER'?
-                  new Icon(
-                      Icons.local_printshop,
-                    )
-                  : new Icon(
-                      Icons.close,
-                    ),
+                  : _selectedTypeName == 'PRINTER'
+                      ? new Icon(
+                          Icons.local_printshop,
+                        )
+                      : new Icon(
+                          Icons.close,
+                        ),
         ),
         body: unmove
             ? new Stack(children: <Widget>[
                 ListView(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.only(top: 20.0,bottom: 35.0),
+                      padding: EdgeInsets.only(top: 20.0, bottom: 35.0),
                       child: new Center(
                           child: new Text(
                         'CURRENT DETAILS',
                         style: new TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 25.0,
-                            color: Colors.blue
-                            ),
+                            color: Colors.blue),
                       )),
                     ),
                     new ListTile(
@@ -137,6 +138,14 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                       leading: new Text('LOCATION'),
                       title: new Text(':'),
                       trailing: Text(_selectedLocation.toString(),
+                          style: new TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.amber)),
+                    ),
+                    new ListTile(
+                      leading: new Text('STATUS'),
+                      title: new Text(':'),
+                      trailing: Text(_deviceStatesName.toString(),
                           style: new TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.amber)),
@@ -198,6 +207,9 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => UsersList.HomePage(
+                                        str_deviceStatesId: _deviceStatesId,
+                                        str_deviceStatesName: _deviceStatesName,
+                                        str_current_states: _current_statesname,
                                         str_current_entityname:
                                             _current_entityname,
                                         str_current_locationname:
@@ -271,6 +283,9 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => LocationsList.HomePage(
+                                     str_deviceStatesId: _deviceStatesId,
+                                        str_deviceStatesName: _deviceStatesName,
+                                        str_current_states: _current_statesname,
                                         str_current_entityname:
                                             _current_entityname,
                                         str_current_locationname:
@@ -291,6 +306,34 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                         },
                       ),
                     ),
+                    new ListTile(
+                      leading: new Text('STATES'),
+                      title: new Text(':'),
+                    ),
+                    new Container(
+                      padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: new DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          iconSize: 20.0,
+                          style: TextStyle(fontSize: 17.0, color: Colors.black),
+                          value: _deviceStatesId,
+                          items: dataStates,
+                          hint: Text('Select States'),
+                          onChanged: (value) {
+                            setState(() {
+                              _searchStatesResult = [];
+
+                              _deviceStatesId = value;
+                              _listDataStates.forEach((MapStates) {
+                                if (MapStates.id.contains(_deviceStatesId))
+                                  _searchStatesResult.add(MapStates);
+                              });
+                              _deviceStatesName = _searchStatesResult[0].name;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
                     Container(
                       padding: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: new RaisedButton.icon(
@@ -299,7 +342,8 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                         onPressed: () {
                           if (_current_entityname == _selectedEntityName &&
                               _current_locationname == _selectedLocation &&
-                              _current_username == _selectedUser) {
+                              _current_username == _selectedUser &&
+                              _current_entityname == _deviceStatesName) {
                             setState(() {
                               isSuccessUpdate = "Nothing Change!";
                             });
@@ -324,7 +368,7 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                                       context,
                                       new MaterialPageRoute(
                                           builder: (context) =>
-                                              computerList.HomePage()));
+                                              computerList.HomePage(str_AppUsername: _appUsername,)));
                                 } else {
                                   Navigator.of(context, rootNavigator: true);
                                 }
@@ -346,59 +390,62 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
     // TODO: implement initState
     super.initState();
     _appUsername = widget.str_AppUsername;
-
+    
     getEntities().then((result) {
-      setState(() {
-        if (widget.strDeviceId != null) {
-          _deviceId = widget.strDeviceId.toUpperCase();
-        }
-        if (widget.str_selectedTypeName != null) {
-          _selectedTypeName = widget.str_selectedTypeName.toUpperCase();
-        }
-
-        if (widget.str_selectedEntityName != null) {
-          _selectedEntityId = widget.str_selectedEntityId;
-          _selectedEntityName = widget.str_selectedEntityName.toUpperCase();
-        }
-
-        if (widget.str_selectedUser != null) {
-          _selectedUserId = widget.str_selectedUserId;
-          _selectedUser = widget.str_selectedUser.toUpperCase();
-        }
-        if (widget.str_selectedLocation != null) {
-          _selectedLocationId = widget.str_selectedLocationId;
-          _selectedLocation = widget.str_selectedLocation.toUpperCase();
-        }
-        if (widget.strPageIdentity != null) {
-          if (widget.strPageIdentity == 'usersList' ||
-              widget.strPageIdentity == 'locationsList') {
-            _pageIdentity = widget.strPageIdentity;
-            unmove = false;
+      getStates().then((onValue) {
+        setState(() {
+          if (widget.strDeviceId != null) {
+            _deviceId = widget.strDeviceId.toUpperCase();
           }
-        }
-        if (widget.str_current_entityname != null ||
-            widget.str_current_locationname != null ||
-            widget.str_current_username != null) {
-          _current_entityname = widget.str_current_entityname.toUpperCase();
-          _current_locationname = widget.str_current_locationname.toUpperCase();
-          _current_username = widget.str_current_username.toUpperCase();
-        }
-        if (widget.str_current_entityname == null ||
-            widget.str_current_locationname == null ||
-            widget.str_current_username == null) {
-          _current_entityname = _selectedEntityName.toUpperCase();
-          _current_locationname = _selectedLocation.toUpperCase();
-          _current_username = _selectedUser.toUpperCase();
-        }
+          if (widget.str_selectedTypeName != null) {
+            _selectedTypeName = widget.str_selectedTypeName.toUpperCase();
+          }
 
-        // print(_selectedEntityId);
-        //print(_selectedTypeName);
-        // print(_selectedEntityName);
-        // print(_selectedUser);
-        //print(_selectedUserId);
-        // print(_selectedLocation);
-        // print(_selectedLocationId);
-        // print(_deviceId);
+          if (widget.str_selectedEntityName != null) {
+            _selectedEntityId = widget.str_selectedEntityId;
+            _selectedEntityName = widget.str_selectedEntityName.toUpperCase();
+          }
+
+          if (widget.str_selectedUser != null) {
+            _selectedUserId = widget.str_selectedUserId;
+            _selectedUser = widget.str_selectedUser.toUpperCase();
+          }
+          if (widget.str_selectedLocation != null) {
+            _selectedLocationId = widget.str_selectedLocationId;
+            _selectedLocation = widget.str_selectedLocation.toUpperCase();
+          }
+          if (widget.strPageIdentity != null) {
+            if (widget.strPageIdentity == 'usersList' ||
+                widget.strPageIdentity == 'locationsList') {
+              _pageIdentity = widget.strPageIdentity;
+              unmove = false;
+            }
+          }
+          if (widget.str_deviceStatesId != null) {
+            _deviceStatesId = widget.str_deviceStatesId;
+            _deviceStatesName = widget.str_deviceStatesName;
+          }
+          if (widget.str_current_entityname != null ||
+              widget.str_current_locationname != null ||
+              widget.str_current_username != null ||
+              widget.str_current_states != null) {
+            _current_entityname = widget.str_current_entityname.toUpperCase();
+            _current_locationname =
+                widget.str_current_locationname.toUpperCase();
+            _current_username = widget.str_current_username.toUpperCase();
+            _current_statesname = widget.str_current_states.toUpperCase();
+          }
+
+          if (widget.str_current_entityname == null ||
+              widget.str_current_locationname == null ||
+              widget.str_current_username == null ||
+              widget.str_current_states == null) {
+            _current_entityname = _selectedEntityName.toUpperCase();
+            _current_locationname = _selectedLocation.toUpperCase();
+            _current_username = _selectedUser.toUpperCase();
+            _current_statesname = _deviceStatesName.toUpperCase();
+          }
+        });
       });
     });
   }
@@ -413,11 +460,12 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
       'user_id': users_id,
       'location_id': locations_id,
       'entities_id': entities_id,
+      'states_id' : _deviceStatesId,
       'appUsername': _appUsername.toString(),
       'old_value':
-          "$_current_entityname > $_current_locationname; User: $_current_username",
+          "$_current_entityname > $_current_locationname; User: $_current_username; States: $_current_statesname",
       'new_value':
-          "$_selectedEntityName > $_selectedLocation; User: $_selectedUser",
+          "$_selectedEntityName > $_selectedLocation; User: $_selectedUser; States: $_deviceStatesName",
     }).then((onValue) {
       if (onValue.body == "Record updated successfully") {
         result = "$deviceID updated successfully";
@@ -476,6 +524,39 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
         ));
       }
       return dataEntities;
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future getStates() async {
+    try {
+      final getStatesResult = await http.get(url + 'getStates.php');
+
+      final getDataStates = json.decode(getStatesResult.body);
+
+      dataStates = [];
+      //txtselectedType = getdataType;
+      for (Map i in getDataStates) {
+        _listDataStates.add(MapIdName.fromJson(i));
+      }
+
+      for (var i = 0; i < _listDataStates.length; i++) {
+        Color color;
+        if (i % 2 != 0) {
+          color = Colors.amber;
+        } else {
+          color = Colors.blue[300];
+        }
+        dataStates.add(new DropdownMenuItem(
+          child: new Text(
+            (_listDataStates[i].name),
+            style: new TextStyle(color: color, fontWeight: FontWeight.bold),
+          ),
+          value: _listDataStates[i].id.toString(),
+        ));
+      }
+      return dataStates;
     } catch (error) {
       print(error);
     }

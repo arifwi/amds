@@ -23,8 +23,8 @@ class MainComputerDetails extends StatefulWidget {
       str_selectedUserId,
       str_selectedLocationId,
       str_AppUsername,
-      str_deviceStatusId,
-      str_deviceStatusName;
+      str_deviceStatesId,
+      str_deviceStatesName;
 
   MainComputerDetails({
     this.strDeviceId,
@@ -41,8 +41,8 @@ class MainComputerDetails extends StatefulWidget {
     this.str_selectedUser,
     this.str_selectedUserId,
     this.str_AppUsername,
-    this.str_deviceStatusId,
-    this.str_deviceStatusName
+    this.str_deviceStatesId,
+    this.str_deviceStatesName
   });
   @override
   _MainComputerDetailsState createState() => _MainComputerDetailsState();
@@ -63,8 +63,8 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
       _sn,
       _pn,
       _appUsername,
-      _deviceStatusId,
-      _deviceStatusName;
+      _deviceStatesId,
+      _deviceStatesName;
 
 
   Color statusColor;
@@ -112,6 +112,8 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
                                     str_selectedLocation: _selectedLocation,
                                     strDeviceId: _deviceId,
                                     str_selectedUser: _selectedUser,
+                                    str_deviceStatesId: _deviceStatesId,
+                                    str_deviceStatesName: _deviceStatesName,
                                   )));
                 },
               ),
@@ -228,7 +230,7 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
                         
                         leading: new Text('STATUS'),
                         title: new Text(':'),
-                        trailing: Text(_deviceStatusName.toString(),
+                        trailing: Text(_deviceStatesName.toString(),
                             style: new TextStyle(fontWeight: FontWeight.bold,color: statusColor)),
                       ),
                       new Padding(
@@ -289,13 +291,13 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
         _selectedLocationId = widget.str_selectedLocationId;
         _selectedLocation = widget.str_selectedLocation.toUpperCase();
       }
-      if(widget.str_deviceStatusId != null){
-        _deviceStatusId = widget.str_deviceStatusId;
-        _deviceStatusName = widget.str_deviceStatusName;
-        if(_deviceStatusName == "USED"){
+      if(widget.str_deviceStatesId != null){
+        _deviceStatesId = widget.str_deviceStatesId;
+        _deviceStatesName = widget.str_deviceStatesName;
+        if(_deviceStatesName == "USED"){
           statusColor = Colors.green;
         }
-        else if(_deviceStatusName == "DAMAGED"){
+        else if(_deviceStatesName == "DAMAGED"){
           statusColor = Colors.red;
         }
       }

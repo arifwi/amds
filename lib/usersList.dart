@@ -9,14 +9,15 @@ import 'package:amds/movementDevices.dart' as movementDevices;
 import 'package:amds/utils/myClass.dart' as utils;
 
 class HomePage extends StatefulWidget {
-  String strDeviceId,
+  String 
       strPN,
       strSN,
-      str_selectedTypeId,
+      strDeviceId,
       str_selectedModelId,
+      str_selectedModelName,
       str_selectedEntityId,
       str_selectedTypeName,
-      str_selectedModelName,
+      str_selectedTypeId,
       str_selectedEntityName,
       str_selectedUser,
       str_selectedLocation,
@@ -26,18 +27,22 @@ class HomePage extends StatefulWidget {
       str_AppUsername,
       str_current_username,
       str_current_entityname,
-      str_current_locationname;
+      str_current_states,
+      str_current_locationname,
+      str_deviceStatesId,
+      str_deviceStatesName;
 
   HomePage({
-    this.strDeviceId,
+    
     this.strSN,
     this.strPN,
-    this.str_selectedTypeId,
+    this.strDeviceId,
     this.str_selectedModelId,
+    this.str_selectedModelName,
     this.str_selectedEntityId,
     this.str_selectedTypeName,
+    this.str_selectedTypeId,
     this.str_selectedEntityName,
-    this.str_selectedModelName,
     this.str_selectedLocation,
     this.str_selectedLocationId,
     this.str_selectedUser,
@@ -47,13 +52,19 @@ class HomePage extends StatefulWidget {
     this.str_current_username,
     this.str_current_entityname,
     this.str_current_locationname,
+    this.str_current_states,
+    this.str_deviceStatesName,
+    this.str_deviceStatesId,
   });
   @override
   _HomePageState createState() => new _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  String _selectedTypeId,
+  String 
+      _sn,
+      _pn,
+      _selectedTypeId,
       _selectedModelId,
       _selectedEntityId,
       _selectedTypeName,
@@ -64,13 +75,15 @@ class _HomePageState extends State<HomePage> {
       _selectedLocation,
       _selectedLocationId,
       _deviceId,
-      _sn,
-      _pn,
+     
       _pageIdentity,
       _appUsername,
       _current_locationname,
       _current_username,
-      _current_entityname;
+      _current_entityname,
+      _current_statesname,
+      _deviceStatesName,
+      _deviceStatesId;
 
   TextEditingController controller = new TextEditingController();
 
@@ -139,13 +152,24 @@ class _HomePageState extends State<HomePage> {
       if (widget.strPageIdentity != null) {
         _pageIdentity = widget.strPageIdentity;
       }
-      if (widget.str_current_entityname != null ||
-          widget.str_current_locationname != null ||
-          widget.str_current_username != null) {
-        _current_entityname = widget.str_current_entityname.toUpperCase();
-        _current_locationname = widget.str_current_locationname.toUpperCase();
-        _current_username = widget.str_current_username.toUpperCase();
-      }
+      if (widget.str_deviceStatesId != null) {
+          _deviceStatesId = widget.str_deviceStatesId;
+          _deviceStatesName = widget.str_deviceStatesName;
+        }
+        if (widget.str_current_entityname != null ||
+            widget.str_current_locationname != null ||
+            widget.str_current_username != null || 
+            widget.str_current_states != null) {
+          _current_entityname = widget.str_current_entityname.toUpperCase();
+          _current_locationname = widget.str_current_locationname.toUpperCase();
+          _current_username = widget.str_current_username.toUpperCase();
+          _current_statesname = widget.str_current_states.toUpperCase();
+        }
+        
+      print(_current_statesname);
+      print(_deviceStatesId);
+      print(_deviceStatesName);
+      
     });
   }
 
@@ -226,6 +250,9 @@ class _HomePageState extends State<HomePage> {
                                       new MaterialPageRoute(
                                           builder: (context) => movementDevices
                                                   .MainMovementDevices(
+                                                    str_deviceStatesId: _deviceStatesId,
+                                                    str_deviceStatesName: _deviceStatesName,
+                                                    str_current_states: _current_statesname,
                                                 str_current_entityname:
                                                     _current_entityname,
                                                 str_current_locationname:
@@ -332,6 +359,9 @@ class _HomePageState extends State<HomePage> {
                                       new MaterialPageRoute(
                                           builder: (context) => movementDevices
                                                   .MainMovementDevices(
+                                                    str_deviceStatesId: _deviceStatesId,
+                                                    str_deviceStatesName: _deviceStatesName,
+                                                    str_current_states: _current_statesname,
                                                 str_current_entityname:
                                                     _current_entityname,
                                                 str_current_locationname:
