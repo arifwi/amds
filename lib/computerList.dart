@@ -386,6 +386,7 @@ class _HomePageState extends State<HomePage> {
                                               str_AppUsername: _appUsername,
                                                str_deviceStatesId: _computerDetails[index].states_id,
                                               str_deviceStatesName:  _computerDetails[index].states_name,
+                                              
                                               str_selectedTypeName:
                                                   _computerDetails[index]
                                                       .typeName,

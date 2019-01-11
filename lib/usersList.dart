@@ -250,6 +250,7 @@ class _HomePageState extends State<HomePage> {
                                       new MaterialPageRoute(
                                           builder: (context) => movementDevices
                                                   .MainMovementDevices(
+                                                    str_AppUsername: _appUsername,
                                                     str_deviceStatesId: _deviceStatesId,
                                                     str_deviceStatesName: _deviceStatesName,
                                                     str_current_states: _current_statesname,
@@ -359,6 +360,7 @@ class _HomePageState extends State<HomePage> {
                                       new MaterialPageRoute(
                                           builder: (context) => movementDevices
                                                   .MainMovementDevices(
+                                                    str_AppUsername: _appUsername,
                                                     str_deviceStatesId: _deviceStatesId,
                                                     str_deviceStatesName: _deviceStatesName,
                                                     str_current_states: _current_statesname,

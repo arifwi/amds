@@ -98,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     } catch (e) {
       print(e);
+      message = e.toString();
       
     }
   }
@@ -117,7 +118,8 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               new Column(
                 children: <Widget>[
-                  new Padding(
+                  
+                   new Padding(
                     padding: EdgeInsets.only(top: 50.0),
                   ),
                   new Text('Mobile GLPI',
