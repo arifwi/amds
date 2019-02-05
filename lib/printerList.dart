@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/Menu.dart' as menu;
-import 'package:amds/printerDetails.dart' as printerDetails;
+import 'package:amds/deviceDetails.dart' as deviceDetails;
 import 'package:amds/scanning.dart' as scanning;
 import 'package:amds/utils/myClass.dart' as utils;
 
 class HomePage extends StatefulWidget {
   String str_AppUsername;
-  HomePage({this.str_AppUsername}); 
+  HomePage({this.str_AppUsername});
   @override
   _HomePageState createState() => new _HomePageState();
 }
@@ -50,6 +50,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _appUsername = widget.str_AppUsername;
+    print(_appUsername);
     list_state.add(new DropdownMenuItem(
       child: Text(
         'All',
@@ -66,30 +67,37 @@ class _HomePageState extends State<HomePage> {
     ));
     list_state.add(new DropdownMenuItem(
       child: Text(
+        'Spare',
+        style: TextStyle(color: Colors.cyan),
+      ),
+      value: '2',
+    ));
+    list_state.add(new DropdownMenuItem(
+      child: Text(
         'On Service',
         style: TextStyle(color: Colors.amber),
       ),
-      value: 'onservice',
+      value: '4',
     ));
     list_state.add(new DropdownMenuItem(
       child: Text(
         'Damaged',
         style: TextStyle(color: Colors.red),
       ),
-      value: 'damaged',
+      value: '3',
     ));
     list_state.add(new DropdownMenuItem(
       child: Text(
         'Dispossed',
         style: TextStyle(color: Colors.grey),
       ),
-      value: 'dispossed',
+      value: '5',
     ));
     getPrinterDetails().then((value) {
       setState(() {
         onSelectionStates('');
         _result = true;
-
+        print(_printerDetails[0].states_name);
         printerCounter = _printerDetails.length.toString();
       });
     });
@@ -101,24 +109,39 @@ class _HomePageState extends State<HomePage> {
 
       switch (_selectedState) {
         case '':
-          states_id('').then((onValue){
-           printerCounter = _printerDetails.length.toString();
+          states_id('').then((onValue) {
+            printerCounter = _printerDetails.length.toString();
           });
-          
+
           break;
         case '1':
-          states_id('1').then((onValue){
+          states_id('1').then((onValue) {
             printerCounter = _searchPrinterResult.length.toString();
           });
           break;
 
-        case 'onservice':
+        case '2':
+          states_id('2').then((onValue) {
+            printerCounter = _searchPrinterResult.length.toString();
+          });
           break;
 
-        case 'damaged':
+        case '4':
+          states_id('4').then((onValue) {
+            printerCounter = _searchPrinterResult.length.toString();
+          });
           break;
 
-        case 'dispossed':
+        case '3':
+          states_id('3').then((onValue) {
+            printerCounter = _searchPrinterResult.length.toString();
+          });
+          break;
+
+        case '5':
+          states_id('5').then((onValue) {
+            printerCounter = _searchPrinterResult.length.toString();
+          });
           break;
       }
     });
@@ -129,7 +152,6 @@ class _HomePageState extends State<HomePage> {
     if (_result == false) {
       //Lakukan sesuatu sambil menunggu proses get dari database
       return Scaffold(
-         
           appBar: new AppBar(
             title: new Text('Printer List'),
             elevation: 0.0,
@@ -166,11 +188,17 @@ class _HomePageState extends State<HomePage> {
                             items: list_state,
                             value: _selectedState,
                             onChanged: (value) {
-                              onSelectionStates(value);                          
-                               },
+                              onSelectionStates(value);
+                            },
                           ),
                         ),
-                      
+                        // trailing: new IconButton(
+                        //   icon: new Icon(Icons.cancel),
+                        //   onPressed: () {
+                        //     controller.clear();
+                        //     states_id(controller1.text);
+                        //   },
+                        // ),
                       ),
                     ),
                   ),
@@ -196,7 +224,6 @@ class _HomePageState extends State<HomePage> {
                             controller.text = '';
                             onSearchTextChanged('');
                             states_id(_selectedState);
-                          
                           },
                         ),
                       ),
@@ -211,12 +238,9 @@ class _HomePageState extends State<HomePage> {
               ])));
     }
     return new Scaffold(
-      
-       backgroundColor: utils.mytheme().dark.accentColor,
       appBar: new AppBar(
         title: new Text('Printer List'),
         elevation: 0.0,
-        
         actions: <Widget>[
           Container(
             padding: EdgeInsets.only(right: 15.0, top: 20.0),
@@ -236,7 +260,7 @@ class _HomePageState extends State<HomePage> {
         child: new Icon(Icons.add),
       ),
       body: Container(
-       
+        color: Theme.of(context).primaryColor,
         child: new Column(
           children: <Widget>[
             new Container(
@@ -252,11 +276,9 @@ class _HomePageState extends State<HomePage> {
                         value: _selectedState,
                         onChanged: (value) {
                           onSelectionStates(value);
-                          
                         },
                       ),
                     ),
-                   
                   ),
                 ),
               ),
@@ -282,7 +304,6 @@ class _HomePageState extends State<HomePage> {
                         controller.text = '';
                         onSearchTextChanged('');
                         states_id(_selectedState);
-                        
                       },
                     ),
                   ),
@@ -291,8 +312,18 @@ class _HomePageState extends State<HomePage> {
             ),
             new Expanded(
               flex: 10,
-              child: _searchPrinterResult.length != 0 ||
-                      controller.text.isNotEmpty
+              child:  printerCounter == "0" ?
+              new Column(
+                
+                children: <Widget>[
+                  new Icon(Icons.report_problem,size: 80.0,),
+                  new Text("Nothing Found")
+                ],
+              ):
+              
+              
+              _searchPrinterResult.length != 0 ||
+                      controller.text.isNotEmpty 
                   ? new ListView.builder(
                       padding: EdgeInsets.only(right: 10.0, left: 10.0),
                       itemCount: _searchPrinterResult.length,
@@ -306,22 +337,29 @@ class _HomePageState extends State<HomePage> {
                                     context,
                                     new MaterialPageRoute(
                                         builder: (context) =>
-                                            printerDetails.MainPrinterDetails(
+                                            deviceDetails.MainDeviceDetails(
+                                              strdeviceType: "PRINTERS",
+                                              str_deviceStatesId:
+                                                  _searchPrinterResult[i]
+                                                      .states_id,
+                                              str_deviceStatesName:
+                                                  _searchPrinterResult[i]
+                                                      .states_name,
                                               str_AppUsername: _appUsername,
-                                              strPN:
-                                                  _searchPrinterResult[i].pn,
+                                              strPN: _searchPrinterResult[i].pn,
                                               str_selectedTypeId:
                                                   _searchPrinterResult[i]
                                                       .typeId,
-                                              str_selectedTypeName:'PRINTER',
+                                              str_selectedTypeName:
+                                                  _searchPrinterResult[i]
+                                                      .typeName,
                                               str_selectedEntityName:
                                                   _searchPrinterResult[i]
                                                       .entities,
                                               str_selectedEntityId:
                                                   _searchPrinterResult[i]
                                                       .entities_id,
-                                              strSN:
-                                                  _searchPrinterResult[i].sn,
+                                              strSN: _searchPrinterResult[i].sn,
                                               str_selectedLocation:
                                                   _searchPrinterResult[i]
                                                       .locations,
@@ -344,7 +382,7 @@ class _HomePageState extends State<HomePage> {
                                                       .locations_id,
                                             )));
                               },
-                              leading: new Icon(Icons.local_printshop),
+                              leading: new Icon(Icons.print),
                               title: new Text(_searchPrinterResult[i].name),
                               trailing: new Text(
                                   _searchPrinterResult[i].username,
@@ -372,9 +410,18 @@ class _HomePageState extends State<HomePage> {
                                     context,
                                     new MaterialPageRoute(
                                         builder: (context) =>
-                                            printerDetails.MainPrinterDetails(
+                                            deviceDetails.MainDeviceDetails(
+                                              strdeviceType: "PRINTERS",
                                               str_AppUsername: _appUsername,
-                                              str_selectedTypeName:'PRINTER',
+                                              str_deviceStatesId:
+                                                  _printerDetails[index]
+                                                      .states_id,
+                                              str_deviceStatesName:
+                                                  _printerDetails[index]
+                                                      .states_name,
+                                              str_selectedTypeName:
+                                                  _printerDetails[index]
+                                                      .typeName,
                                               str_selectedEntityName:
                                                   _printerDetails[index]
                                                       .entities,
@@ -403,12 +450,11 @@ class _HomePageState extends State<HomePage> {
                                                   _printerDetails[index]
                                                       .modelId,
                                               str_selectedTypeId:
-                                                  _printerDetails[index]
-                                                      .typeId,
+                                                  _printerDetails[index].typeId,
                                               strPN: _printerDetails[index].pn,
                                             )));
                               },
-                              leading: new Icon(Icons.local_printshop),
+                              leading: new Icon(Icons.print),
                               title: new Text(_printerDetails[index].name),
                               trailing: new Text(
                                 _printerDetails[index].username,
@@ -427,6 +473,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   Future<Null> onSearchTextChanged(String text) async {
     _searchPrinterResult.clear();
 
@@ -455,7 +502,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<Null>states_id(String states_id) async {
+  Future<Null> states_id(String states_id) async {
     _searchPrinterResult.clear();
     if (states_id.isEmpty) {
       setState(() {});
@@ -492,7 +539,8 @@ class MapIdNamePrinters {
       locations,
       sn,
       pn,
-      states_id;
+      states_id,
+      states_name;
 
   MapIdNamePrinters(
       {this.id,
@@ -511,7 +559,8 @@ class MapIdNamePrinters {
       this.locations,
       this.pn,
       this.sn,
-      this.states_id});
+      this.states_id,
+      this.states_name});
 
   factory MapIdNamePrinters.fromJson(Map<String, dynamic> json) {
     return new MapIdNamePrinters(
@@ -531,6 +580,7 @@ class MapIdNamePrinters {
         locations_id: json['locations_id'],
         sn: json['sn'],
         pn: json['pn'],
-        states_id: json['states_id']);
+        states_id: json['states_id'],
+        states_name: json['states_name']);
   }
 }

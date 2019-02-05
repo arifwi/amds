@@ -8,10 +8,12 @@ import 'package:amds/Menu.dart' as menu;
 import 'package:amds/usersList.dart' as UsersList;
 import 'package:amds/locationsList.dart' as LocationsList;
 import 'package:amds/computerList.dart' as computerList;
+import 'package:amds/printerList.dart' as printerList;
 import 'package:amds/utils/myClass.dart' as utils;
 
 class MainMovementDevices extends StatefulWidget {
-  String strDeviceId,
+  String strdeviceType,
+      strDeviceId,
       str_selectedEntityId,
       str_selectedTypeName,
       str_selectedEntityName,
@@ -29,6 +31,7 @@ class MainMovementDevices extends StatefulWidget {
       str_deviceStatesName;
 
   MainMovementDevices({
+    this.strdeviceType,
     this.strDeviceId,
     this.str_selectedEntityId,
     this.str_selectedTypeName,
@@ -51,7 +54,8 @@ class MainMovementDevices extends StatefulWidget {
 }
 
 class _MainMovementDevicesState extends State<MainMovementDevices> {
-  String _selectedEntityId,
+  String _deviceType,
+      _selectedEntityId,
       _selectedTypeName,
       _selectedEntityName,
       _selectedUser,
@@ -80,29 +84,16 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
 
   bool unmove = true;
 
+  Icon _icon;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
-          centerTitle: true,
-          title: Text(_deviceId.toString(),
-              style: new TextStyle(fontWeight: FontWeight.bold)),
-          leading: _selectedTypeName == 'DESKTOP'
-              ? new Icon(
-                  Icons.desktop_mac,
-                )
-              : _selectedTypeName == 'NOTEBOOK'
-                  ? new Icon(
-                      Icons.laptop,
-                    )
-                  : _selectedTypeName == 'PRINTER'
-                      ? new Icon(
-                          Icons.local_printshop,
-                        )
-                      : new Icon(
-                          Icons.close,
-                        ),
-        ),
+            centerTitle: true,
+            title: Text(_deviceId.toString(),
+                style: new TextStyle(fontWeight: FontWeight.bold)),
+            leading: _icon),
         body: unmove
             ? new Stack(children: <Widget>[
                 ListView(
@@ -283,7 +274,7 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => LocationsList.HomePage(
-                                     str_deviceStatesId: _deviceStatesId,
+                                        str_deviceStatesId: _deviceStatesId,
                                         str_deviceStatesName: _deviceStatesName,
                                         str_current_states: _current_statesname,
                                         str_current_entityname:
@@ -343,7 +334,7 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                           if (_current_entityname == _selectedEntityName &&
                               _current_locationname == _selectedLocation &&
                               _current_username == _selectedUser &&
-                              _current_entityname == _deviceStatesName) {
+                              _current_statesname == _deviceStatesName) {
                             setState(() {
                               isSuccessUpdate = "Nothing Change!";
                             });
@@ -352,7 +343,7 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                             updateDevices(
                                     _deviceId,
                                     _selectedEntityId,
-                                    'glpi_computers',
+                                    _deviceType,
                                     _selectedLocationId,
                                     _selectedUserId)
                                 .then((result) {
@@ -360,15 +351,32 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                                   () {
                                 if (isSuccessUpdate ==
                                     "$_deviceId updated successfully") {
-                                  Navigator.of(context, rootNavigator: true)
-                                      .pop();
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                  Navigator.pushReplacement(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) =>
-                                              computerList.HomePage(str_AppUsername: _appUsername,)));
+                                  if (_deviceType == "COMPUTERS") {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop();
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    Navigator.pushReplacement(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                computerList.HomePage(
+                                                  str_AppUsername: _appUsername,
+                                                )));
+                                  }
+                                  else if(_deviceType =="PRINTERS"){
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop();
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    Navigator.pushReplacement(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                printerList.HomePage(
+                                                  str_AppUsername: _appUsername,
+                                                )));
+                                  }
                                 } else {
                                   Navigator.of(context, rootNavigator: true);
                                 }
@@ -390,7 +398,7 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
     // TODO: implement initState
     super.initState();
     _appUsername = widget.str_AppUsername;
-    
+
     getEntities().then((result) {
       getStates().then((onValue) {
         setState(() {
@@ -445,22 +453,53 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
             _current_username = _selectedUser.toUpperCase();
             _current_statesname = _deviceStatesName.toUpperCase();
           }
+          if (widget.strdeviceType != null) {
+            _deviceType = widget.strdeviceType.toUpperCase();
+            if (_deviceType == "COMPUTERS") {
+              _selectedTypeName == 'DESKTOP'
+                  ? _icon = new Icon(
+                      Icons.desktop_mac,
+                      size: 80.0,
+                    )
+                  : _selectedTypeName == 'NOTEBOOK'
+                      ? _icon = new Icon(
+                          Icons.laptop,
+                          size: 80.0,
+                        )
+                      : _icon = new Icon(
+                          Icons.close,
+                          size: 80.0,
+                        );
+            } else if (_deviceType == "PRINTERS") {
+              _icon = new Icon(
+                Icons.print,
+                size: 80.0,
+              );
+            }
+          }
         });
       });
     });
   }
 
-  Future updateDevices(String deviceID, String entities_id, String devicesType,
+  Future updateDevices(String deviceID, String entities_id, String deviceType,
       String locations_id, String users_id) async {
     String result;
+    setState(() {
+      if (_deviceType == "COMPUTERS") {
+        deviceType = "glpi_computers";
+      } else if (_deviceType == "PRINTERS") {
+        deviceType = "glpi_printers";
+      }
+    });
 
     final response = await http.post(url + 'movementDevices.php', body: {
-      'devicetype': devicesType,
+      'devicetype': deviceType,
       'id': deviceID,
       'user_id': users_id,
       'location_id': locations_id,
       'entities_id': entities_id,
-      'states_id' : _deviceStatesId,
+      'states_id': _deviceStatesId,
       'appUsername': _appUsername.toString(),
       'old_value':
           "$_current_entityname > $_current_locationname; User: $_current_username; States: $_current_statesname",

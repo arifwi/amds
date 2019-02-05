@@ -12,6 +12,7 @@ class HomePage extends StatefulWidget {
   String 
       strPN,
       strSN,
+      strdeviceType,
       strDeviceId,
       str_selectedModelId,
       str_selectedModelName,
@@ -36,6 +37,7 @@ class HomePage extends StatefulWidget {
     
     this.strSN,
     this.strPN,
+    this.strdeviceType,
     this.strDeviceId,
     this.str_selectedModelId,
     this.str_selectedModelName,
@@ -64,6 +66,7 @@ class _HomePageState extends State<HomePage> {
   String 
       _sn,
       _pn,
+      _deviceType, 
       _selectedTypeId,
       _selectedModelId,
       _selectedEntityId,
@@ -165,7 +168,9 @@ class _HomePageState extends State<HomePage> {
           _current_username = widget.str_current_username.toUpperCase();
           _current_statesname = widget.str_current_states.toUpperCase();
         }
-        
+      if (widget.strdeviceType != null) {
+        _deviceType = widget.strdeviceType.toUpperCase();
+      }
       print(_current_statesname);
       print(_deviceStatesId);
       print(_deviceStatesName);
@@ -250,6 +255,7 @@ class _HomePageState extends State<HomePage> {
                                       new MaterialPageRoute(
                                           builder: (context) => movementDevices
                                                   .MainMovementDevices(
+                                                    strdeviceType: _deviceType,
                                                     str_deviceStatesId: _deviceStatesId,
                                                     str_deviceStatesName: _deviceStatesName,
                                                     str_current_states: _current_statesname,
@@ -359,6 +365,7 @@ class _HomePageState extends State<HomePage> {
                                       new MaterialPageRoute(
                                           builder: (context) => movementDevices
                                                   .MainMovementDevices(
+                                                    strdeviceType: _deviceType,
                                                     str_deviceStatesId: _deviceStatesId,
                                                     str_deviceStatesName: _deviceStatesName,
                                                     str_current_states: _current_statesname,

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/Menu.dart' as menu;
-import 'package:amds/computerDetails.dart' as computerDetails;
+import 'package:amds/deviceDetails.dart' as deviceDetails;
 import 'package:amds/scanning.dart' as scanning;
 import 'package:amds/utils/myClass.dart' as utils;
 
@@ -67,24 +67,31 @@ class _HomePageState extends State<HomePage> {
     ));
     list_state.add(new DropdownMenuItem(
       child: Text(
+        'Spare',
+        style: TextStyle(color: Colors.cyan),
+      ),
+      value: '2',
+    ));
+    list_state.add(new DropdownMenuItem(
+      child: Text(
         'On Service',
         style: TextStyle(color: Colors.amber),
       ),
-      value: 'onservice',
+      value: '4',
     ));
     list_state.add(new DropdownMenuItem(
       child: Text(
         'Damaged',
         style: TextStyle(color: Colors.red),
       ),
-      value: 'damaged',
+      value: '3',
     ));
     list_state.add(new DropdownMenuItem(
       child: Text(
         'Dispossed',
         style: TextStyle(color: Colors.grey),
       ),
-      value: 'dispossed',
+      value: '5',
     ));
     getComputerDetails().then((value) {
       setState(() {
@@ -102,24 +109,39 @@ class _HomePageState extends State<HomePage> {
 
       switch (_selectedState) {
         case '':
-          states_id('').then((onValue){
-           computerCounter = _computerDetails.length.toString();
+          states_id('').then((onValue) {
+            computerCounter = _computerDetails.length.toString();
           });
-          
+
           break;
         case '1':
-          states_id('1').then((onValue){
+          states_id('1').then((onValue) {
             computerCounter = _searchComputerResult.length.toString();
           });
           break;
 
-        case 'onservice':
+        case '2':
+          states_id('2').then((onValue) {
+            computerCounter = _searchComputerResult.length.toString();
+          });
           break;
 
-        case 'damaged':
+        case '4':
+          states_id('4').then((onValue) {
+            computerCounter = _searchComputerResult.length.toString();
+          });
           break;
 
-        case 'dispossed':
+        case '3':
+          states_id('3').then((onValue) {
+            computerCounter = _searchComputerResult.length.toString();
+          });
+          break;
+
+        case '5':
+          states_id('5').then((onValue) {
+            computerCounter = _searchComputerResult.length.toString();
+          });
           break;
       }
     });
@@ -166,8 +188,8 @@ class _HomePageState extends State<HomePage> {
                             items: list_state,
                             value: _selectedState,
                             onChanged: (value) {
-                              onSelectionStates(value);                          
-                               },
+                              onSelectionStates(value);
+                            },
                           ),
                         ),
                         // trailing: new IconButton(
@@ -202,7 +224,6 @@ class _HomePageState extends State<HomePage> {
                             controller.text = '';
                             onSearchTextChanged('');
                             states_id(_selectedState);
-                          
                           },
                         ),
                       ),
@@ -255,11 +276,9 @@ class _HomePageState extends State<HomePage> {
                         value: _selectedState,
                         onChanged: (value) {
                           onSelectionStates(value);
-                          
                         },
                       ),
                     ),
-                   
                   ),
                 ),
               ),
@@ -285,7 +304,6 @@ class _HomePageState extends State<HomePage> {
                         controller.text = '';
                         onSearchTextChanged('');
                         states_id(_selectedState);
-                        
                       },
                     ),
                   ),
@@ -294,150 +312,177 @@ class _HomePageState extends State<HomePage> {
             ),
             new Expanded(
               flex: 10,
-              child: _searchComputerResult.length != 0 ||
-                      controller.text.isNotEmpty
-                  ? new ListView.builder(
-                      padding: EdgeInsets.only(right: 10.0, left: 10.0),
-                      itemCount: _searchComputerResult.length,
-                      itemBuilder: (context, i) {
-                        return Container(
-                          padding: EdgeInsets.only(bottom: 5.0),
-                          child: new Card(
-                            child: new ListTile(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) =>
-                                            computerDetails.MainComputerDetails(
-                                              str_deviceStatesId: _searchComputerResult[i].states_id,
-                                              str_deviceStatesName:  _searchComputerResult[i].states_name,
-                                              str_AppUsername: _appUsername,
-                                              strPN:
-                                                  _searchComputerResult[i].pn,
-                                              str_selectedTypeId:
-                                                  _searchComputerResult[i]
-                                                      .typeId,
-                                              str_selectedTypeName:
-                                                  _searchComputerResult[i]
-                                                      .typeName,
-                                              str_selectedEntityName:
-                                                  _searchComputerResult[i]
-                                                      .entities,
-                                              str_selectedEntityId:
-                                                  _searchComputerResult[i]
-                                                      .entities_id,
-                                              strSN:
-                                                  _searchComputerResult[i].sn,
-                                              str_selectedLocation:
-                                                  _searchComputerResult[i]
-                                                      .locations,
-                                              str_selectedModelId:
-                                                  _searchComputerResult[i]
-                                                      .modelId,
-                                              str_selectedModelName:
-                                                  _searchComputerResult[i]
-                                                      .modelName,
-                                              strDeviceId:
-                                                  _searchComputerResult[i].name,
-                                              str_selectedUser:
-                                                  _searchComputerResult[i]
-                                                      .username,
-                                              str_selectedUserId:
-                                                  _searchComputerResult[i]
-                                                      .user_id,
-                                              str_selectedLocationId:
-                                                  _searchComputerResult[i]
-                                                      .locations_id,
-                                            )));
-                              },
-                              leading: _searchComputerResult[i].typeName ==
-                                      'NOTEBOOK'
-                                  ? new Icon(Icons.laptop)
-                                  : new Icon(Icons.desktop_mac),
-                              title: new Text(_searchComputerResult[i].name),
-                              trailing: new Text(
-                                  _searchComputerResult[i].username,
-                                  style: new TextStyle(
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                            margin: const EdgeInsets.all(0.0),
-                          ),
-                        );
-                      },
+              child: computerCounter == "0"
+                  ? new Column(
+                      children: <Widget>[
+                        new Icon(
+                          Icons.report_problem,
+                          size: 80.0,
+                        ),
+                        new Text("Nothing Found")
+                      ],
                     )
-                  : new ListView.builder(
-                      padding: EdgeInsets.only(
-                        right: 10.0,
-                        left: 10.0,
-                      ),
-                      itemCount: _computerDetails.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          padding: EdgeInsets.only(bottom: 5.0),
-                          child: new Card(
-                            child: new ListTile(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) =>
-                                            computerDetails.MainComputerDetails(
-                                              str_AppUsername: _appUsername,
-                                               str_deviceStatesId: _computerDetails[index].states_id,
-                                              str_deviceStatesName:  _computerDetails[index].states_name,
-                                              str_selectedTypeName:
-                                                  _computerDetails[index]
-                                                      .typeName,
-                                              str_selectedEntityName:
-                                                  _computerDetails[index]
-                                                      .entities,
-                                              str_selectedEntityId:
-                                                  _computerDetails[index]
-                                                      .entities_id,
-                                              strSN: _computerDetails[index].sn,
-                                              str_selectedLocation:
-                                                  _computerDetails[index]
-                                                      .locations,
-                                              str_selectedModelName:
-                                                  _computerDetails[index]
-                                                      .modelName,
-                                              strDeviceId:
-                                                  _computerDetails[index].name,
-                                              str_selectedUser:
-                                                  _computerDetails[index]
-                                                      .username,
-                                              str_selectedUserId:
-                                                  _computerDetails[index]
-                                                      .user_id,
-                                              str_selectedLocationId:
-                                                  _computerDetails[index]
-                                                      .locations_id,
-                                              str_selectedModelId:
-                                                  _computerDetails[index]
-                                                      .modelId,
-                                              str_selectedTypeId:
-                                                  _computerDetails[index]
-                                                      .typeId,
-                                              strPN: _computerDetails[index].pn,
-                                            )));
-                              },
-                              leading:
-                                  _computerDetails[index].typeName == 'NOTEBOOK'
+                  : _searchComputerResult.length != 0 ||
+                          controller.text.isNotEmpty
+                      ? new ListView.builder(
+                          padding: EdgeInsets.only(right: 10.0, left: 10.0),
+                          itemCount: _searchComputerResult.length,
+                          itemBuilder: (context, i) {
+                            return Container(
+                              padding: EdgeInsets.only(bottom: 5.0),
+                              child: new Card(
+                                child: new ListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                deviceDetails.MainDeviceDetails(
+                                                  strdeviceType: "COMMPUTERS",
+                                                  str_deviceStatesId:
+                                                      _searchComputerResult[i]
+                                                          .states_id,
+                                                  str_deviceStatesName:
+                                                      _searchComputerResult[i]
+                                                          .states_name,
+                                                  str_AppUsername: _appUsername,
+                                                  strPN:
+                                                      _searchComputerResult[i]
+                                                          .pn,
+                                                  str_selectedTypeId:
+                                                      _searchComputerResult[i]
+                                                          .typeId,
+                                                  str_selectedTypeName:
+                                                      _searchComputerResult[i]
+                                                          .typeName,
+                                                  str_selectedEntityName:
+                                                      _searchComputerResult[i]
+                                                          .entities,
+                                                  str_selectedEntityId:
+                                                      _searchComputerResult[i]
+                                                          .entities_id,
+                                                  strSN:
+                                                      _searchComputerResult[i]
+                                                          .sn,
+                                                  str_selectedLocation:
+                                                      _searchComputerResult[i]
+                                                          .locations,
+                                                  str_selectedModelId:
+                                                      _searchComputerResult[i]
+                                                          .modelId,
+                                                  str_selectedModelName:
+                                                      _searchComputerResult[i]
+                                                          .modelName,
+                                                  strDeviceId:
+                                                      _searchComputerResult[i]
+                                                          .name,
+                                                  str_selectedUser:
+                                                      _searchComputerResult[i]
+                                                          .username,
+                                                  str_selectedUserId:
+                                                      _searchComputerResult[i]
+                                                          .user_id,
+                                                  str_selectedLocationId:
+                                                      _searchComputerResult[i]
+                                                          .locations_id,
+                                                )));
+                                  },
+                                  leading: _searchComputerResult[i].typeName ==
+                                          'NOTEBOOK'
                                       ? new Icon(Icons.laptop)
                                       : new Icon(Icons.desktop_mac),
-                              title: new Text(_computerDetails[index].name),
-                              trailing: new Text(
-                                _computerDetails[index].username,
-                                style:
-                                    new TextStyle(fontWeight: FontWeight.bold),
+                                  title:
+                                      new Text(_searchComputerResult[i].name),
+                                  trailing: new Text(
+                                      _searchComputerResult[i].username,
+                                      style: new TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                                margin: const EdgeInsets.all(0.0),
                               ),
-                            ),
-                            margin: const EdgeInsets.all(0.0),
+                            );
+                          },
+                        )
+                      : new ListView.builder(
+                          padding: EdgeInsets.only(
+                            right: 10.0,
+                            left: 10.0,
                           ),
-                        );
-                      },
-                    ),
+                          itemCount: _computerDetails.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              padding: EdgeInsets.only(bottom: 5.0),
+                              child: new Card(
+                                child: new ListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                deviceDetails.MainDeviceDetails(
+                                                  strdeviceType: "COMMPUTERS",
+                                                  str_AppUsername: _appUsername,
+                                                  str_deviceStatesId:
+                                                      _computerDetails[index]
+                                                          .states_id,
+                                                  str_deviceStatesName:
+                                                      _computerDetails[index]
+                                                          .states_name,
+                                                  str_selectedTypeName:
+                                                      _computerDetails[index]
+                                                          .typeName,
+                                                  str_selectedEntityName:
+                                                      _computerDetails[index]
+                                                          .entities,
+                                                  str_selectedEntityId:
+                                                      _computerDetails[index]
+                                                          .entities_id,
+                                                  strSN: _computerDetails[index]
+                                                      .sn,
+                                                  str_selectedLocation:
+                                                      _computerDetails[index]
+                                                          .locations,
+                                                  str_selectedModelName:
+                                                      _computerDetails[index]
+                                                          .modelName,
+                                                  strDeviceId:
+                                                      _computerDetails[index]
+                                                          .name,
+                                                  str_selectedUser:
+                                                      _computerDetails[index]
+                                                          .username,
+                                                  str_selectedUserId:
+                                                      _computerDetails[index]
+                                                          .user_id,
+                                                  str_selectedLocationId:
+                                                      _computerDetails[index]
+                                                          .locations_id,
+                                                  str_selectedModelId:
+                                                      _computerDetails[index]
+                                                          .modelId,
+                                                  str_selectedTypeId:
+                                                      _computerDetails[index]
+                                                          .typeId,
+                                                  strPN: _computerDetails[index]
+                                                      .pn,
+                                                )));
+                                  },
+                                  leading: _computerDetails[index].typeName ==
+                                          'NOTEBOOK'
+                                      ? new Icon(Icons.laptop)
+                                      : new Icon(Icons.desktop_mac),
+                                  title: new Text(_computerDetails[index].name),
+                                  trailing: new Text(
+                                    _computerDetails[index].username,
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                margin: const EdgeInsets.all(0.0),
+                              ),
+                            );
+                          },
+                        ),
             ),
           ],
         ),
@@ -473,7 +518,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<Null>states_id(String states_id) async {
+  Future<Null> states_id(String states_id) async {
     _searchComputerResult.clear();
     if (states_id.isEmpty) {
       setState(() {});

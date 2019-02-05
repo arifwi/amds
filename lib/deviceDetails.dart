@@ -8,8 +8,10 @@ import 'package:amds/addDevice.dart' as addDevice;
 import 'package:amds/Menu.dart' as menu;
 import 'package:amds/movementDevices.dart' as movementDevices;
 
-class MainComputerDetails extends StatefulWidget {
-  String strDeviceId,
+class MainDeviceDetails extends StatefulWidget {
+  String 
+      strdeviceType,
+      strDeviceId,
       strPN,
       strSN,
       str_selectedTypeId,
@@ -26,7 +28,8 @@ class MainComputerDetails extends StatefulWidget {
       str_deviceStatesId,
       str_deviceStatesName;
 
-  MainComputerDetails({
+  MainDeviceDetails({
+    this.strdeviceType,
     this.strDeviceId,
     this.strSN,
     this.strPN,
@@ -45,11 +48,13 @@ class MainComputerDetails extends StatefulWidget {
     this.str_deviceStatesName
   });
   @override
-  _MainComputerDetailsState createState() => _MainComputerDetailsState();
+  _MainDeviceDetailsState createState() => _MainDeviceDetailsState();
 }
 
-class _MainComputerDetailsState extends State<MainComputerDetails> {
-  String _selectedTypeId,
+class _MainDeviceDetailsState extends State<MainDeviceDetails> {
+  String
+      _deviceType, 
+      _selectedTypeId,
       _selectedModelId,
       _selectedEntityId,
       _selectedTypeName,
@@ -66,6 +71,8 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
       _deviceStatesId,
       _deviceStatesName;
 
+      
+  Icon _icon;
 
   Color statusColor;
   @override
@@ -103,6 +110,7 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
                           new MaterialPageRoute(
                               builder: (context) =>
                                   movementDevices.MainMovementDevices(
+                                    strdeviceType: _deviceType,
                                     str_AppUsername: _appUsername,
                                     str_selectedTypeName: _selectedTypeName,
                                     str_selectedLocationId: _selectedLocationId,
@@ -139,20 +147,7 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
                   new Column(
                     children: <Widget>[
                       new Center(
-                        child: _selectedTypeName == 'DESKTOP'
-                            ? new Icon(
-                                Icons.desktop_mac,
-                                size: 80.0,
-                              )
-                            : _selectedTypeName == 'NOTEBOOK'
-                                ? new Icon(
-                                    Icons.laptop,
-                                    size: 80.0,
-                                  )
-                                : new Icon(
-                                    Icons.close,
-                                    size: 80.0,
-                                  ),
+                        child: _icon
                       ),
 
                       // new ListTile(
@@ -252,6 +247,7 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
 
     
     setState(() {
+      
       if (widget.strDeviceId != null) {
         _deviceId = widget.strDeviceId.toUpperCase();
       }
@@ -292,8 +288,37 @@ class _MainComputerDetailsState extends State<MainComputerDetails> {
         else if(_deviceStatesName == "DAMAGED"){
           statusColor = Colors.red;
         }
+        else if(_deviceStatesName == "SPARE"){
+          statusColor = Colors.cyan;
+        }
+      }
+      if (widget.strdeviceType != null) {
+        _deviceType = widget.strdeviceType.toUpperCase();
+        if(_deviceType == "COMPUTERS"){
+          _selectedTypeName == 'DESKTOP'
+                            ? _icon = new Icon(
+                                Icons.desktop_mac,
+                                size: 80.0,
+                              )
+                            : _selectedTypeName == 'NOTEBOOK'
+                                ?_icon = new Icon(
+                                    Icons.laptop,
+                                    size: 80.0,
+                                  )
+                                : _icon = new Icon(
+                                    Icons.close,
+                                    size: 80.0,
+                                  );
+        }
+        else if (_deviceType == "PRINTERS"){
+          _icon = new Icon(
+            Icons.print,
+            size: 80.0,
+          );
+        }
       }
       _appUsername = widget.str_AppUsername;
+      print(_deviceType);
 
     });
   }

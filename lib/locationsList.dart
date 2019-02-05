@@ -11,6 +11,7 @@ import 'package:amds/utils/myClass.dart' as utils;
 class HomePage extends StatefulWidget {
   String strPN,
       strSN,
+      strdeviceType,
       strDeviceId,
       str_selectedModelId,
       str_selectedModelName,
@@ -34,6 +35,7 @@ class HomePage extends StatefulWidget {
   HomePage({
     this.strSN,
     this.strPN,
+    this.strdeviceType,
     this.strDeviceId,
     this.str_selectedModelId,
     this.str_selectedModelName,
@@ -59,9 +61,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String 
-      _sn,
+  String _sn,
       _pn,
+      _deviceType,
       _selectedTypeId,
       _selectedModelId,
       _selectedEntityId,
@@ -73,7 +75,6 @@ class _HomePageState extends State<HomePage> {
       _selectedLocation,
       _selectedLocationId,
       _deviceId,
-     
       _pageIdentity,
       _appUsername,
       _current_locationname,
@@ -82,7 +83,6 @@ class _HomePageState extends State<HomePage> {
       _current_statesname,
       _deviceStatesName,
       _deviceStatesId;
-
 
   TextEditingController controller = new TextEditingController();
 
@@ -124,9 +124,8 @@ class _HomePageState extends State<HomePage> {
       }
       if (widget.str_selectedTypeId != null) {
         _selectedTypeId = widget.str_selectedTypeId;
-        
       }
-      if(widget.str_selectedTypeName != null){
+      if (widget.str_selectedTypeName != null) {
         _selectedTypeName = widget.str_selectedTypeName;
       }
       if (widget.str_selectedModelId != null) {
@@ -150,18 +149,21 @@ class _HomePageState extends State<HomePage> {
         _pageIdentity = widget.strPageIdentity;
       }
       if (widget.str_deviceStatesId != null) {
-          _deviceStatesId = widget.str_deviceStatesId;
-          _deviceStatesName = widget.str_deviceStatesName;
-        }
-        if (widget.str_current_entityname != null ||
-            widget.str_current_locationname != null ||
-            widget.str_current_username != null || 
-            widget.str_current_states != null) {
-          _current_entityname = widget.str_current_entityname.toUpperCase();
-          _current_locationname = widget.str_current_locationname.toUpperCase();
-          _current_username = widget.str_current_username.toUpperCase();
-          _current_statesname = widget.str_current_states.toUpperCase();
-        }
+        _deviceStatesId = widget.str_deviceStatesId;
+        _deviceStatesName = widget.str_deviceStatesName;
+      }
+      if (widget.str_current_entityname != null ||
+          widget.str_current_locationname != null ||
+          widget.str_current_username != null ||
+          widget.str_current_states != null) {
+        _current_entityname = widget.str_current_entityname.toUpperCase();
+        _current_locationname = widget.str_current_locationname.toUpperCase();
+        _current_username = widget.str_current_username.toUpperCase();
+        _current_statesname = widget.str_current_states.toUpperCase();
+      }
+      if (widget.strdeviceType != null) {
+        _deviceType = widget.strdeviceType.toUpperCase();
+      }
     });
   }
 
@@ -243,9 +245,13 @@ class _HomePageState extends State<HomePage> {
                                       new MaterialPageRoute(
                                           builder: (context) => movementDevices
                                                   .MainMovementDevices(
-                                                    str_deviceStatesId: _deviceStatesId,
-                                                    str_deviceStatesName: _deviceStatesName,
-                                                    str_current_states: _current_statesname,
+                                                    strdeviceType: _deviceType,
+                                                str_deviceStatesId:
+                                                    _deviceStatesId,
+                                                str_deviceStatesName:
+                                                    _deviceStatesName,
+                                                str_current_states:
+                                                    _current_statesname,
                                                 str_current_entityname:
                                                     _current_entityname,
                                                 str_current_locationname:
@@ -277,7 +283,6 @@ class _HomePageState extends State<HomePage> {
                                       new MaterialPageRoute(
                                           builder: (context) =>
                                               addDevice.mainAdd(
-                                                
                                                 strSN: _sn,
                                                 strPN: _pn,
                                                 strDeviceId: _deviceId,
@@ -358,9 +363,13 @@ class _HomePageState extends State<HomePage> {
                                       new MaterialPageRoute(
                                           builder: (context) => movementDevices
                                                   .MainMovementDevices(
-                                                    str_deviceStatesId: _deviceStatesId,
-                                                    str_deviceStatesName: _deviceStatesName,
-                                                    str_current_states: _current_statesname,
+                                                    strdeviceType: _deviceType,
+                                                str_deviceStatesId:
+                                                    _deviceStatesId,
+                                                str_deviceStatesName:
+                                                    _deviceStatesName,
+                                                str_current_states:
+                                                    _current_statesname,
                                                 str_current_entityname:
                                                     _current_entityname,
                                                 str_current_locationname:
