@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String _appUsername;
+  String _appUsername,  _deviceType = "PRINTERS";
 
   TextEditingController controller = new TextEditingController();
   TextEditingController controller1 = new TextEditingController();
@@ -50,7 +50,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _appUsername = widget.str_AppUsername;
-    print(_appUsername);
     list_state.add(new DropdownMenuItem(
       child: Text(
         'All',
@@ -167,8 +166,9 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => scanning.scanning(
+                      builder: (context) => scanning.MainScanning(
                             str_AppUsername: _appUsername,
+                            strdeviceType: _deviceType,
                           )));
             },
             child: new Icon(Icons.add),
@@ -253,8 +253,9 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => scanning.scanning(
-                        str_AppUsername: _appUsername,
+                  builder: (context) => scanning.MainScanning(
+                          str_AppUsername: _appUsername,
+                            strdeviceType: _deviceType,
                       )));
         },
         child: new Icon(Icons.add),

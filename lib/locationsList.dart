@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
 
     getLocation().then((result) {
       _appUsername = widget.str_AppUsername;
-
+      _deviceType =widget.strdeviceType;
       if (widget.strDeviceId != null) {
         _deviceId = widget.strDeviceId;
       }
@@ -246,6 +246,7 @@ class _HomePageState extends State<HomePage> {
                                           builder: (context) => movementDevices
                                                   .MainMovementDevices(
                                                     strdeviceType: _deviceType,
+                                                    str_AppUsername: _appUsername,
                                                 str_deviceStatesId:
                                                     _deviceStatesId,
                                                 str_deviceStatesName:
@@ -283,6 +284,7 @@ class _HomePageState extends State<HomePage> {
                                       new MaterialPageRoute(
                                           builder: (context) =>
                                               addDevice.mainAdd(
+                                                strdeviceType: _deviceType,
                                                 strSN: _sn,
                                                 strPN: _pn,
                                                 strDeviceId: _deviceId,
@@ -364,6 +366,7 @@ class _HomePageState extends State<HomePage> {
                                           builder: (context) => movementDevices
                                                   .MainMovementDevices(
                                                     strdeviceType: _deviceType,
+                                                    str_AppUsername: _appUsername,
                                                 str_deviceStatesId:
                                                     _deviceStatesId,
                                                 str_deviceStatesName:
@@ -401,6 +404,7 @@ class _HomePageState extends State<HomePage> {
                                       new MaterialPageRoute(
                                           builder: (context) =>
                                               addDevice.mainAdd(
+                                                strdeviceType: _deviceType,
                                                 strSN: _sn,
                                                 strPN: _pn,
                                                 strDeviceId: _deviceId,

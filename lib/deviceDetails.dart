@@ -318,7 +318,6 @@ class _MainDeviceDetailsState extends State<MainDeviceDetails> {
         }
       }
       _appUsername = widget.str_AppUsername;
-      print(_deviceType);
 
     });
   }

@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String _appUsername;
+  String _appUsername, _deviceType = "COMPUTERS";
 
   TextEditingController controller = new TextEditingController();
   TextEditingController controller1 = new TextEditingController();
@@ -50,6 +50,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _appUsername = widget.str_AppUsername;
+    print(_deviceType);
     print(_appUsername);
     list_state.add(new DropdownMenuItem(
       child: Text(
@@ -167,8 +168,9 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => scanning.scanning(
+                      builder: (context) => scanning.MainScanning(
                             str_AppUsername: _appUsername,
+                            strdeviceType: _deviceType,
                           )));
             },
             child: new Icon(Icons.add),
@@ -253,8 +255,9 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => scanning.scanning(
+                  builder: (context) => scanning.MainScanning(
                         str_AppUsername: _appUsername,
+                        strdeviceType: _deviceType,
                       )));
         },
         child: new Icon(Icons.add),
@@ -338,7 +341,7 @@ class _HomePageState extends State<HomePage> {
                                         new MaterialPageRoute(
                                             builder: (context) =>
                                                 deviceDetails.MainDeviceDetails(
-                                                  strdeviceType: "COMMPUTERS",
+                                                  strdeviceType: "COMPUTERS",
                                                   str_deviceStatesId:
                                                       _searchComputerResult[i]
                                                           .states_id,
@@ -420,7 +423,7 @@ class _HomePageState extends State<HomePage> {
                                         new MaterialPageRoute(
                                             builder: (context) =>
                                                 deviceDetails.MainDeviceDetails(
-                                                  strdeviceType: "COMMPUTERS",
+                                                  strdeviceType: "COMPUTERS",
                                                   str_AppUsername: _appUsername,
                                                   str_deviceStatesId:
                                                       _computerDetails[index]

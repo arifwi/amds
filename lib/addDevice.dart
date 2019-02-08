@@ -8,11 +8,13 @@ import 'package:amds/scanning.dart' as scan;
 import 'package:amds/usersList.dart' as UsersList;
 import 'package:amds/locationsList.dart' as LocationList;
 import 'package:amds/computerList.dart' as computerList;
+import 'package:amds/printerList.dart' as printerList;
 import 'package:amds/utils/formatter.dart' as MyFormatter;
 import 'package:amds/utils/myClass.dart' as utils;
 
 class mainAdd extends StatefulWidget {
-  String strDeviceId,
+  String strdeviceType,
+      strDeviceId,
       strPN,
       strSN,
       str_selectedTypeId,
@@ -28,6 +30,7 @@ class mainAdd extends StatefulWidget {
       str_AppUsername;
 
   mainAdd({
+    this.strdeviceType,
     this.strDeviceId,
     this.strSN,
     this.strPN,
@@ -63,7 +66,8 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
 
   bool enableDeviceID = true, enableSN = true, enablePN = true;
 
-  String _selectedTypeId,
+  String _deviceType,
+      _selectedTypeId,
       _selectedModelId,
       _selectedEntityId,
       _selectedTypeName,
@@ -102,62 +106,123 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     // TODO: implement initState
-
     super.initState();
 
-    getcomputerTypes().then((result) {
-      new Future.delayed(Duration(milliseconds: 250), () {
-        _result = result;
-        getcomputerModels().then((result) {
-          getEntities().then((result) {
-            setState(() {
-              _appUsername = widget.str_AppUsername;
+    _appUsername = widget.str_AppUsername;
+    _deviceType = widget.strdeviceType;
 
-              if (widget.strDeviceId != null) {
-                _deviceId = widget.strDeviceId;
-                controllerDeviceId.text = _deviceId;
-                _isUnlock = false;
-                enableDeviceID = false;
-              }
-              if (widget.strSN != null) {
-                _sn = widget.strSN;
-                controllerSerialNumber.text = _sn;
-                _isUnlock = false;
-                enableSN = false;
-              }
-              if (widget.strPN != null) {
-                _pn = widget.strPN;
-                controllerProductNumber.text = _pn;
-                _isUnlock = false;
-                enablePN = false;
-              }
-              if (widget.str_selectedTypeId != null) {
-                _selectedTypeId = widget.str_selectedTypeId;
-                _selectedTypeName = widget.str_selectedTypeName;
-              }
-              if (widget.str_selectedModelId != null) {
-                _selectedModelName = widget.str_selectedModelName;
-                _selectedModelId = widget.str_selectedModelId;
-              }
-              if (widget.str_selectedEntityId != null) {
-                _selectedEntityId = widget.str_selectedEntityId;
-                _selectedEntityName = widget.str_selectedEntityName;
-              }
+    switch (_deviceType) {
+      case "COMPUTERS":
+        getcomputerTypes().then((result) {
+          new Future.delayed(Duration(milliseconds: 250), () {
+            _result = result;
+            getcomputerModels().then((result) {
+              getEntities().then((result) {
+                setState(() {
+                  if (widget.strDeviceId != null) {
+                    _deviceId = widget.strDeviceId;
+                    controllerDeviceId.text = _deviceId;
+                    _isUnlock = false;
+                    enableDeviceID = false;
+                  }
+                  if (widget.strSN != null) {
+                    _sn = widget.strSN;
+                    controllerSerialNumber.text = _sn;
+                    _isUnlock = false;
+                    enableSN = false;
+                  }
+                  if (widget.strPN != null) {
+                    _pn = widget.strPN;
+                    controllerProductNumber.text = _pn;
+                    _isUnlock = false;
+                    enablePN = false;
+                  }
+                  if (widget.str_selectedTypeId != null) {
+                    _selectedTypeId = widget.str_selectedTypeId;
+                    _selectedTypeName = widget.str_selectedTypeName;
+                  }
+                  if (widget.str_selectedModelId != null) {
+                    _selectedModelName = widget.str_selectedModelName;
+                    _selectedModelId = widget.str_selectedModelId;
+                  }
+                  if (widget.str_selectedEntityId != null) {
+                    _selectedEntityId = widget.str_selectedEntityId;
+                    _selectedEntityName = widget.str_selectedEntityName;
+                  }
 
-              if (widget.str_selectedUser != null) {
-                _selectedUser = widget.str_selectedUser;
-                _selectedUserId = widget.str_selectedUserId;
-              }
-              if (widget.str_selectedLocation != null) {
-                _selectedLocation = widget.str_selectedLocation;
-                _selectedLocationId = widget.str_selectedLocationId;
-              }
-              print(_appUsername);
+                  if (widget.str_selectedUser != null) {
+                    _selectedUser = widget.str_selectedUser;
+                    _selectedUserId = widget.str_selectedUserId;
+                  }
+                  if (widget.str_selectedLocation != null) {
+                    _selectedLocation = widget.str_selectedLocation;
+                    _selectedLocationId = widget.str_selectedLocationId;
+                  }
+                  if (widget.strdeviceType != null) {
+                    _deviceType = widget.strdeviceType.toUpperCase();
+                  }
+                });
+              });
             });
           });
         });
-      });
-    });
+        break;
+      case "PRINTERS":
+        getprinterTypes().then((result) {
+          new Future.delayed(Duration(milliseconds: 250), () {
+            _result = result;
+            getprinterModels().then((result) {
+              getEntities().then((result) {
+                setState(() {
+                  if (widget.strDeviceId != null) {
+                    _deviceId = widget.strDeviceId;
+                    controllerDeviceId.text = _deviceId;
+                    _isUnlock = false;
+                    enableDeviceID = false;
+                  }
+                  if (widget.strSN != null) {
+                    _sn = widget.strSN;
+                    controllerSerialNumber.text = _sn;
+                    _isUnlock = false;
+                    enableSN = false;
+                  }
+                  if (widget.strPN != null) {
+                    _pn = widget.strPN;
+                    controllerProductNumber.text = _pn;
+                    _isUnlock = false;
+                    enablePN = false;
+                  }
+                  if (widget.str_selectedTypeId != null) {
+                    _selectedTypeId = widget.str_selectedTypeId;
+                    _selectedTypeName = widget.str_selectedTypeName;
+                  }
+                  if (widget.str_selectedModelId != null) {
+                    _selectedModelName = widget.str_selectedModelName;
+                    _selectedModelId = widget.str_selectedModelId;
+                  }
+                  if (widget.str_selectedEntityId != null) {
+                    _selectedEntityId = widget.str_selectedEntityId;
+                    _selectedEntityName = widget.str_selectedEntityName;
+                  }
+
+                  if (widget.str_selectedUser != null) {
+                    _selectedUser = widget.str_selectedUser;
+                    _selectedUserId = widget.str_selectedUserId;
+                  }
+                  if (widget.str_selectedLocation != null) {
+                    _selectedLocation = widget.str_selectedLocation;
+                    _selectedLocationId = widget.str_selectedLocationId;
+                  }
+                  if (widget.strdeviceType != null) {
+                    _deviceType = widget.strdeviceType.toUpperCase();
+                  }
+                });
+              });
+            });
+          });
+        });
+        break;
+    }
   }
 
 //INTERFACE//
@@ -179,6 +244,9 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
       onWillPop: backButtonDialog,
       child: Scaffold(
         appBar: new AppBar(
+          backgroundColor: _deviceType == "COMPUTERS"
+              ? Colors.red
+              : _deviceType == "PRINTERS" ? Colors.blueAccent : Colors.amber,
           title: Text('Add Device'),
           leading: new Icon(Icons.add_to_queue),
           actions: <Widget>[
@@ -231,10 +299,11 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
             Navigator.pushReplacement(
                 context,
                 new MaterialPageRoute(
-                    builder: (context) => scan.scanning(
+                    builder: (context) => scan.MainScanning(
                           strSN: _sn,
                           strPN: _pn,
                           strDeviceId: _deviceId,
+                          strdeviceType: _deviceType,
                           str_selectedModelId: _selectedModelId,
                           str_selectedEntityId: _selectedEntityId,
                           str_selectedTypeId: _selectedTypeId,
@@ -400,6 +469,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                                         strSN: _sn,
                                         strPN: _pn,
                                         strDeviceId: _deviceId,
+                                        strdeviceType: _deviceType,
                                         str_selectedModelId: _selectedModelId,
                                         str_selectedEntityId: _selectedEntityId,
                                         str_selectedTypeId: _selectedTypeId,
@@ -444,6 +514,7 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                                         strSN: _sn,
                                         strPN: _pn,
                                         strDeviceId: _deviceId,
+                                        strdeviceType: _deviceType,
                                         str_selectedModelId: _selectedModelId,
                                         str_selectedEntityId: _selectedEntityId,
                                         str_selectedTypeId: _selectedTypeId,
@@ -472,6 +543,70 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
   //END OF INTERFACE//
 
   //METHOD OR FUNCTION ARE HERE//
+  Future getprinterTypes() async {
+    try {
+      final getTypeResult = await http.get(url + 'getprinterTypes.php');
+
+      final getdataType = json.decode(getTypeResult.body);
+
+      dataType = [];
+      //txtselectedType = getdataType;
+      for (Map i in getdataType) {
+        _listDataType.add(MapIdName.fromJson(i));
+      }
+
+      for (var i = 0; i < _listDataType.length; i++) {
+        Color color;
+        if (i % 2 != 0) {
+          color = Colors.amber;
+        } else {
+          color = Colors.blue[300];
+        }
+        dataType.add(new DropdownMenuItem(
+          child: new Text(
+            (_listDataType[i].name),
+            style: new TextStyle(color: color, fontWeight: FontWeight.bold),
+          ),
+          value: _listDataType[i].id.toString(),
+        ));
+      }
+      return dataType;
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<dynamic> getprinterModels() async {
+    try {
+      final getModelResult = await http.get(url + 'getprinterModels.php');
+
+      final getdatamodel = json.decode(getModelResult.body);
+      //print(getdatamodel.length.toString());
+      //for(Map a in )
+      for (Map i in getdatamodel) {
+        _listDataModel.add(MapIdName.fromJson(i));
+      }
+      for (var i = 0; i < _listDataModel.length; i++) {
+        //txtselectedModel.add(getdatamodel)
+        Color color;
+        if (i % 2 != 0) {
+          color = Colors.amber;
+        } else {
+          color = Colors.blue[300];
+        }
+        dataModel.add(new DropdownMenuItem(
+          child: new Text(
+            (_listDataModel[i].name),
+            style: new TextStyle(fontWeight: FontWeight.bold, color: color),
+          ),
+          value: _listDataModel[i].id.toString(),
+        ));
+      }
+      return dataModel;
+    } catch (error) {
+      print(error);
+    }
+  }
 
   Future getcomputerTypes() async {
     try {
@@ -706,7 +841,8 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                       _sn = controllerSerialNumber.text;
                       _pn = controllerProductNumber.text;
                     });
-                    inputNewComputer(
+                    inputNewDevice(
+                            _deviceType,
                             _deviceId,
                             _selectedEntityId,
                             _selectedTypeId,
@@ -724,7 +860,15 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
                           Navigator.of(context, rootNavigator: true).pop();
                         }).then((onValue) {
                           Navigator.pop(context);
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>computerList.HomePage(str_AppUsername: _appUsername,)));
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => _deviceType=="COMPUTERS"? computerList.HomePage(
+                                      
+                                        str_AppUsername: _appUsername,
+                                        
+                                      ):printerList.HomePage(
+                                        str_AppUsername: _appUsername,)));
                         });
                       });
                       //Navigator.pushReplacement(context, newRoute)
@@ -771,7 +915,8 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
     }
   }
 
-  Future inputNewComputer(
+  Future inputNewDevice(
+      String deviceType,
       String computerId,
       String entities_id,
       String computerTypes_id,
@@ -781,8 +926,16 @@ class mainAddState extends State<mainAdd> with SingleTickerProviderStateMixin {
       String locations_id,
       String users_id) async {
     String result;
+    if (deviceType == "COMPUTERS") {
+      deviceType = "glpi_computers";
+    } else if (deviceType == "PRINTERS") {
+      deviceType = "glpi_printers";
+    }
+
+    print(deviceType);
     try {
-      final response = await http.post(url + "inputNewComputer.php", body: {
+      final response = await http.post(url + "inputNewDevice.php", body: {
+        'devicetype': deviceType,
         'id': computerId,
         'entities_id': entities_id,
         'model_id': computerModels_id,

@@ -11,7 +11,6 @@ import 'package:amds/scanning.dart' as scanningComputer;
 import 'package:amds/usersList.dart' as userList;
 import 'package:amds/locationsList.dart'as locationList;
 import 'package:amds/computerList.dart' as commputerList;
-import 'package:amds/computerDetails.dart' as computerDetails;
 import 'package:amds/movementDevices.dart' as movementDevices;
 import 'package:amds/utils/myClass.dart' as utils;
 
@@ -40,11 +39,10 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/mainMenu': (BuildContext context) => new menu.mainMenu(),
         '/addComputer': (BuildContext context)=> new mainAdd(),
-        '/scanningComputer' : (BuildContext context)=> new scanningComputer.scanning(),
+        '/scanningComputer' : (BuildContext context)=> new scanningComputer.MainScanning(),
         '/userList' : (BuildContext context)=> new userList.HomePage(),
         '/locationList' : (BuildContext context) => locationList.HomePage(),
         '/computerList' : (BuildContext context) => commputerList.HomePage(),
-        '/computerDetails': (BuildContext context)=> computerDetails.MainComputerDetails(),
         '/movementDevices': (BuildContext context)=> movementDevices.MainMovementDevices(),
 
 

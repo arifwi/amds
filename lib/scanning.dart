@@ -5,9 +5,12 @@ import 'package:amds/addDevice.dart' as addDevice;
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
 import 'package:amds/Menu.dart' as menu;
+import 'package:amds/computerList.dart' as computerList;
 
-class scanning extends StatefulWidget {
-  String strDeviceId,
+class MainScanning extends StatefulWidget {
+  String 
+      strdeviceType,
+      strDeviceId,
       strPN,
       strSN,
       str_selectedTypeId,
@@ -22,7 +25,8 @@ class scanning extends StatefulWidget {
       str_selectedLocationId,
       str_AppUsername;
 
-  scanning({
+  MainScanning({
+    this.strdeviceType,
     this.strDeviceId,
     this.strSN,
     this.strPN,
@@ -44,8 +48,10 @@ class scanning extends StatefulWidget {
   _scanningState createState() => _scanningState();
 }
 
-class _scanningState extends State<scanning> {
-  String _selectedTypeId,
+class _scanningState extends State<MainScanning> {
+  String 
+      _deviceType,
+      _selectedTypeId,
       _selectedModelId,
       _selectedEntityId,
       _selectedTypeName,
@@ -65,8 +71,9 @@ class _scanningState extends State<scanning> {
   @override
   void initState() {
     // TODO: implement initState
-    
+    super.initState();
     setState(() {
+      _deviceType = widget.strdeviceType;
       _appUsername = widget.str_AppUsername;
       if (widget.strDeviceId != null) {
         _deviceId = widget.strDeviceId;
@@ -98,9 +105,11 @@ class _scanningState extends State<scanning> {
         _selectedLocation = widget.str_selectedLocation;
         _selectedLocationId = widget.str_selectedLocationId;
       }
+      
+      
     });
-  print(_appUsername);
-    super.initState();
+ 
+    
   }
 
   @override
@@ -246,6 +255,7 @@ class _scanningState extends State<scanning> {
                                     strSN: _sn,
                                     strPN: _pn,
                                     strDeviceId: _deviceId,
+                                    strdeviceType: _deviceType,
                                     str_selectedModelId: _selectedModelId,
                                     str_selectedEntityId: _selectedEntityId,
                                     str_selectedTypeId: _selectedTypeId,
@@ -298,6 +308,7 @@ class _scanningState extends State<scanning> {
                         strSN: _sn,
                         strPN: _pn,
                         strDeviceId: _deviceId,
+                        strdeviceType: _deviceType,
                         str_selectedModelId: _selectedModelId,
                         str_selectedEntityId: _selectedEntityId,
                         str_selectedTypeId: _selectedTypeId,

@@ -198,7 +198,9 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => UsersList.HomePage(
+                                    strdeviceType: _deviceType,
                                         str_deviceStatesId: _deviceStatesId,
+                                    str_AppUsername: _appUsername,
                                         str_deviceStatesName: _deviceStatesName,
                                         str_current_states: _current_statesname,
                                         str_current_entityname:
@@ -274,6 +276,8 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => LocationsList.HomePage(
+                                    strdeviceType: _deviceType,
+                                    str_AppUsername: _appUsername,
                                         str_deviceStatesId: _deviceStatesId,
                                         str_deviceStatesName: _deviceStatesName,
                                         str_current_states: _current_statesname,
@@ -398,7 +402,8 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
     // TODO: implement initState
     super.initState();
     _appUsername = widget.str_AppUsername;
-
+    _deviceType = widget.strdeviceType;
+    print(_appUsername);
     getEntities().then((result) {
       getStates().then((onValue) {
         setState(() {
@@ -453,30 +458,25 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
             _current_username = _selectedUser.toUpperCase();
             _current_statesname = _deviceStatesName.toUpperCase();
           }
-          if (widget.strdeviceType != null) {
-            _deviceType = widget.strdeviceType.toUpperCase();
+          
             if (_deviceType == "COMPUTERS") {
               _selectedTypeName == 'DESKTOP'
                   ? _icon = new Icon(
                       Icons.desktop_mac,
-                      size: 80.0,
                     )
                   : _selectedTypeName == 'NOTEBOOK'
                       ? _icon = new Icon(
                           Icons.laptop,
-                          size: 80.0,
                         )
                       : _icon = new Icon(
                           Icons.close,
-                          size: 80.0,
                         );
             } else if (_deviceType == "PRINTERS") {
               _icon = new Icon(
                 Icons.print,
-                size: 80.0,
               );
             }
-          }
+          
         });
       });
     });
@@ -486,9 +486,9 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
       String locations_id, String users_id) async {
     String result;
     setState(() {
-      if (_deviceType == "COMPUTERS") {
+      if (deviceType == "COMPUTERS") {
         deviceType = "glpi_computers";
-      } else if (_deviceType == "PRINTERS") {
+      } else if (deviceType == "PRINTERS") {
         deviceType = "glpi_printers";
       }
     });

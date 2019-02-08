@@ -46,6 +46,8 @@ class _mainMenuState extends State<mainMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+        new GlobalKey<RefreshIndicatorState>();
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
     final double itemWidth = size.width / 2;
@@ -54,137 +56,27 @@ class _mainMenuState extends State<mainMenu> {
       child: new Scaffold(
         appBar: new AppBar(
           title: new Text('Main Menu'),
+          
 
           //new Text("${widget.username}"),
         ),
-        body: new GridView.count(
-          crossAxisCount: 2,
-          childAspectRatio: (itemWidth / itemHeight),
-          children: <Widget>[
-            new GestureDetector(
-              child: new Card(
-                  child: Column(
-                children: <Widget>[
-                  Icon(
-                    Icons.computer,
-                    size: 75.0,
-                  ),
-                  Text(
-                    'Computers',
-                    style:
-                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('All :  '),
-                      Text(
-                        '$allComputerCounter Unit',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.blue),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Active :  '),
-                      Text(
-                        '$activeComputerCounter Unit',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.green),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Spare :  '),
-                      Text(
-                        '$spareComputerCounter Unit',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.cyan),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('On Service :  '),
-                      Text(
-                        '$onServiceComputerCounter Unit',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.amber),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Damaged :  '),
-                      Text(
-                        '$damagedComputerCounter Unit',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.red),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Dispossed :  '),
-                      Text(
-                        '$dispossedComputerCounter Unit',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                ],
-              )),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => commputerlist.HomePage(
-                              str_AppUsername: _appUsername,
-                            )));
-              },
-            ),
-            new GestureDetector(
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          key: _refreshIndicatorKey,
+          child: new GridView.count(
+            crossAxisCount: 2,
+            childAspectRatio: (itemWidth / itemHeight),
+            children: <Widget>[
+              new GestureDetector(
                 child: new Card(
                     child: Column(
                   children: <Widget>[
                     Icon(
-                      Icons.print,
+                      Icons.computer,
                       size: 75.0,
                     ),
                     Text(
-                      'Printers',
+                      'Computers',
                       style: TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.bold),
                     ),
@@ -197,7 +89,7 @@ class _mainMenuState extends State<mainMenu> {
                       children: <Widget>[
                         Text('All :  '),
                         Text(
-                          '$allPrinterCounter Unit',
+                          '$allComputerCounter Unit',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.blue),
                         ),
@@ -212,7 +104,7 @@ class _mainMenuState extends State<mainMenu> {
                       children: <Widget>[
                         Text('Active :  '),
                         Text(
-                          '$activePrinterCounter Unit',
+                          '$activeComputerCounter Unit',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.green),
                         ),
@@ -227,7 +119,7 @@ class _mainMenuState extends State<mainMenu> {
                       children: <Widget>[
                         Text('Spare :  '),
                         Text(
-                          '$sparePrinterCounter Unit',
+                          '$spareComputerCounter Unit',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.cyan),
                         ),
@@ -242,7 +134,7 @@ class _mainMenuState extends State<mainMenu> {
                       children: <Widget>[
                         Text('On Service :  '),
                         Text(
-                          '$onServicePrinterCounter Unit',
+                          '$onServiceComputerCounter Unit',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.amber),
                         ),
@@ -257,7 +149,7 @@ class _mainMenuState extends State<mainMenu> {
                       children: <Widget>[
                         Text('Damaged :  '),
                         Text(
-                          '$damagedPrinterCounter Unit',
+                          '$damagedComputerCounter Unit',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.red),
                         ),
@@ -272,7 +164,7 @@ class _mainMenuState extends State<mainMenu> {
                       children: <Widget>[
                         Text('Dispossed :  '),
                         Text(
-                          '$dispossedPrinterCounter Unit',
+                          '$dispossedComputerCounter Unit',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.grey),
                         ),
@@ -284,33 +176,184 @@ class _mainMenuState extends State<mainMenu> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => printerList.HomePage(
+                          builder: (context) => commputerlist.HomePage(
                                 str_AppUsername: _appUsername,
                               )));
-                }),
-            new GestureDetector(
-              child: new Card(
-                  child: Column(
-                children: <Widget>[
-                  Icon(
-                    Icons.reply,
-                    size: 75.0,
-                  ),
-                  Text(
-                    'Logout',
-                    style:
-                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              )),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => login.MyApp()),
-                );
-              },
-            ),
-          ],
+                },
+              ),
+              new GestureDetector(
+                  child: new Card(
+                      child: Column(
+                    children: <Widget>[
+                      Icon(
+                        Icons.print,
+                        size: 75.0,
+                      ),
+                      Text(
+                        'Printers',
+                        style: TextStyle(
+                            fontSize: 18.0, fontWeight: FontWeight.bold),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 5.0),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('All :  '),
+                          Text(
+                            '$allPrinterCounter Unit',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 5.0),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('Active :  '),
+                          Text(
+                            '$activePrinterCounter Unit',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 5.0),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('Spare :  '),
+                          Text(
+                            '$sparePrinterCounter Unit',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.cyan),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 5.0),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('On Service :  '),
+                          Text(
+                            '$onServicePrinterCounter Unit',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.amber),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 5.0),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('Damaged :  '),
+                          Text(
+                            '$damagedPrinterCounter Unit',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, color: Colors.red),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 5.0),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('Dispossed :  '),
+                          Text(
+                            '$dispossedPrinterCounter Unit',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => printerList.HomePage(
+                                  str_AppUsername: _appUsername,
+                                )));
+                  }),
+                  new GestureDetector(
+                child: new Card(
+                    child: Column(
+                  children: <Widget>[
+                    Icon(
+                      Icons.devices_other,
+                      size: 75.0,
+                    ),
+                    Text(
+                      'Mobile Devices',
+                      style: TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 5.0),
+                    ),
+                  Text("ON PROGERSS", style: TextStyle(fontSize: 30.0, color: Colors.red),textAlign: TextAlign.center,),
+                      
+                    
+                  ],
+                )),
+                onTap: () {
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => commputerlist.HomePage(
+                  //               str_AppUsername: _appUsername,
+                  //             )));
+                },
+              ),
+              new GestureDetector(
+                child: new Card(
+                    child: Column(
+                  children: <Widget>[
+                    Icon(
+                      Icons.reply,
+                      size: 75.0,
+                    ),
+                    Text(
+                      'Logout',
+                      style: TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                )),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => login.MyApp()),
+                  );
+                },
+              ),
+              
+            ],
+          ),
         ),
       ),
     );
@@ -371,11 +414,16 @@ class _mainMenuState extends State<mainMenu> {
         onServicePrinterCounter = getCounter[0]["countOnServicePrinter"];
         sparePrinterCounter = getCounter[0]["countSparePrinter"];
         dispossedPrinterCounter = getCounter[0]["countDispossedPrinter"];
-        
       });
     } catch (error) {
       print(error);
     }
+  }
+
+  Future<Null> _refresh() {
+   return getDeviceStatus().then((onValue){
+      
+    });
   }
 
   @override
