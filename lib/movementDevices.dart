@@ -70,6 +70,8 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
       _current_statesname,
       _deviceStatesId,
       _deviceStatesName;
+  String updateEntity ='', updateLocation ='', updateUsername ='', updateStatesname ='', 
+  newValue;
 
   String isSuccessUpdate;
   String _appUsername;
@@ -335,15 +337,47 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
                         color: Colors.blue,
                         icon: new Icon(Icons.save),
                         onPressed: () {
-                          if (_current_entityname == _selectedEntityName &&
-                              _current_locationname == _selectedLocation &&
-                              _current_username == _selectedUser &&
-                              _current_statesname == _deviceStatesName) {
+                          bool _checkEntity = true, _checkLocation =true, _checkUsername =true, _checkStatesname =true;
+                          setState(() {
+                           _checkEntity = _current_entityname == _selectedEntityName;
+                           _checkLocation = _current_locationname == _selectedLocation;
+                           _checkUsername = _current_username == _selectedUser;
+                           _checkStatesname = _current_statesname == _deviceStatesName;
+                           
+                          });
+                          // _current_entityname == _selectedEntityName &&
+                          //     _current_locationname == _selectedLocation &&
+                          //     _current_username == _selectedUser &&
+                          //     _current_statesname == _deviceStatesName
+                         
+                          if(_checkLocation == false || _checkEntity == false){
+                            setState(() {
+                            updateLocation = _selectedLocation;
+                              updateEntity = "$_selectedEntityName > ";
+                            });
+                          }
+                          if(_checkStatesname == false){
+                            setState(() {
+                            updateStatesname = " - States: $_deviceStatesName";                              
+                            });
+                          }
+                          if(_checkUsername == false){
+                            setState(() {
+                            updateUsername = " - User: $_selectedUser";                              
+                            });
+                          }
+                          
+                          if (_checkEntity && _checkLocation && _checkUsername && _checkStatesname) {
                             setState(() {
                               isSuccessUpdate = "Nothing Change!";
                             });
                             successDialog();
-                          } else {
+                          }
+                          else{
+
+                            setState(() {
+                             newValue = "${updateEntity}${updateLocation}${updateUsername}${updateStatesname}"; 
+                            });
                             updateDevices(
                                     _deviceId,
                                     _selectedEntityId,
@@ -504,7 +538,7 @@ class _MainMovementDevicesState extends State<MainMovementDevices> {
       'old_value':
           "$_current_entityname > $_current_locationname; User: $_current_username; States: $_current_statesname",
       'new_value':
-          "$_selectedEntityName > $_selectedLocation; User: $_selectedUser; States: $_deviceStatesName",
+          "$newValue",
     }).then((onValue) {
       if (onValue.body == "Record updated successfully") {
         result = "$deviceID updated successfully";
