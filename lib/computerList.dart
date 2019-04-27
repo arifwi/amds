@@ -98,7 +98,6 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         onSelectionStates('');
         _result = true;
-        print(_computerDetails[0].states_name);
         computerCounter = _computerDetails.length.toString();
       });
     });
@@ -190,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                             items: list_state,
                             value: _selectedState,
                             onChanged: (value) {
-                              onSelectionStates(value);
+                              
                             },
                           ),
                         ),
@@ -217,15 +216,14 @@ class _HomePageState extends State<HomePage> {
                           decoration: new InputDecoration(
                               hintText: 'Search', border: InputBorder.none),
                           onChanged: (value) {
-                            onSearchTextChanged(controller.text);
+                           
                           },
                         ),
                         trailing: new IconButton(
                           icon: new Icon(Icons.cancel),
                           onPressed: () {
                             controller.text = '';
-                            onSearchTextChanged('');
-                            states_id(_selectedState);
+                          
                           },
                         ),
                       ),
@@ -395,9 +393,9 @@ class _HomePageState extends State<HomePage> {
                                       ? new Icon(Icons.laptop)
                                       : new Icon(Icons.desktop_mac),
                                   title:
-                                      new Text(_searchComputerResult[i].name),
+                                      new Text(_searchComputerResult[i].name.toString().toUpperCase()),
                                   trailing: new Text(
-                                      _searchComputerResult[i].username,
+                                      _searchComputerResult[i].username.toString().toUpperCase(),
                                       style: new TextStyle(
                                           fontWeight: FontWeight.bold)),
                                 ),
@@ -474,9 +472,9 @@ class _HomePageState extends State<HomePage> {
                                           'NOTEBOOK'
                                       ? new Icon(Icons.laptop)
                                       : new Icon(Icons.desktop_mac),
-                                  title: new Text(_computerDetails[index].name),
+                                  title: new Text(_computerDetails[index].name.toString().toUpperCase()),
                                   trailing: new Text(
-                                    _computerDetails[index].username,
+                                    _computerDetails[index].username.toString().toUpperCase(),
                                     style: new TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
